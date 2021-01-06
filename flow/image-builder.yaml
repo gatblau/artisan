@@ -1,0 +1,21 @@
+---
+name: Image Builder
+description: Builds a container image from Artisan content packages
+input:
+  - name: ART_REG_DOMAIN
+    description: the artisan registry domain
+    required: true
+    type: string
+secret:
+  - name: PUB_KEY
+    description: the public PGP key used to verify the authenticity of the executed packages
+    mount: /keys/root_rsa_pub.pgp
+  - name: ART_REG_USER
+    description: the artisan registry user
+  - name: ART_REG_PWD
+    description: the artisan registry password
+steps:
+  - name: build-image
+    runtime: quay.io/gatblau/art-buildah
+    command: art exec ${ART_REG_DOMAIN}/art/bc-launcher start-build -u=${ART_REG_USER}:${ART_REG_PWD} -p=/keys/root_rsa_pub.pgp
+...
