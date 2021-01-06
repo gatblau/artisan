@@ -1,0 +1,22 @@
+---
+# build the Red Hat Container Tools Runtime Image
+env:
+  REPO_NAME: quay.io/gatblau
+  IMG_NAME: art-rhctools
+  ART_PACKAGE: artisan
+
+functions:
+  - name: build-image
+    run:
+#       fetches artisan CLI
+      - art open ${ART_PACKAGE} . -s
+#       build the image with the artisan reference
+      - docker build -t=${REPO_NAME}/${IMG_NAME}:${ARTISAN_REF} .
+#       tag the image as latest
+      - docker tag ${REPO_NAME}/${IMG_NAME}:${ARTISAN_REF} ${REPO_NAME}/${IMG_NAME}:latest
+#       delete the art cli
+      - rm art
+#       push the image and the latest tag
+      - docker push ${REPO_NAME}/${IMG_NAME}:${ARTISAN_REF}
+      - docker push ${REPO_NAME}/${IMG_NAME}:latest
+...
