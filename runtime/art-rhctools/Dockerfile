@@ -6,7 +6,7 @@
 #  Contributors to this project, hereby assign copyright in this code to the project,
 #  to be licensed under the same terms as the rest of the code.
 #
-FROM docker.io/centos:8.3.2011
+FROM docker.io/centos:7
 
 LABEL author="gatblau"
 LABEL maintainer="onix@gatblau.org"
