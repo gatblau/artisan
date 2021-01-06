@@ -1,4 +1,4 @@
-# Artisan Golang Application Runtime Image
+# Image to run Golang Artisan Packages
 
 Builds Golang based Applications.
 

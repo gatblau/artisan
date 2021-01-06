@@ -1,4 +1,4 @@
-# Artisan JavaScript Application Development Runtime Image - NodeJS-14
+# Image to run JavaScript Artisan Packages
 
 Builds JavaScript Applications using npm.
 

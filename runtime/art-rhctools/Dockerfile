@@ -1,5 +1,5 @@
 #
-#  Onix Config Manager - Artisan Red Hat Container Tools Runtime Image
+#  Onix Config Manager - Red Hat Container Tools Artisan Package Runtime Image
 #  Copyright (c) 2018-2021 by www.gatblau.org
 #  Licensed under the Apache License, Version 2.0 at http://www.apache.org/licenses/LICENSE-2.0
 #
