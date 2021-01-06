@@ -16,7 +16,7 @@ functions:
 #       tag the image as latest
       - docker tag ${REPO_NAME}/${IMG_NAME}:${ARTISAN_REF}-${LIFECYCLE_STAGE} ${REPO_NAME}/${IMG_NAME}:latest
 #       delete the art cli
-      - rm art
+      - rm ./art
 #       push the image and the latest tag
       - docker push ${REPO_NAME}/${IMG_NAME}:${ARTISAN_REF}-${LIFECYCLE_STAGE}
       - docker push ${REPO_NAME}/${IMG_NAME}:latest
