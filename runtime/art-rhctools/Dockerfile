@@ -6,16 +6,21 @@
 #  Contributors to this project, hereby assign copyright in this code to the project,
 #  to be licensed under the same terms as the rest of the code.
 #
-FROM docker.io/centos:7
+FROM centos:8.3.2011
 
 LABEL author="gatblau"
 LABEL maintainer="onix@gatblau.org"
 LABEL tools="buildah,skopeo,artisan"
 
-RUN yum update -y && \
-    yum install buildah skopeo -y && \
-    rm -rf /var/cache/yum && \
-    yum clean all
+# Don't include container-selinux and remove directories used by dnf that are just taking up space.
+RUN yum -y install buildah skopeo fuse-overlayfs --exclude container-selinux; rm -rf /var/cache /var/log/dnf* /var/log/yum.*
+
+# Adjust storage.conf to enable Fuse storage.
+RUN sed -i -e 's|^#mount_program|mount_program|g' -e '/additionalimage.*/a "/var/lib/shared",' /etc/containers/storage.conf
+RUN mkdir -p /var/lib/shared/overlay-images /var/lib/shared/overlay-layers; touch /var/lib/shared/overlay-images/images.lock; touch /var/lib/shared/overlay-layers/layers.lock
+
+# Set up environment variables to note that this is not starting with usernamespace and default to isolate the filesystem with chroot.
+ENV _BUILDAH_STARTED_IN_USERNS="" BUILDAH_ISOLATION=chroot
 
 WORKDIR /app
 
