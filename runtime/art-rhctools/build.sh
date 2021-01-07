@@ -18,4 +18,4 @@ if [[ -z "${PUB_KEY_PATH+x}" ]]; then
 fi
 
 # open docker context artefacts
-art exec -u="${ART_REG_USER}:${ART_REG_PWD}" "${PACKAGE_NAME}" build-image -p="${PUB_KEY_PATH}"
+art exec -u=${ART_REG_USER}:${ART_REG_PWD} ${PACKAGE_NAME} build-image -p=${PUB_KEY_PATH}

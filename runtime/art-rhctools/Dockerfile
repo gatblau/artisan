@@ -22,6 +22,8 @@ WORKDIR /app
 COPY art /usr/bin/art
 COPY build.sh ./
 
-RUN chmod ug+x /usr/bin/art && mkdir -p /keys
+RUN chmod ug+x /usr/bin/art && \
+    chmod ug+rx /app/build.sh && \
+    mkdir -p /keys
 
-CMD ["sh", "-c", "/app/build.sh"]
+CMD ["sh", "/app/build.sh"]
