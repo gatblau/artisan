@@ -6,16 +6,20 @@
 #  Contributors to this project, hereby assign copyright in this code to the project,
 #  to be licensed under the same terms as the rest of the code.
 #
-FROM centos:8.3.2011
+FROM registry.access.redhat.com/ubi8/ubi
 
 LABEL author="gatblau"
 LABEL maintainer="onix@gatblau.org"
 LABEL tools="buildah,skopeo,artisan"
 
-# Don't include container-selinux and remove directories used by dnf that are just taking up space.
-RUN yum -y install buildah skopeo fuse-overlayfs --exclude container-selinux; rm -rf /var/cache /var/log/dnf* /var/log/yum.*
+COPY appstream.repo /etc/yum.repos.d/CentOS-AppStream.repo
+COPY repokey  /etc/pki/rpm-gpg/RPM-GPG-KEY-centosofficial
 
-# Adjust storage.conf to enable Fuse storage.
+RUN dnf update --disablerepo=* --enablerepo=ubi-8-appstream --enablerepo=ubi-8-baseos -y && \
+    dnf -y install buildah skopeo fuse-overlayfs --exclude container-selinux && \
+    rm -rf /var/cache /var/log/dnf* /var/log/yum.*
+
+# adjust storage.conf to enable Fuse storage
 RUN sed -i -e 's|^#mount_program|mount_program|g' -e '/additionalimage.*/a "/var/lib/shared",' /etc/containers/storage.conf
 RUN mkdir -p /var/lib/shared/overlay-images /var/lib/shared/overlay-layers; touch /var/lib/shared/overlay-images/images.lock; touch /var/lib/shared/overlay-layers/layers.lock
 
@@ -25,10 +29,10 @@ ENV _BUILDAH_STARTED_IN_USERNS="" BUILDAH_ISOLATION=chroot
 WORKDIR /app
 
 COPY art /usr/bin/art
-COPY build.sh ./
+COPY boot.sh ./
 
 RUN chmod ug+x /usr/bin/art && \
-    chmod ug+rx /app/build.sh && \
+    chmod ug+rx /app/boot.sh && \
     mkdir -p /keys
 
-CMD ["sh", "/app/build.sh"]
+ENTRYPOINT ["sh", "/app/boot.sh"]
