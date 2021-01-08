@@ -20,7 +20,7 @@ The interface of any runtime is defined by the following environment variables t
 | variable | description | required |
 |---|---|---|
 | `PACKAGE_NAME` | the fully qualified artisan package name | false |
-| `PUB_KEY_FILE` | the path to the public PGP mounted in the image, required to open the artisan package | only if the `package` name has been provided |
+| `PUB_KEY_PATH` | the path to the public PGP mounted in the image, required to open the artisan package | only if the `package` name has been provided |
 | `ART_REG_USER` | the username to log in the artisan registry where the package is located | only if authentication is required |
 | `ART_REG_PWD` |  the password for the username used to log in the artisan registry | only if `username` is defined |
 | `FX_NAME` | the name of the artisan function to run either in the package or the source `build.yaml` file | false |

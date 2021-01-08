@@ -8,8 +8,8 @@
 #  to be licensed under the same terms as the rest of the code.
 #
 if [[ -z "${PACKAGE_NAME+x}" ]]; then
-  if [[ -z "${PUB_KEY_FILE+x}" ]]; then
-    echo "A full path to the PGP public key used to open the package is required: PUB_KEY_FILE must be provided"
+  if [[ -z "${PUB_KEY_PATH+x}" ]]; then
+    echo "A full path to the PGP public key used to open the package is required: PUB_KEY_PATH must be provided"
     exit 1
   fi
   # if a user name is defined
@@ -23,10 +23,10 @@ if [[ -z "${PACKAGE_NAME+x}" ]]; then
   # if a function has been defined executes the package with the function
   if [[ -z "${FX_NAME+x}" ]]; then
       # pass the function name
-      art exec -u=${ART_REG_USER}:${ART_REG_PWD} ${PACKAGE_NAME} ${FX_NAME} -p=${PUB_KEY_FILE}
+      art exec -u=${ART_REG_USER}:${ART_REG_PWD} ${PACKAGE_NAME} ${FX_NAME} -p=${PUB_KEY_PATH}
   else
       # executes the default function
-      art exec -u=${ART_REG_USER}:${ART_REG_PWD} ${PACKAGE_NAME} -p=${PUB_KEY_FILE}
+      art exec -u=${ART_REG_USER}:${ART_REG_PWD} ${PACKAGE_NAME} -p=${PUB_KEY_PATH}
   fi
   # else if only a function has been defined
 elif [[ -z "${FX_NAME+x}" ]]; then
