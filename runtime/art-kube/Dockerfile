@@ -32,10 +32,17 @@ RUN wget https://github.com/openshift/okd/releases/download/$OKD_VERSION/openshi
     mv oc $ARTISAN_HOME && \
     rm openshift-client-linux-$OKD_VERSION.tar.gz
 
+WORKDIR /app
+
 COPY art ${ARTISAN_HOME}
+COPY boot.sh ./
 
 RUN chmod ug+x $ARTISAN_HOME/art && \
     chmod ug+x $ARTISAN_HOME/kubectl && \
-    chmod ug+x $ARTISAN_HOME/oc
+    chmod ug+x $ARTISAN_HOME/oc && \
+    chmod ug+rx /app/boot.sh && \
+    mkdir -p /keys
 
 USER $UNAME
+
+ENTRYPOINT ["sh", "/app/boot.sh"]

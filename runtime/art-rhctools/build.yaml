@@ -21,6 +21,6 @@ functions:
       - rm ./art
       - rm ./boot.sh
 #       push the image and the latest tag
-#      - docker push ${REPO_NAME}/${IMG_NAME}:${ARTISAN_REF}-${LIFECYCLE_STAGE}
-#      - docker push ${REPO_NAME}/${IMG_NAME}:latest
+      - docker push ${REPO_NAME}/${IMG_NAME}:${ARTISAN_REF}-${LIFECYCLE_STAGE}
+      - docker push ${REPO_NAME}/${IMG_NAME}:latest
 ...
