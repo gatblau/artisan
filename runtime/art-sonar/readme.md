@@ -9,9 +9,9 @@ The community edition of the scanner supports the languages described in the tab
 
 ### Runtime Use
 
-This runtime is designed to run a sonar scan automatically following the logic in [run.sh](run.sh).
+If no package name is specified, this runtime will execute [run.sh](run.sh), which will scan the source mounted in the image.
 
 ### Runtime Input
 
-The runtime input information is defined in the [input.yaml](input.yaml) file.
+The runtime input information required by [run.sh](run.sh) is defined in the [input.yaml](input.yaml) file.
 
