@@ -1,0 +1,25 @@
+# define the variables required by the run.sh script
+---
+var:
+  - name: SONAR_URI
+    description: the URI of the SonarQube server to use for code quality reporting
+    required: true
+    type: uri
+
+  - name: SONAR_PROJECT_KEY
+    description: the unique key identifying the project in the SonarQube server
+    required: true
+    type: string
+
+  - name: SONAR_SOURCES
+    description: the path the sonar scanner should use to scan source code
+    required: true
+    type: path
+    value: src/
+
+  - name: SONAR_BINARIES
+    description: the path the sonar scanner should use to scan binary files
+    required: true
+    type: path
+    value: target/classes
+...
