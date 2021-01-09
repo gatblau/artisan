@@ -36,8 +36,15 @@ RUN wget http://archive.apache.org/dist/maven/maven-3/$MAVEN_VERSION/binaries/ap
 
 COPY art $ARTISAN_HOME
 
+WORKDIR /app
+
+COPY boot.sh ./
+
 RUN chmod ug+x $ARTISAN_HOME/art && \
+    chmod ug+rx /app/boot.sh && \
     # folder below to mount keys in container
     mkdir -p /keys
 
 USER $UNAME
+
+ENTRYPOINT ["sh", "/app/boot.sh"]
