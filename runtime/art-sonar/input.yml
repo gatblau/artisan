@@ -23,11 +23,6 @@ input:
       type: path
 
   secret:
-    - name: SONAR_USER
-      description: the user to access the Sonar server
-      aggregate: true
-
-    - name: SONAR_PWD
-      description: the password to access the Sonar server
-      aggregate: true
+    - name: SONAR_TOKEN
+      description: the token to access the Sonar server
 ...

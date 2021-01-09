@@ -30,8 +30,10 @@ WORKDIR /app
 
 RUN wget https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/${SONAR_ZIP_FILE} && \
     unzip ${SONAR_ZIP_FILE} && \
-    mv ${SONAR_FOLDER} sonar
+    mv ${SONAR_FOLDER} /app
 
-RUN chmod -R a+rwx ./sonar/
+COPY run.sh ./
+
+RUN chmod -R a+rwx ./
 
 USER $UNAME
