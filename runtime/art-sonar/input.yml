@@ -16,13 +16,11 @@ input:
       description: the path the sonar scanner should use to scan source code
       required: true
       type: path
-      value: src/
 
     - name: SONAR_BINARIES
       description: the path the sonar scanner should use to scan binary files
       required: true
       type: path
-      value: target/classes
 
   secret:
     - name: SONAR_USER
