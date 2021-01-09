@@ -38,3 +38,5 @@ COPY boot.sh run.sh ./
 RUN chmod -R a+rwx ./
 
 USER $UNAME
+
+ENTRYPOINT ["sh", "/app/boot.sh"]
