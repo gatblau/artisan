@@ -22,6 +22,10 @@ if [[ -n "${PACKAGE_NAME+x}" ]]; then
       exit 1
     fi
   fi
+
+  # copy any mounted keys to the artisan registry
+  cp -r /keys/* /.artisan/keys/
+
   # if a function has been defined executes the package with the function
   if [[ -n "${FX_NAME+x}" ]]; then
       # pass the function name
