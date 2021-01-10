@@ -27,7 +27,8 @@ RUN yum update -y && \
     yum install -y wget unzip && \
     groupadd -g $GID -o $UNAME && useradd -M -u $UID -g $GID $UNAME && \
     rm -rf /var/cache/yum && \
-    yum clean all
+    yum clean all && \
+    mkdir -p /.artisan/keys && chown $UNAME /.artisan/keys && chmod ug+r /.artisan/keys
 
 RUN wget http://archive.apache.org/dist/maven/maven-3/$MAVEN_VERSION/binaries/apache-maven-$MAVEN_VERSION-bin.tar.gz && \
     tar -zxvf apache-maven-$MAVEN_VERSION-bin.tar.gz && \
