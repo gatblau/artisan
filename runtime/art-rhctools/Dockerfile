@@ -17,12 +17,16 @@ ARG UNAME=builder
 ENV UID=100000000
 ENV GID=100000000
 
-COPY appstream.repo /etc/yum.repos.d/CentOS-AppStream.repo
-COPY repokey  /etc/pki/rpm-gpg/RPM-GPG-KEY-centosofficial
+#COPY appstream.repo /etc/yum.repos.d/CentOS-AppStream.repo
+#COPY repokey  /etc/pki/rpm-gpg/RPM-GPG-KEY-centosofficial
 
+# install the kubic repository with latest buildah stable releases
 RUN dnf update --disablerepo=* --enablerepo=ubi-8-appstream --enablerepo=ubi-8-baseos -y && \
-    dnf -y install shadow-utils.x86_64 && \
-    dnf -y install buildah skopeo fuse-overlayfs --exclude container-selinux && \
+    dnf -y install 'dnf-command(copr)' && \
+    dnf -y copr enable rhcontainerbot/container-selinux && \
+    curl -L -o /etc/yum.repos.d/devel:kubic:libcontainers:stable.repo https://download.opensuse.org/repositories/devel:kubic:libcontainers:stable/CentOS_8/devel:kubic:libcontainers:stable.repo
+
+RUN dnf -y install shadow-utils.x86_64 buildah skopeo fuse-overlayfs && \
     groupadd -g $GID -o $UNAME && useradd -M -u $UID -g $GID $UNAME && \
     rm -rf /var/cache /var/log/dnf* /var/log/yum.*
 
@@ -44,6 +48,6 @@ COPY boot.sh ./
 
 RUN chmod ug+x /usr/bin/art && \
     chmod ug+rx /app/boot.sh && \
-    mkdir -p /keys
+    mkdir -p /keys && mkdir -p /.artisan/keys && chown $UNAME /.artisan/keys && chmod ug+r /.artisan/keys
 
 ENTRYPOINT ["sh", "/app/boot.sh"]
