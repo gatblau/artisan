@@ -26,16 +26,15 @@ RUN microdnf update --disablerepo=* --enablerepo=ubi-8-appstream --enablerepo=ub
     rm -rf /var/cache/yum && \
     microdnf clean all
 
-WORKDIR /app
-
 RUN wget https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/${SONAR_ZIP_FILE} && \
     unzip ${SONAR_ZIP_FILE} && \
-    mv ${SONAR_FOLDER} /app/sonar && \
-    rm ${SONAR_ZIP_FILE}
+    mv ${SONAR_FOLDER} /sonar && \
+    rm ${SONAR_ZIP_FILE} && \
+    mkdir -p /.artisan/keys && chown $UNAME /.artisan/keys && chmod ug+wr /.artisan/keys && \
+    mkdir -p /app && chown $UNAME /app && chmod ug+wr /app
 
-COPY boot.sh run.sh ./
-
-RUN chmod -R a+rwx ./
+COPY boot.sh run.sh /app/
+RUN chmod -R a+rwx /app/ && chmod -R a+rwx /sonar/
 
 USER $UNAME
 
