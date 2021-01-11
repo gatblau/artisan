@@ -48,6 +48,6 @@ COPY boot.sh ./
 
 RUN chmod ug+x /usr/bin/art && \
     chmod ug+rx /app/boot.sh && \
-    mkdir -p /keys && mkdir -p /.artisan/keys && chown $UNAME /.artisan/keys && chmod ug+r /.artisan/keys
+    mkdir -p /keys && mkdir -p /.artisan/keys && chown $UNAME /.artisan/keys && chmod ug+wr /.artisan/keys
 
 ENTRYPOINT ["sh", "/app/boot.sh"]
