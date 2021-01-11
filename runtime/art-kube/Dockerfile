@@ -41,7 +41,8 @@ RUN chmod ug+x $ARTISAN_HOME/art && \
     chmod ug+x $ARTISAN_HOME/kubectl && \
     chmod ug+x $ARTISAN_HOME/oc && \
     chmod ug+rx /app/boot.sh && \
-    mkdir -p /keys
+    mkdir -p /keys && \
+    mkdir -p /.artisan/keys && chown $UNAME /.artisan/keys && chmod ug+wr /.artisan/keys
 
 USER $UNAME
 
