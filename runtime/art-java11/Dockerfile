@@ -28,7 +28,8 @@ RUN yum update -y && \
     groupadd -g $GID -o $UNAME && useradd -M -u $UID -g $GID $UNAME && \
     rm -rf /var/cache/yum && \
     yum clean all && \
-    mkdir -p /.artisan/keys && chown $UNAME /.artisan/keys && chmod ug+r /.artisan/keys
+    mkdir -p /.artisan/keys && chown $UNAME /.artisan/keys && chmod ug+wr /.artisan/keys && \
+    mkdir -p /app && chown $UNAME /app && chmod ug+wr /app
 
 RUN wget http://archive.apache.org/dist/maven/maven-3/$MAVEN_VERSION/binaries/apache-maven-$MAVEN_VERSION-bin.tar.gz && \
     tar -zxvf apache-maven-$MAVEN_VERSION-bin.tar.gz && \
@@ -36,6 +37,8 @@ RUN wget http://archive.apache.org/dist/maven/maven-3/$MAVEN_VERSION/binaries/ap
     mv apache-maven-$MAVEN_VERSION $MAVEN_HOME
 
 COPY art $ARTISAN_HOME
+COPY boot.sh run.sh /app/
+RUN chmod -R a+rwx /app/
 
 WORKDIR /app
 
