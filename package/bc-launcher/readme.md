@@ -5,7 +5,7 @@ BuildConfig to run custom builds with Buildah in Openshift.
 ## Usage
 
 ```bash
-art exec -u=${ART_REG_USER}:${ART_REG_PWD} ${PACKAGE_NAME} ${FX_NAME} -p=${PUB_KEY_PATH}
+art exec -u=${BC_ART_REG_USER}:${BC_ART_REG_PWD} ${BC_PACKAGE_NAME} ${BC_FX_NAME} -p=${BC_PUB_KEY_PATH}
 ```
 
 | Asset | Description |
