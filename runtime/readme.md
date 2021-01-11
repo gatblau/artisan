@@ -20,19 +20,47 @@ The interface of any runtime is defined by the following environment variables t
 | variable | description | required |
 |---|---|---|
 | `PACKAGE_NAME` | the fully qualified artisan package name | false |
-| `PUB_KEY_PATH` | the path to the public PGP mounted in the image, required to open the artisan package | only if the `package` name has been provided |
 | `ART_REG_USER` | the username to log in the artisan registry where the package is located | only if authentication is required |
 | `ART_REG_PWD` |  the password for the username used to log in the artisan registry | only if `username` is defined |
 | `FX_NAME` | the name of the artisan function to run either in the package or the source `build.yaml` file | false |
 
+## Runtime File System
+
+| folder | description |
+|---|---|
+| `/app/` | the folder where boot.sh and run.sh are located |
+| `/usr/bin/` | the folder where artisan cli is so that it can be accessed from anywhere in the container |
+| `/workspace/source/` | the folder where any mounted project source is located, and from where a build.yaml file will be read |
+| `/.artisan/` | the artisan local registry folder |
+| `/.artisan/keys/` | the root folder for the PGP keys in the artisan registry |
+| `/keys/` | the root folder for the PGP keys to be mounted into the runtime image. These keys are moved into the artisan registry by the boot.sh file |
+
+## Mounting Keys
+
+Artisan PGP keys should be mounted on the /keys folder of the runtime image.
+
+The boot.sh script in the runtime moves the keys into the local artisan registry, where they are automatically read by artisan following the following convention:
+
+```sh
+/ (root)
+ | root_rsa_key.pgp (private key)
+ | root_rsa_pub.pgp (public key) 
+ / groupName /
+      | groupName_rsa_key.pgp (private key)
+      | groupName_rsa_pub.pgp (public key)
+      / packageName /
+                     | groupName_packageName_rsa_key.pgp (private key)
+                     | groupName_packageName_rsa_pub.pgp (public key)
+```
+
 ## Runtime Index
 
-| Image | Description | Tools |
-|---|---|---|
-| [java11](art-java11/readme.md) | Build Java applications | *artisan, OpenJDK-11, maven* |
-| [kube](art-kube/readme.md) | Kubernetes and OpenShift client CLIs | *artisan, kubectl, oc* |
-| [rhctools](art-kube/readme.md) | Build and sign container images | *artisan, buildah, skopeo* |
-| [sonar](art-sonar/readme.md) | Scan source code for quality metrics | *artisan, sonar-scanner* |
-| [node](art-node/readme.md) | Build JavaScript applications | *artisan, node-js* |
-| [golang](art-go/readme.md) | Build Go applications | *artisan, golang* |
-| [python](art-python/readme.md) | Build Python applications | *artisan, python 3* |
+| Image | Description | Tools | Run Script |
+|---|---|---|---|
+| [java11](art-java11/readme.md) | Build Java applications | *artisan, OpenJDK-11, maven* | no |
+| [kube](art-kube/readme.md) | Kubernetes and OpenShift client CLIs | *artisan, kubectl, oc* | no |
+| [rhctools](art-kube/readme.md) | Build and sign container images | *artisan, buildah, skopeo* | no |
+| [sonar](art-sonar/readme.md) | Scan source code for quality metrics | *artisan, sonar-scanner* | yes |
+| [node](art-node/readme.md) | Build JavaScript applications | *artisan, node-js* | no |
+| [golang](art-go/readme.md) | Build Go applications | *artisan, golang* | no |
+| [python](art-python/readme.md) | Build Python applications | *artisan, python 3* | no |
