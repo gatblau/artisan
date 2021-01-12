@@ -37,7 +37,7 @@ RUN wget http://archive.apache.org/dist/maven/maven-3/$MAVEN_VERSION/binaries/ap
     mv apache-maven-$MAVEN_VERSION $MAVEN_HOME
 
 COPY art $ARTISAN_HOME
-COPY boot.sh run.sh /app/
+COPY boot.sh /app/
 RUN chmod -R a+rwx /app/
 
 WORKDIR /app
