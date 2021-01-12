@@ -1,0 +1,6 @@
+---
+profiles:
+  - name: bc-launcher
+    runtime: quay.io/gatblau/art-rhctools
+    target: bc-launcher
+...

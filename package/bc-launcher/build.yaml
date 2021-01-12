@@ -1,0 +1,114 @@
+---
+input:
+  var:
+    - name: BC_APPLICATION_NAME
+      description: openshift app name
+      required: true
+      type: string
+    - name: BC_BUILDER_IMAGE
+      description: image builder name (buildah image)
+      required: true
+      type: string
+    - name: BC_PUSH_IMAGE_REGISTRY
+      description: application image registry name
+      required: true
+      type: string
+    - name: BC_PUSH_IMAGE_REPO
+      description: application image repo name
+      required: true
+      type: string
+    - name: BC_PUSH_IMAGE_NAME
+      description: application image name
+      required: true
+      type: string
+    - name: BC_PUSH_IMAGE_VERSION
+      description: application image version/tag
+      required: true
+      type: string
+    - name: BC_PULL_IMAGE_REGISTRY
+      description: application runtime image registry name
+      required: true
+      type: string
+    - name: BC_ARTEFACT_NAME
+      description: name for the artefact that will be downloaded
+      required: true
+      type: string
+    - name: BC_PACKAGE_NAME
+      description: docker context artefact name
+      required: true
+      type: string
+    - name: BC_PUB_KEY_PATH
+      description: public key path to open the application artefacts
+      required: true
+      type: string
+    - name: BC_FX_NAME
+      description: function name to build image
+      required: true
+      type: string
+    - name: BC_PRI_KEY_PATH
+      description: private key path to sign the application image
+      required: true
+      type: string
+    - name: BC_CRYPTO_KEY_EMAIL
+      description: email id which is used to genearte crypto signature keys
+      required: true
+      type: string
+    - name: BC_PULL_IMAGE_REGISTRY_UNAME
+      description: user name for the container registry where the base image is located
+      required: true
+      type: string
+    - name: BC_CRYPTO_KEY_NAME
+      description: cryptography signature secret name
+      required: true
+      type: string
+
+  secret:
+    - name: BC_PULL_IMAGE_REGISTRY_PWD
+      description: password for the container registry where the base image is located
+      aggregate: true
+    - name: BC_PUSH_IMAGE_REGISTRY_UNAME
+      description: user name for the container registry where the application image will be pushed
+      aggregate: true
+      type: string
+    - name: BC_PUSH_IMAGE_REGISTRY_PWD
+      description: password for the container registry where the application image will be pushed
+      aggregate: true
+    - name: BC_ART_REG_USER
+      description: artefact registry user name
+      aggregate: true
+      type: string
+    - name: BC_ART_REG_PWD
+      description: artefact registry user password
+      aggregate: true
+
+functions:
+  - name: start-build
+    description: creates buildconfig in openshift to build application image
+    export: true
+    run:
+      # environment variables below are used so artie can use this during interactive mode
+      - sh start-build.sh ${BC_APPLICATION_NAME} ${BC_BUILDER_IMAGE} ${BC_PUSH_IMAGE_REGISTRY} ${BC_PUSH_IMAGE_REPO} ${BC_PUSH_IMAGE_NAME} ${BC_PUSH_IMAGE_VERSION} ${BC_PULL_IMAGE_REGISTRY} ${BC_ARTEFACT_NAME} ${BC_CRYPTO_KEY_NAME} ${BC_PACKAGE_NAME} ${BC_PUB_KEY_PATH} ${BC_FX_NAME} ${BC_PRI_KEY_PATH} ${BC_CRYPTO_KEY_EMAIL} ${BC_PULL_IMAGE_REGISTRY_UNAME} ${BC_PULL_IMAGE_REGISTRY_PWD} ${BC_PUSH_IMAGE_REGISTRY_UNAME} ${BC_PUSH_IMAGE_REGISTRY_PWD} ${BC_ART_REG_USER} ${BC_ART_REG_PWD}
+    input:
+      var:
+        - BC_APPLICATION_NAME
+        - BC_BUILDER_IMAGE
+        - BC_PUSH_IMAGE_REGISTRY
+        - BC_PUSH_IMAGE_REPO
+        - BC_PUSH_IMAGE_NAME
+        - BC_PUSH_IMAGE_VERSION
+        - BC_PULL_IMAGE_REGISTRY
+        - BC_ARTEFACT_NAME
+        - BC_PACKAGE_NAME
+        - BC_PUB_KEY_PATH
+        - BC_FX_NAME
+        - BC_PRI_KEY_PATH
+        - BC_CRYPTO_KEY_EMAIL
+        - BC_PULL_IMAGE_REGISTRY_UNAME
+        - BC_CRYPTO_KEY_NAME
+      secret:
+        - BC_PULL_IMAGE_REGISTRY_PWD
+        - BC_PUSH_IMAGE_REGISTRY_UNAME
+        - BC_PUSH_IMAGE_REGISTRY_PWD
+        - BC_ART_REG_USER
+        - BC_ART_REG_PWD
+...
