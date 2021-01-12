@@ -1,0 +1,8 @@
+# build recipes
+---
+profiles:
+  - name: java
+    description: builds the java recipe
+    type: recipe/java
+    target: java
+...

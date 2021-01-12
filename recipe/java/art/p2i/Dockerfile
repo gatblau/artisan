@@ -1,4 +1,4 @@
-FROM {{.JavaImage}}
+FROM registry.access.redhat.com/openjdk-11-rhel8
 
 USER root
 

@@ -18,22 +18,19 @@ input:
     - name: SIGNING_KEY
       description: the private PGP key required to digitally sign the application package
       private: true
-      package_group: {{.KeyGroup}}
-      package_name: {{.KeyName}}
 
 profiles:
   - name: app
     description: packages the java uber jar file
     default: true
-    type: java
+    type: content/java
     labels:
-      author: {{.Author}}
-      application: {{.AppName}}
-      description: {{.AppDescription}}
-      package_type: content/java
-
-    application: test-app
-    target: target/{{.AppName}}-1.0-SNAPSHOT-runner.jar
+      author: <<Author Here>>
+      application: <<Name of the App Here>>
+      description: <<Description for the App Here>>
+      license: <<License Terms Here>>
+    application: <<App Name Here>>
+    target: target/<<App Name Here>>-1.0-SNAPSHOT-runner.jar
 
 functions:
   - name: build-app
@@ -45,11 +42,11 @@ functions:
   - name: publish-app
     description: packages and publishes the application
     run:
-      - art build -t=${APP_PACKAGE_NAME}
-      - art push ${APP_PACKAGE_NAME} -u=${ART_REG_USER}:${ART_REG_PWD}
+      - art build -t=${PACKAGE_NAME}
+      - art push ${PACKAGE_NAME} -u=${ART_REG_USER}:${ART_REG_PWD}
     input:
       var:
-        - APP_PACKAGE_NAME
+        - PACKAGE_NAME
       secret:
         - ART_REG_USER
         - ART_REG_PWD

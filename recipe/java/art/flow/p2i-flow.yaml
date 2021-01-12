@@ -3,10 +3,10 @@ name: Java Application Package To Image Flow
 description: build, sign and publish a Java Application Container Image
 
 steps:
-  # use case 3: call the build-image function in the APP_IMAGE_BUILD_PACKAGE
+  # use case 3: call the build-image function in the IMAGE_PACKAGE
   - name: build-image
     description: builds, signs and publish the container image
     runtime: quay.io/gatblau/art-rhctools
-    package: ${APP_IMAGE_BUILD_PACKAGE}
+    package: {{ Image Build Package Name Here }}
     function: build-image
 ...

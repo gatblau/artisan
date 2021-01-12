@@ -27,6 +27,6 @@ steps:
   - name: build-image
     description: builds, signs and publish the container image
     runtime: quay.io/gatblau/art-rhctools
-    package: ${APP_IMAGE_BUILD_PACKAGE}
+    package: {{ Image Build Package Name Here }}
     function: build-image
 ...
