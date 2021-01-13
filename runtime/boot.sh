@@ -25,10 +25,10 @@ if [[ -n "${PACKAGE_NAME+x}" ]]; then
   # if a function has been defined executes the package with the function
   if [[ -n "${FX_NAME+x}" ]]; then
       # pass the function name
-      art exec -u=${ART_REG_USER}:${ART_REG_PWD} ${PACKAGE_NAME} ${FX_NAME}
+      art exec -u=${ART_REG_USER}:${ART_REG_PWD} ${PACKAGE_NAME} ${FX_NAME} -s
   else
       # executes the default function
-      art exec -u=${ART_REG_USER}:${ART_REG_PWD} ${PACKAGE_NAME}
+      art exec -u=${ART_REG_USER}:${ART_REG_PWD} ${PACKAGE_NAME} -s
   fi
   # else if only a function has been defined
 elif [[ -n "${FX_NAME+x}" ]]; then
