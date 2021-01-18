@@ -25,10 +25,11 @@ ENV PATH $MAVEN_HOME/bin:$PATH
 RUN yum update -y && \
     yum install -y java-11-openjdk-devel && \
     yum install -y wget unzip && \
-    groupadd -g $GID -o $UNAME && useradd -M -u $UID -g $GID $UNAME && \
+    groupadd -g $GID -o $UNAME && useradd -M -u $UID -g $GID $UNAME && usermod --home / -u $UID $UNAME && \
     rm -rf /var/cache/yum && \
     yum clean all && \
-    mkdir -p /.artisan/keys && chown $UNAME /.artisan/keys && chmod ug+wr /.artisan/keys && \
+    mkdir -p /.artisan/keys && \
+    chown -R $UNAME /.artisan && chmod -R ug+wr /.artisan && \
     mkdir -p /app && chown $UNAME /app && chmod ug+wr /app
 
 RUN wget http://archive.apache.org/dist/maven/maven-3/$MAVEN_VERSION/binaries/apache-maven-$MAVEN_VERSION-bin.tar.gz && \
@@ -51,4 +52,4 @@ RUN chmod ug+x $ARTISAN_HOME/art && \
 
 USER $UNAME
 
-ENTRYPOINT ["sh", "/app/boot.sh"]
+CMD sleep infinity
