@@ -52,4 +52,4 @@ RUN chmod ug+x $ARTISAN_HOME/art && \
 
 USER $UNAME
 
-CMD sleep infinity
+ENTRYPOINT ["sh", "/app/boot.sh"]
