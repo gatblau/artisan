@@ -1,0 +1,17 @@
+---
+env:
+  REPO_NAME: quay.io/artisan
+  IMG_NAME: java
+  LIFECYCLE_STAGE: alpha
+
+functions:
+  - name: build-image
+    run:
+      # build the image with the artisan reference
+      - docker build -t=${REPO_NAME}/${IMG_NAME}:${ARTISAN_REF}-${LIFECYCLE_STAGE} .
+      # tag the image as latest
+      - docker tag ${REPO_NAME}/${IMG_NAME}:${ARTISAN_REF}-${LIFECYCLE_STAGE} ${REPO_NAME}/${IMG_NAME}:latest
+      # push the image and the latest tag
+      - docker push ${REPO_NAME}/${IMG_NAME}:${ARTISAN_REF}-${LIFECYCLE_STAGE}
+      - docker push ${REPO_NAME}/${IMG_NAME}:latest
+...
