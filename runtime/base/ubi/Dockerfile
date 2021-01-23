@@ -12,8 +12,8 @@ LABEL maintainer="onix@gatblau.org"
 
 ARG UNAME=runtime
 
-ENV UID=100000000
-ENV GID=100000000
+ENV UID=100000
+ENV GID=100000
 
 RUN groupadd -g $GID -o $UNAME && \
     useradd -M -u $UID -g $GID $UNAME && \
