@@ -15,7 +15,9 @@ ARG UNAME=runtime
 ENV UID=100000
 ENV GID=100000
 
-RUN groupadd -g $GID -o $UNAME && \
+# disable any repository that is not
+RUN dnf update --disablerepo=* --enablerepo=ubi-8-appstream --enablerepo=ubi-8-baseos --disableplugin=subscription-manager -y && \
+    groupadd -g $GID -o $UNAME && \
     useradd -M -u $UID -g $GID $UNAME && \
     usermod --home / -u $UID $UNAME && \
     # artisan local registry folder
