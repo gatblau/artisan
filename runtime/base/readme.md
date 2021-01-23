@@ -5,8 +5,7 @@ the created runtime is compatible with Artisan.
 
 Artisan runtimes are [Built on Red Hat Universal Base Image](https://developers.redhat.com/articles/ubi-faq#).
 
-*To ensure the containers you build can be redistributed, disable non-UBI yum repositories in the standard UBI image when you add software.
-If you disable all yum repositories except for UBI repositories, only packages from the freely available repositories are used when you add software.*
+*To ensure the containers you build can be redistributed, the base images disable non-UBI yum repositories.*
 
 To create a runtime:
 
