@@ -1,7 +1,7 @@
 ---
 env:
   REPO_NAME: quay.io/artisan
-  IMG_NAME: java
+  IMG_NAME: buildah
   ART_PACKAGE: artisan
 
 functions:

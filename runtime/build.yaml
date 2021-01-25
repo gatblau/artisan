@@ -3,7 +3,9 @@ functions:
   - name: publish
     description: publishes all runtimes
     run:
-      - art run build-image art-java11
-      - art run build-image art-rhctools
-      - art run build-image art-kube
+      - art run build-image base/ubi-min
+      - art run build-image base/ubi
+      - art run build-image java
+      - art run build-image buildah
+      - art run build-image k8s
 ...

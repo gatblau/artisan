@@ -12,8 +12,8 @@ LABEL maintainer="onix@gatblau.org"
 
 ARG UNAME=runtime
 
-ENV UID=100000
-ENV GID=100000
+ENV UID=100000000
+ENV GID=100000000
 
 # disable any repository that is not
 RUN dnf update --disablerepo=* --enablerepo=ubi-8-appstream --enablerepo=ubi-8-baseos --disableplugin=subscription-manager -y && \

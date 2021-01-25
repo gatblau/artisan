@@ -42,3 +42,5 @@ RUN microdnf update --disablerepo=* --enablerepo=ubi-8-appstream --enablerepo=ub
 # copy maven and gradle
 COPY --from=builder /app/apache-maven-$MAVEN_VERSION $MAVEN_HOME
 COPY --from=builder /app/gradle-$GRADLE_VERSION $GRADLE_HOME
+
+USER $UNAME

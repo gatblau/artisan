@@ -1,7 +1,7 @@
 ---
 env:
   REPO_NAME: quay.io/artisan
-  IMG_NAME: java
+  IMG_NAME: k8s
   ART_PACKAGE: artisan
 
 functions:
@@ -9,6 +9,6 @@ functions:
     run:
       - docker build -t=${REPO_NAME}/${IMG_NAME}:${ARTISAN_REF} .
       - docker tag ${REPO_NAME}/${IMG_NAME}:${ARTISAN_REF} ${REPO_NAME}/${IMG_NAME}:latest
-      - docker push ${REPO_NAME}/${IMG_NAME}:${ARTISAN_REF}
-      - docker push ${REPO_NAME}/${IMG_NAME}:latest
+#      - docker push ${REPO_NAME}/${IMG_NAME}:${ARTISAN_REF}
+#      - docker push ${REPO_NAME}/${IMG_NAME}:latest
 ...
