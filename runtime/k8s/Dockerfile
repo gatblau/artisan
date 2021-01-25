@@ -25,5 +25,3 @@ WORKDIR /app/
 COPY --from=builder /app/kubectl /app/oc /usr/bin/
 
 USER $UNAME
-
-ENTRYPOINT ["sleep", "infinity"]
