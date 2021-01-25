@@ -8,6 +8,9 @@
 #  to be licensed under the same terms as the rest of the code.
 #
 
+# copy any mounted keys to the artisan registry
+cp -r /keys/* /.artisan/keys/
+
 # if a package name has been provided
 if [[ -n "${PACKAGE_NAME+x}" ]]; then
   # if a user name is defined
@@ -18,10 +21,6 @@ if [[ -n "${PACKAGE_NAME+x}" ]]; then
       exit 1
     fi
   fi
-
-  # copy any mounted keys to the artisan registry
-  cp -r /keys/* /.artisan/keys/
-
   # if a function has been defined executes the package with the function
   if [[ -n "${FX_NAME+x}" ]]; then
       # pass the function name
