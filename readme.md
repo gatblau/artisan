@@ -1,3 +1,5 @@
+<div float="right"><img src="https://github.com/gatblau/artisan/raw/master/artisan.png" width="100"></div>
+
 # Artisan Library
 
 This project is a library for [Onix Artisan](https://github.com/gatblau/onix) assets as follows:
