@@ -23,7 +23,7 @@ RUN microdnf update --disablerepo=* --enablerepo=ubi-8-appstream --enablerepo=ub
     usermod --home / -u $UID $UNAME && \
     # artisan local registry folder
     mkdir -p /.artisan/keys && mkdir -p /.artisan/tmp && mkdir -p /.artisan/build && \
-    chown -R $UNAME /.artisan/ && chmod -R ug+wr /.artisan/ && \
+    chown -R $UNAME /.artisan/ && chmod -R a+wr /.artisan/ && \
     # app folder
     mkdir -p /app/ && chown $UNAME /app/ && chmod a+rwx /app/ && \
     # keys volume mount
