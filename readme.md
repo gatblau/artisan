@@ -1,4 +1,4 @@
-<p float="right"><img src="https://github.com/gatblau/artisan/raw/master/artisan.png" width="150"></p>
+<div style="text-align:right"<img src="https://github.com/gatblau/artisan/raw/master/artisan.png" width="150"></div>
 
 # Artisan Library
 
