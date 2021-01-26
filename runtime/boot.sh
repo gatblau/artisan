@@ -9,7 +9,7 @@
 #
 
 # copy any mounted keys to the artisan registry
-cp -r /keys/* /.artisan/keys/
+cp -r /keys/* /.artisan/keys/ | true
 
 # if a package name has been provided
 if [[ -n "${PACKAGE_NAME+x}" ]]; then
