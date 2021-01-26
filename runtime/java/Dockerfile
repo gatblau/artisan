@@ -9,38 +9,38 @@
 FROM alpine as builder
 
 ENV MAVEN_VERSION 3.6.3
-ENV GRADLE_VERSION 6.8
+#ENV GRADLE_VERSION 6.8
 
 WORKDIR /app/
 
 # downloads maven and gradel
 RUN wget http://archive.apache.org/dist/maven/maven-3/$MAVEN_VERSION/binaries/apache-maven-$MAVEN_VERSION-bin.tar.gz && \
     tar -zxvf apache-maven-$MAVEN_VERSION-bin.tar.gz && \
-    rm apache-maven-$MAVEN_VERSION-bin.tar.gz && \
-    wget --no-verbose --output-document=gradle.zip "https://services.gradle.org/distributions/gradle-${GRADLE_VERSION}-bin.zip" && \
-    unzip gradle.zip && \
-    rm gradle.zip
+    rm apache-maven-$MAVEN_VERSION-bin.tar.gz
+
+#RUN wget --no-verbose --output-document=gradle.zip "https://services.gradle.org/distributions/gradle-${GRADLE_VERSION}-bin.zip" && \
+#    unzip gradle.zip && \
+#    rm gradle.zip
 
 FROM quay.io/artisan/ubi-min
 
 ARG UNAME=runtime
 
 ENV MAVEN_VERSION 3.6.3
-ENV GRADLE_VERSION 6.8
+#ENV GRADLE_VERSION 6.8
 ENV JAVA_HOME /usr/lib/jvm/jre-openjdk
 
 ENV MAVEN_HOME /usr/lib/mvn
-ENV GRADLE_HOME /usr/lib/gradle
+#ENV GRADLE_HOME /usr/lib/gradle
 ENV PATH $MAVEN_HOME/bin:$GRADLE_HOME/bin:$PATH
 
 # installs JDK 11
-RUN microdnf update --disablerepo=* --enablerepo=ubi-8-appstream --enablerepo=ubi-8-baseos -y && \
-    microdnf install -y java-11-openjdk-devel && \
-    microdnf clean all && \
-    rm -rf /var/cache /var/log/dnf* /var/log/yum.*
+RUN microdnf install -y java-11-openjdk-devel && \
+    microdnf clean all && rm -rf /var/cache /var/log/dnf* /var/log/yum.* && \
+    mkdir -p /.m2/repository/ && chown -R $UNAME /.m2/ && chmod -R a+wr /.m2/
 
 # copy maven and gradle
 COPY --from=builder /app/apache-maven-$MAVEN_VERSION $MAVEN_HOME
-COPY --from=builder /app/gradle-$GRADLE_VERSION $GRADLE_HOME
+#COPY --from=builder /app/gradle-$GRADLE_VERSION $GRADLE_HOME
 
 USER $UNAME
