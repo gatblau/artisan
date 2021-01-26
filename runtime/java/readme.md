@@ -1,6 +1,6 @@
 # Java Artisan Runtime
 
-Runtime for building Java applications using Maven or Gradle.
+Runtime for building Java applications using Apache Maven.
 
 # Usage
 
