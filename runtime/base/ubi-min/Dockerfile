@@ -40,4 +40,4 @@ WORKDIR /app/
 # permissions on artisan CLI and bootstrap script
 RUN chmod ug+x /usr/bin/art && chmod ug+x /app/boot.sh
 
-ENTRYPOINT ["sh", "/app/boot.sh"]
+CMD ["sh", "/app/boot.sh"]
