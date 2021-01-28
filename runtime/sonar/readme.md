@@ -1,3 +1,4 @@
+<img src="https://github.com/gatblau/artisan/raw/master/artisan.png" width="150" align="right"/>
 # Artisan Runtime Image for SonarQube Community Scanner
 
 This image container the community [sonar scanner](https://docs.sonarqube.org/latest/analysis/scan/sonarscanner/)
