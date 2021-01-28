@@ -8,8 +8,8 @@
 #  to be licensed under the same terms as the rest of the code.
 #
 
-# copy any mounted keys to the artisan registry
-cp -R /keys /.artisan
+# copy any mounted keys to the artisan registry in the user home
+cp -R /keys ${HOME}/.artisan
 
 # if a package name has been provided
 if [[ -n "${PACKAGE_NAME+x}" ]]; then
