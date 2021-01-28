@@ -9,6 +9,10 @@
 #
 
 # copy any mounted keys to the artisan registry in the user home
+#echo creating ${HOME}/.artisan/keys folder
+mkdir -p ${HOME}/.artisan/keys
+
+#echo copying keys from /keys mount to ${HOME}/.artisan artisan registry
 cp -R /keys ${HOME}/.artisan
 
 # if a package name has been provided
