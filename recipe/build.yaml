@@ -4,5 +4,5 @@ profiles:
   - name: java-quarkus
     description: builds the java recipe
     type: recipe/java
-    target: java
+    target: java-quarkus
 ...
