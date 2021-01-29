@@ -2,7 +2,7 @@
 
 # Java Recipe - Quarkus & OpenShift Pipelines
 
-This recipe provides a quick start for a Java Web Service using Quarkus
+This recipe provides a quick start for a Java Web Service using Quarkus and Tekton pipelines in OpenShift
 
 ## Getting Started
 
