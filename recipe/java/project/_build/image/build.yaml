@@ -25,59 +25,34 @@ input:
       description: application image version/tag
       required: true
       type: string
-    - name: PRI_KEY_PATH
-      description: private key path to sign the application image
-      required: true
-      type: string
     - name: CRYPTO_KEY_EMAIL
       description: email id which is used to genearte crypto signature keys
       required: true
       type: string
 
   secret:
-    - name: ART_REG_USER
-      description: artefact registry user name
-      aggregate: true
-    - name: ART_REG_PWD
-      description: artefact registry user password
-      aggregate: true
     - name: PULL_IMAGE_REGISTRY_UNAME
       description: user name for the container registry where the base image is located
-      aggregate: true
     - name: PULL_IMAGE_REGISTRY_PWD
       description: password for the container registry where the base image is located
-      aggregate: true
     - name: PUSH_IMAGE_REGISTRY_UNAME
       description: user name for the container registry where the application image will be pushed
-      aggregate: true
     - name: PUSH_IMAGE_REGISTRY_PWD
       description: password for the container registry where the application image will be pushed
-      aggregate: true
-
-  key:
-    - name: PACKAGE_VERIFYING_KEY
-      description: the public PGP key used to verify the application package authenticity
-
-    - name: IMAGE_SIGNING_KEY
-      description: the private PGP key required to digitally sign the application package
-      private: true
 
 functions:
   - name: build-image
     description: build application image & push into the image registry
     export: true
+    env:
+      PRI_KEY_PATH: ${HOME}/.artisan/root_rsa_key.pgp
     run:
-      # open the application package in the /app folder
+      # Download sap-equip-jvm artefacts from repo
       - art open -u=${ART_REG_USER}:${ART_REG_PWD} ${ARTEFACT_NAME} app
-      # log in the base image registry
       - buildah login -u ${PULL_IMAGE_REGISTRY_UNAME} -p ${PULL_IMAGE_REGISTRY_PWD} ${PULL_IMAGE_REGISTRY}
-      # build the image using the Dockerfile
       - buildah bud --isolation chroot -t ${PUSH_IMAGE_REGISTRY}/${PUSH_IMAGE_REPO}/${PUSH_IMAGE_NAME}:${PUSH_IMAGE_VERSION} .
-      # import the pgp key
       - gpg --import ${PRI_KEY_PATH}
-      # sign and push the image
       - skopeo copy --sign-by=${CRYPTO_KEY_EMAIL} --dest-tls-verify=false --dest-creds ${PUSH_IMAGE_REGISTRY_UNAME}:${PUSH_IMAGE_REGISTRY_PWD} containers-storage:${PUSH_IMAGE_REGISTRY}/${PUSH_IMAGE_REPO}/${PUSH_IMAGE_NAME}:${PUSH_IMAGE_VERSION} docker://${PUSH_IMAGE_REGISTRY}/${PUSH_IMAGE_REPO}/${PUSH_IMAGE_NAME}:${PUSH_IMAGE_VERSION}
-
     input:
       var:
         - ARTEFACT_NAME
@@ -86,18 +61,10 @@ functions:
         - PUSH_IMAGE_REPO
         - PUSH_IMAGE_NAME
         - PUSH_IMAGE_VERSION
-        - PRI_KEY_PATH
         - CRYPTO_KEY_EMAIL
-
       secret:
-        - ART_REG_USER
-        - ART_REG_PWD
         - PULL_IMAGE_REGISTRY_UNAME
         - PULL_IMAGE_REGISTRY_PWD
         - PUSH_IMAGE_REGISTRY_UNAME
         - PUSH_IMAGE_REGISTRY_PWD
-
-      key:
-        - PACKAGE_VERIFYING_KEY
-        - IMAGE_SIGNING_KEY
 ...

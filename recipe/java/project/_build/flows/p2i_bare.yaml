@@ -1,12 +1,11 @@
 ---
-name: Java Application Package To Image Flow
+name: java-app-image
 description: build, sign and publish a Java Application Container Image
 
 steps:
-#   as package and function are defined, inputs are read from package manifest
   - name: build-image
     description: builds, signs and publish the container image
-    runtime: quay.io/gatblau/art-rhctools
+    runtime: buildah
     package: << Image Build Package Name Here >>
     function: build-image
 ...
