@@ -1,3 +1,5 @@
+<img src="https://github.com/gatblau/artisan/raw/master/artisan.png" width="150" align="right"/>
+
 # Artisan Recipes
 
 Recipes are packages containing build or deployment automation templates for a particular purpose.

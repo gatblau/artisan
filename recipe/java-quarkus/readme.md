@@ -1,3 +1,5 @@
+<img src="https://github.com/gatblau/artisan/raw/master/artisan.png" width="150" align="right"/>
+
 # Java Recipe - Quarkus & OpenShift Pipelines
 
 This recipe provides a quick start for a Java Web Service using Quarkus
