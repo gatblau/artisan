@@ -40,4 +40,13 @@ oc login ...
 
 # create the tekton pipeline in OpenShift as follows:
 cat _build/flows/s2p_tkn.yaml | oc apply -f -
-``
+
+# if you want to store the flow definition in git you MUST encrypt it as it contains
+# all the credentials required by the pipeline
+# you can use artisan to pgp encrypt it - ensure you have an encryption key pair stored in a safe place
+# then to encrypt the flow:
+art pgp encrypt -p path/to/public/key _build/flows/s2p.yaml
+
+# the tekton definition can be deleted
+rm _build/flows/s2p_tkn.yaml
+```
