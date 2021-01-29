@@ -6,6 +6,6 @@ This project is a library for [Onix Artisan](https://github.com/gatblau/onix) as
 
 | Asset | Description |
 |---|---|
-| Runtimes | Container images ready to run artisan packages |
-| Recipes | Archetypes for build or deployment automation |
-| Packages | Mostly executable packages |
+| [Runtimes](runtime/readme.md) | Container images ready to run artisan packages |
+| [Recipes](recipe/readme.md) | Archetypes for artisan based projects using different build and/or automation tools |
+| [Packages](packages/readme.md) | Executable packages |

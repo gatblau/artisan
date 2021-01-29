@@ -1,4 +1,4 @@
-# Java Recipe - Quarkus in OpenShift
+# Java Recipe - Quarkus & OpenShift Pipelines
 
 This recipe provides a quick start for a Java Web Service using Quarkus
 
