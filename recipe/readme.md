@@ -6,4 +6,4 @@ For example, the java recipe contains the files required to create CI and Image 
 
 | Recipe | Description |
 |---|---|
-| [java-quarkus](java) | quick start for Java Quarkus application with OpenShift pipelines |
+| [java-quarkus](java-quarkus) | quick start for a Quarkus Java application with OpenShift pipelines |
