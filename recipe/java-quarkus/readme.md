@@ -6,14 +6,15 @@ This recipe provides a quick start for a Java Web Service using Quarkus
 
 Ensure you have the following:
 - artisan CLI installed
-- this recipe is available from an Artisan registry
+- this recipe is available from an Artisan registry and you know the {{registry-url}}
 - oc client installed
+- tkn client installed (optional)
 
 Then follow the steps below:
 
 ```bash
 # open the recipe in a folder where the project files will be located
-art open recipe/java-quarkus my-project
+art open {{registry-url}}/recipe/java-quarkus my-project
 
 # go into the project directory
 cd my-project
