@@ -1,0 +1,76 @@
+---
+git_uri: <<update me>>
+app_icon: java
+
+env:
+  APP_NAME: <<update me>>
+
+input:
+  var:
+    - name: APP_PACKAGE_NAME
+      description: the name:tag for the application package to be published
+      required: true
+      type: name
+    - name: PROJECT_GROUP_ID
+      description: the maven group id for the project
+      required: true
+      type: string
+    - name: PROJECT_ARTIFACT_ID
+      description: the maven artifact id for the application
+      required: true
+      type: string
+
+  secret:
+    - name: ART_REG_USER
+      description: the artisan registry user
+    - name: ART_REG_PWD
+      description: the artisan registry password
+
+  key:
+    - name: SIGNING_KEY
+      description: the private PGP key required to digitally sign the application package
+      private: true
+
+profiles:
+  - name: app
+    description: packages the java application uber jar file
+    default: true
+    type: content/java
+    target: target/${APP_NAME}-1.0-SNAPSHOT-runner.jar
+    run:
+      - $(build-app)
+
+functions:
+  - name: build-app
+    description: compiles and tests the application
+    run:
+      - mvn package -DskipTests=true
+      - mvn test
+
+  - name: publish-app
+    description: packages and publishes the application
+    run:
+      - art build -t=${APP_PACKAGE_NAME} -p app
+      - art push ${APP_PACKAGE_NAME} -u=${ART_REG_USER}:${ART_REG_PWD}
+    input:
+      var:
+        - APP_PACKAGE_NAME
+      secret:
+        - ART_REG_USER
+        - ART_REG_PWD
+      key:
+        - SIGNING_KEY
+
+  - name: init-quarkus
+    description: create a Quarkus scaffolding for the project
+    runtime: java
+    run:
+      # create a Quarkus scaffold
+      - mvn io.quarkus:quarkus-maven-plugin:1.11.1.Final:create -DprojectGroupId=${PROJECT_GROUP_ID} -DprojectArtifactId=${PROJECT_ARTIFACT_ID} -DprojectVersion=0.0.1
+      - cp -R ${PROJECT_ARTIFACT_ID}/ .
+      - rm -R ${PROJECT_ARTIFACT_ID}
+    input:
+      var:
+        - PROJECT_GROUP_ID
+        - PROJECT_ARTIFACT_ID
+...

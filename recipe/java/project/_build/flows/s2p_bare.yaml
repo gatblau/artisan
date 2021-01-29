@@ -1,25 +1,24 @@
 ---
-name: Java Application Source To Package flow
+name: java-app-package
 description: build, package, sign and publish a Java Application
 
 steps:
   # as only function is defined, inputs are read Inputs from build.yaml
   - name: build-app
     description: compile and test the java app
-    runtime: quay.io/gatblau/art-java
+    runtime: java
     function: build-app
 
   # as no package nor function is defined then reads Input from runtime_input URL
   - name: scan-app
     description: runs a code quality check scan using the sonar runtime
-    runtime: quay.io/gatblau/art-sonar
+    runtime: sonar
     # defines the URI where the input definition for this runtime is located
-    # NOTE: if not specified, uses the https://raw.githubusercontent.com/gatblau/artisan/master/runtime/{RUNTIME_NAME}/input.yml
-    runtime_manifest: https://raw.githubusercontent.com/gatblau/artisan/master/runtime/art-sonar/input.yaml
+    runtime_manifest: https://raw.githubusercontent.com/gatblau/artisan/master/runtime/sonar/input.yaml
 
   # as only function is defined, inputs are read Inputs from build.yaml
   - name: package-app
     description: package and signs the app and publish it
-    runtime: quay.io/gatblau/art-java
+    runtime: java
     function: publish-app
 ...
