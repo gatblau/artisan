@@ -40,6 +40,12 @@ profiles:
     run:
       - $(build-app)
 
+  - name: image
+    description: builds the image builder package
+    runtime: buildah
+    type: exe/image/builder
+    target: _build/image
+
 functions:
   - name: build-app
     description: compiles and tests the application
@@ -60,17 +66,4 @@ functions:
         - ART_REG_PWD
       key:
         - SIGNING_KEY
-
-  - name: init-quarkus
-    description: create a Quarkus scaffolding for the project
-    runtime: java
-    run:
-      # create a Quarkus scaffold
-      - mvn io.quarkus:quarkus-maven-plugin:1.11.1.Final:create -DprojectGroupId=${PROJECT_GROUP_ID} -DprojectArtifactId=${PROJECT_ARTIFACT_ID} -DprojectVersion=0.0.1
-      - cp -R ${PROJECT_ARTIFACT_ID}/ .
-      - rm -R ${PROJECT_ARTIFACT_ID}
-    input:
-      var:
-        - PROJECT_GROUP_ID
-        - PROJECT_ARTIFACT_ID
 ...

@@ -43,6 +43,7 @@ input:
 functions:
   - name: build-image
     description: build application image & push into the image registry
+    runtime: buildah
     export: true
     env:
       PRI_KEY_PATH: ${HOME}/.artisan/root_rsa_key.pgp
