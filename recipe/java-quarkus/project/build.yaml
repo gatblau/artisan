@@ -6,6 +6,11 @@ env:
 
 input:
   var:
+    - name: GIT_URI
+      description: the URI of the project git repository
+      required: true
+      type: uri
+
     - name: SONAR_URI
       description: the URI of the SonarQube server to use for code quality reporting
       required: true
@@ -113,9 +118,10 @@ functions:
       # build the image builder package
       - art build -t ${IMG_PACKAGE_NAME} -p image
       # create a tekton pipeline resources file
-      - art flow merge --tkn _build/flows/s2p_bare.yaml
+      - art flow merge -b . --tkn _build/flows/s2p_bare.yaml
     input:
       var:
+        - GIT_URI
         - PROJECT_GROUP_ID
         - PROJECT_ARTIFACT_ID
         - SONAR_URI
