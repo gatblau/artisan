@@ -5,7 +5,10 @@ functions:
     run:
       - art run build-image base/ubi-min
       - art run build-image base/ubi
-      - art run build-image java
-      - art run build-image buildah
       - art run build-image k8s
+      - art run build-image buildah
+      - art run build-image java
+      - art run build-image python
+      - art run build-image sonar
+      - art run build-image go
 ...
