@@ -33,11 +33,6 @@ input:
       type: path
       default: target/classes
 
-    - name: IMG_PACKAGE_NAME
-      description: the name:tag for the image builder package to be published (e.g. registry-host/app-group/img-name)
-      required: true
-      type: name
-
     - name: APP_PACKAGE_NAME
       description: the name:tag for the application package to be published (e.g. registry-host/app-group/app-name)
       required: true
@@ -122,10 +117,6 @@ functions:
       - rm -R ${PROJECT_ARTIFACT_ID}
       # copy the docker file to build the jvm version to the image builder package folder
       - cp src/main/docker/Dockerfile.jvm _build/image/Dockerfile
-      # build the image builder package
-      - art build -t ${IMG_PACKAGE_NAME} -p image
-      # create a tekton pipeline resources file
-      - art flow merge -b . --tkn _build/flows/s2p_bare.yaml
     input:
       var:
         - GIT_URI
@@ -138,8 +129,38 @@ functions:
         - SONAR_BINARIES
         - SONAR_TOKEN
         - APP_PACKAGE_NAME
-        - IMG_PACKAGE_NAME
         - ART_REG_USER
         - ART_REG_PWD
         - SIGNING_KEY
+
+  - name: git-init
+    description: initialises the git repository
+    run:
+      - git init
+      - git add .
+      - git commit -m "first commit"
+      - git remote add origin ${GIT_URI}
+      - git push -u origin master
+
+  - name: app-pipeline
+    description: create a tekton pipeline in openshift to build the application
+    run:
+      # create a tekton pipeline resources file
+      - art flow merge -b . --tkn _build/flows/s2p_bare.yaml
+      # apply pipeline to OpenShift
+      - oc apply -f _build/flows/s2p_tkn.yaml
+
+  - name: img-pipeline
+    description: create a tekton pipeline in openshift to build the docker image
+    env:
+      IMG_PACKAGE_NAME: ${APP_PACKAGE_NAME}-image
+    run:
+      # build the image builder context package
+      - art build -t ${IMG_PACKAGE_NAME} -p image
+      # push the image builder context package to the registry
+      - art push -u ${ART_REG_USER}:${ART_REG_PWD} ${IMG_PACKAGE_NAME}
+      # create a tekton pipeline resources file
+      - art flow merge -b . --tkn _build/flows/p2i_bare.yaml
+      # apply the resource file to OpenShift
+      - oc apply -f _build/flows/p2i_tkn.yaml
 ...
