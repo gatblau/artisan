@@ -53,6 +53,12 @@ input:
       required: true
       type: string
 
+    - name: PROJECT_ARTIFACT_VERSION
+      description: the version of the application artifact
+      required: true
+      type: string
+      default: "0.0.1"
+
   secret:
     - name: ART_REG_USER
       description: the artisan registry user
@@ -65,13 +71,14 @@ input:
     - name: SIGNING_KEY
       description: the private PGP key required to digitally sign the application package
       private: true
+      path: /
 
 profiles:
   - name: app
     description: packages the java application uber jar file
     default: true
     type: content/java
-    target: target/${APP_NAME}-1.0-SNAPSHOT-runner.jar
+    target: target/${PROJECT_ARTIFACT_ID}-${PROJECT_ARTIFACT_VERSION}-runner.jar
     run:
       - $(build-app)
 
@@ -108,7 +115,7 @@ functions:
     runtime: java
     run:
       # creates the quarkus scaffold for the project
-      - mvn io.quarkus:quarkus-maven-plugin:1.11.1.Final:create -DprojectGroupId=${PROJECT_GROUP_ID} -DprojectArtifactId=${PROJECT_ARTIFACT_ID} -DprojectVersion=0.0.1
+      - mvn io.quarkus:quarkus-maven-plugin:1.11.1.Final:create -DprojectGroupId=${PROJECT_GROUP_ID} -DprojectArtifactId=${PROJECT_ARTIFACT_ID} -DprojectVersion=${PROJECT_ARTIFACT_VERSION}
       # copy project files to the correct location
       - cp -r ${PROJECT_ARTIFACT_ID}/. .
       # remove old folder
@@ -124,6 +131,7 @@ functions:
         - GIT_URI
         - PROJECT_GROUP_ID
         - PROJECT_ARTIFACT_ID
+        - PROJECT_ARTIFACT_VERSION
         - SONAR_URI
         - SONAR_PROJECT_KEY
         - SONAR_SOURCES
