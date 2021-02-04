@@ -158,15 +158,19 @@ functions:
 
   - name: img-pipeline
     description: create a tekton pipeline in openshift to build the docker image
-    env:
-      IMG_PACKAGE_NAME: ${APP_PACKAGE_NAME}-image
     run:
+      - art merge _build/flows/p2i_bare.yaml.tem
       # build the image builder context package
-      - art build -t ${IMG_PACKAGE_NAME} -p image
+      - art build -t ${APP_PACKAGE_NAME}-image -p image
       # push the image builder context package to the registry
-      - art push -u ${ART_REG_USER}:${ART_REG_PWD} ${IMG_PACKAGE_NAME}
+      - art push -u ${ART_REG_USER}:${ART_REG_PWD} ${APP_PACKAGE_NAME}-image
       # create a tekton pipeline resources file
       - art flow merge -b . --tkn _build/flows/p2i_bare.yaml
       # apply the resource file to OpenShift
       - oc apply -f _build/flows/p2i_tkn.yaml
+    input:
+      var:
+        - APP_PACKAGE_NAME
+        - ART_REG_USER
+        - ART_REG_PWD
 ...
