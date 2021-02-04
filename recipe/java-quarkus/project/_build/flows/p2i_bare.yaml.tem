@@ -6,6 +6,6 @@ steps:
   - name: build-image
     description: builds, signs and publish the container image
     runtime: buildah
-    package: ${APP_PACKAGE_NAME}-image
+    package: ${BC_LAUNCHER_PACKAGE_NAME}-image
     function: build-image
 ...
