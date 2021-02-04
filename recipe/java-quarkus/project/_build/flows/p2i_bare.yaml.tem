@@ -7,5 +7,5 @@ steps:
     description: builds, signs and publish the container image
     runtime: buildah
     package: ${BC_LAUNCHER_PACKAGE_NAME}
-    function: build-image
+    function: start-build
 ...
