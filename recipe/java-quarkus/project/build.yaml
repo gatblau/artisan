@@ -54,6 +54,11 @@ input:
       type: string
       default: 0.0.1
 
+    - name: BC_LAUNCHER_PACKAGE_NAME
+      description: the name:tag for the build configuration launcher package used to trigger the image build in OpenShift
+      required: true
+      type: name
+
   secret:
     - name: ART_REG_USER
       description: the artisan registry user
