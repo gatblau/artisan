@@ -6,6 +6,6 @@ steps:
   - name: build-image
     description: builds, signs and publish the container image
     runtime: buildah
-    package: << Image Build Package Name Here >>
+    package: {{APP_PACKAGE_NAME}}
     function: build-image
 ...
