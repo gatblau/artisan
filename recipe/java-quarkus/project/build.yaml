@@ -52,7 +52,7 @@ input:
       description: the version of the application artifact
       required: true
       type: string
-      default: "0.0.1"
+      default: 0.0.1
 
   secret:
     - name: ART_REG_USER
@@ -74,8 +74,10 @@ profiles:
     default: true
     type: content/java
     target: target/${PROJECT_ARTIFACT_ID}-${PROJECT_ARTIFACT_VERSION}-runner.jar
-    run:
-      - $(build-app)
+    input:
+      var:
+        - PROJECT_ARTIFACT_ID
+        - PROJECT_ARTIFACT_VERSION
 
   - name: image
     description: builds the image builder package
@@ -98,10 +100,14 @@ functions:
     input:
       var:
         - APP_PACKAGE_NAME
+        # needs this for the app profile to work
+        - PROJECT_ARTIFACT_ID
+        - PROJECT_ARTIFACT_VERSION
       secret:
         - ART_REG_USER
         - ART_REG_PWD
       key:
+        # needs this binding to mount the key in the container
         - SIGNING_KEY
 
   - name: init
@@ -138,7 +144,7 @@ functions:
     run:
       - git init
       - git add .
-      - git commit -m "first commit"
+      - git commit -m first_commit
       - git remote add origin ${GIT_URI}
       - git push -u origin master
 
