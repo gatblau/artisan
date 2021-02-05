@@ -5,7 +5,7 @@ description: build, sign and publish a Java Application Container Image
 steps:
   - name: build-image
     description: builds, signs and publish the container image
-    runtime: buildah
+    runtime: k8s
     package: ${BC_LAUNCHER_PACKAGE_NAME}
     function: start-build
 ...
