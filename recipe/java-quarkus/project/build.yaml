@@ -126,8 +126,6 @@ functions:
       - cp -r ${PROJECT_ARTIFACT_ID}/. .
       # remove old folder
       - rm -R ${PROJECT_ARTIFACT_ID}
-      # copy the docker file to build the jvm version to the image builder package folder
-      - cp src/main/docker/Dockerfile.jvm _build/image/Dockerfile
     input:
       var:
         - GIT_URI
@@ -164,6 +162,9 @@ functions:
   - name: img-pipeline
     description: create a tekton pipeline in openshift to build the docker image
     run:
+      # copy the docker file to build the jvm version to the image builder package folder
+      - cp src/main/docker/Dockerfile.jvm _build/image/Dockerfile 2>/dev/null || :
+      # merge the name of the BC_LAUNCHER_PACKAGE_NAME into the p2i template
       - art merge _build/flows/p2i_bare.yaml.tem
       # build the image builder context package
       - art build -t ${APP_PACKAGE_NAME}-image -p image
