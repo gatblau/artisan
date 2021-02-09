@@ -108,9 +108,6 @@ functions:
     input:
       var:
         - APP_PACKAGE_NAME
-        # needs this for the app profile to work
-        - PROJECT_ARTIFACT_ID
-        - PROJECT_ARTIFACT_VERSION
       secret:
         - ART_REG_USER
         - ART_REG_PWD
