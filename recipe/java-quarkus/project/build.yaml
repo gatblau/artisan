@@ -78,11 +78,7 @@ profiles:
     description: packages the java application uber jar file
     default: true
     type: content/java
-    target: target/${PROJECT_ARTIFACT_ID}-${PROJECT_ARTIFACT_VERSION}-runner.jar
-    input:
-      var:
-        - PROJECT_ARTIFACT_ID
-        - PROJECT_ARTIFACT_VERSION
+    target: target/target
 
   - name: image
     description: builds the image builder package
@@ -96,6 +92,13 @@ functions:
     run:
       - mvn package -DskipTests=true
       - mvn test
+      - mkdir target/target
+      - cp target/${PROJECT_ARTIFACT_ID}-${PROJECT_ARTIFACT_VERSION}-runner.jar target/target
+      - cp -r target/lib/. target/target/lib
+    input:
+      var:
+        - PROJECT_ARTIFACT_ID
+        - PROJECT_ARTIFACT_VERSION
 
   - name: publish-app
     description: packages and publishes the application
@@ -180,4 +183,5 @@ functions:
         - APP_PACKAGE_NAME
         - ART_REG_USER
         - ART_REG_PWD
+        - BC_LAUNCHER_PACKAGE_NAME
 ...
