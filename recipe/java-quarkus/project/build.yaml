@@ -121,7 +121,8 @@ functions:
     runtime: java
     run:
       # creates the quarkus scaffold for the project
-      - mvn io.quarkus:quarkus-maven-plugin:1.11.1.Final:create -DprojectGroupId=${PROJECT_GROUP_ID} -DprojectArtifactId=${PROJECT_ARTIFACT_ID} -DprojectVersion=${PROJECT_ARTIFACT_VERSION}
+      # the plugin version below might need upgrading if the current one is not available anymore
+      - mvn io.quarkus:quarkus-maven-plugin:1.11.2.Final:create -DprojectGroupId=${PROJECT_GROUP_ID} -DprojectArtifactId=${PROJECT_ARTIFACT_ID} -DprojectVersion=${PROJECT_ARTIFACT_VERSION}
       # copy project files to the correct location
       - cp -r ${PROJECT_ARTIFACT_ID}/. .
       # remove old folder
