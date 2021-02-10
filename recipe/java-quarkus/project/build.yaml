@@ -78,6 +78,11 @@ profiles:
     description: packages the java application uber jar file
     default: true
     type: content/java
+    run:
+      # copy the docker file to build the jvm version to the artefact(target) package folder
+      - cp src/main/docker/Dockerfile.jvm target/target
+      # copy the build.yaml file to build the jvm version to the artefact(target) package folder
+      - cp _build/image/build.yaml target/target
     target: target/target
 
   - name: image
@@ -164,14 +169,8 @@ functions:
     description: create a tekton pipeline in openshift to build the docker image
     run:
       - rm -f _build/image/Dockerfile
-      # copy the docker file to build the jvm version to the image builder package folder
-      - cp src/main/docker/Dockerfile.jvm _build/image/Dockerfile
       # merge the name of the BC_LAUNCHER_PACKAGE_NAME into the p2i template
       - art merge _build/flows/p2i_bare.yaml.tem
-      # build the image builder context package
-      - art build -t ${APP_PACKAGE_NAME}-image -p image
-      # push the image builder context package to the registry
-      - art push -u ${ART_REG_USER}:${ART_REG_PWD} ${APP_PACKAGE_NAME}-image
       # create a tekton pipeline resources file
       - art flow merge -b . --tkn _build/flows/p2i_bare.yaml
       # apply the resource file to OpenShift
