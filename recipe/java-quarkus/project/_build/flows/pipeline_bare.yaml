@@ -21,4 +21,9 @@ steps:
     description: package and signs the app and publish it
     runtime: java
     function: publish-app
+
+  - name: build-image
+    description: build and publish container image
+    runtime: k8s
+    function: build-image
 ...

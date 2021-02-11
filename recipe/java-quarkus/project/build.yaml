@@ -120,6 +120,14 @@ functions:
         # needs this binding to mount the key in the container
         - SIGNING_KEY
 
+  - name: build-image
+    run:
+      - art merge buildconfig.yaml.tem
+      - oc create -f buildconfig.yaml
+      - oc start-build sap-equip-jvm-custom-build -F | tee buildconfig.log
+      - oc delete -f buildconfig.yaml
+# add input vars, secrets required by buildconfig.yaml.tem
+
   - name: init
     description: initialises the project and creates pipelines
     export: true
@@ -157,28 +165,11 @@ functions:
       - git remote add origin ${GIT_URI}
       - git push -u origin master
 
-  - name: app-pipeline
+  - name: ci-pipeline
     description: create a tekton pipeline in openshift to build the application
     run:
       # create a tekton pipeline resources file
-      - art flow merge -b . --tkn _build/flows/s2p_bare.yaml
+      - art flow merge -b . --tkn _build/flows/pipeline_bare.yaml
       # apply pipeline to OpenShift
-      - oc apply -f _build/flows/s2p_tkn.yaml
-
-  - name: img-pipeline
-    description: create a tekton pipeline in openshift to build the docker image
-    run:
-      - rm -f _build/image/Dockerfile
-      # merge the name of the BC_LAUNCHER_PACKAGE_NAME into the p2i template
-      - art merge _build/flows/p2i_bare.yaml.tem
-      # create a tekton pipeline resources file
-      - art flow merge -b . --tkn _build/flows/p2i_bare.yaml
-      # apply the resource file to OpenShift
-      - oc apply -f _build/flows/p2i_tkn.yaml
-    input:
-      var:
-        - APP_PACKAGE_NAME
-        - ART_REG_USER
-        - ART_REG_PWD
-        - BC_LAUNCHER_PACKAGE_NAME
+      - oc apply -f _build/flows/pipeline_tkn.yaml
 ...
