@@ -59,6 +59,49 @@ input:
       required: true
       type: name
 
+    # env variables required bt bc_launcher
+    - name: BC_APPLICATION_NAME
+      description: openshift app name
+      required: true
+      type: string
+    - name: BC_BUILDER_IMAGE
+      description: image builder name (buildah image)
+      required: true
+      type: string
+    - name: BC_PUSH_IMAGE_REGISTRY
+      description: application image registry name
+      required: true
+      type: string
+    - name: BC_PUSH_IMAGE_REPO
+      description: application image repo name
+      required: true
+      type: string
+    - name: BC_PUSH_IMAGE_NAME
+      description: application image name
+      required: true
+      type: string
+    - name: BC_PUSH_IMAGE_VERSION
+      description: application image version/tag
+      required: true
+      type: string
+    - name: BC_PULL_IMAGE_REGISTRY
+      description: application runtime image registry name
+      required: true
+      type: string
+    - name: BC_ARTEFACT_NAME
+      description: name for the artefact that will be downloaded
+      required: true
+      type: string
+    - name: BC_FX_NAME
+      description: function name to build image
+      required: true
+      type: string
+    - name: BC_CRYPTO_KEY_EMAIL
+      description: email id which is used to genearte crypto signature keys
+      required: true
+      type: string
+
+
   secret:
     - name: ART_REG_USER
       description: the artisan registry user
@@ -66,12 +109,37 @@ input:
       description: the artisan registry password
     - name: SONAR_TOKEN
       description: the token to access the Sonar server
+    - name: BC_PULL_IMAGE_REGISTRY_UNAME
+      description: user name for the container registry where the base image is located
+      aggregate: true
+      type: string
+    - name: BC_PULL_IMAGE_REGISTRY_PWD
+      description: password for the container registry where the base image is located
+      aggregate: true
+    - name: BC_PUSH_IMAGE_REGISTRY_UNAME
+      description: user name for the container registry where the application image will be pushed
+      aggregate: true
+      type: string
+    - name: BC_PUSH_IMAGE_REGISTRY_PWD
+      description: password for the container registry where the application image will be pushed
+      aggregate: true
+    - name: BC_ART_REG_USER
+      description: artefact registry user name
+      aggregate: true
+      type: string
+    - name: BC_ART_REG_PWD
+      description: artefact registry user password
+      aggregate: true
 
   key:
     - name: SIGNING_KEY
       description: the private PGP key required to digitally sign the application package
       private: true
       path: /
+
+    - name: BC_SIGNING_KEY
+      description: the private PGP key required to digitally sign the docker image
+      private: true
 
 profiles:
   - name: app
@@ -80,7 +148,7 @@ profiles:
     type: content/java
     run:
       # copy the docker file to build the jvm version to the artefact(target) package folder
-      - cp src/main/docker/Dockerfile.jvm target/target
+      - cp _build/image/Dockerfile target/target/Dockerfile
       # copy the build.yaml file to build the jvm version to the artefact(target) package folder
       - cp _build/image/build.yaml target/target
     target: target/target
@@ -122,11 +190,31 @@ functions:
 
   - name: build-image
     run:
-      - art merge buildconfig.yaml.tem
-      - oc create -f buildconfig.yaml
-      - oc start-build sap-equip-jvm-custom-build -F | tee buildconfig.log
-      - oc delete -f buildconfig.yaml
-# add input vars, secrets required by buildconfig.yaml.tem
+      - art merge _build/flows/buildconfig.yaml.tem
+      - oc create -f _build/flows/buildconfig.yaml
+      - oc start-build ${BC_APPLICATION_NAME}-custom-build -F | tee buildconfig.log
+      - oc delete -f _build/flows/buildconfig.yaml
+    input:
+      var:
+        - BC_APPLICATION_NAME
+        - BC_BUILDER_IMAGE
+        - BC_PUSH_IMAGE_REGISTRY
+        - BC_PUSH_IMAGE_REPO
+        - BC_PUSH_IMAGE_NAME
+        - BC_PUSH_IMAGE_VERSION
+        - BC_PULL_IMAGE_REGISTRY
+        - BC_ARTEFACT_NAME
+        - BC_FX_NAME
+        - BC_CRYPTO_KEY_EMAIL
+      secret:
+        - BC_PULL_IMAGE_REGISTRY_UNAME
+        - BC_PULL_IMAGE_REGISTRY_PWD
+        - BC_PUSH_IMAGE_REGISTRY_UNAME
+        - BC_PUSH_IMAGE_REGISTRY_PWD
+        - BC_ART_REG_USER
+        - BC_ART_REG_PWD
+      key:
+        - BC_SIGNING_KEY
 
   - name: init
     description: initialises the project and creates pipelines
