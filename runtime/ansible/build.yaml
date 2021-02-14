@@ -6,9 +6,16 @@ env:
 
 functions:
   - name: build-image
+    description: builds and push docker image
     run:
       - docker build -t=${REPO_NAME}/${IMG_NAME}:${ARTISAN_REF} .
       - docker tag ${REPO_NAME}/${IMG_NAME}:${ARTISAN_REF} ${REPO_NAME}/${IMG_NAME}:latest
       - docker push ${REPO_NAME}/${IMG_NAME}:${ARTISAN_REF}
       - docker push ${REPO_NAME}/${IMG_NAME}:latest
+
+  - name: version
+    description: prints the versions for the tools in this runtime
+    runtime: ansible
+    run:
+      - ansible --version
 ...
