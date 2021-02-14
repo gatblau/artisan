@@ -6,17 +6,55 @@
 #  Contributors to this project, hereby assign copyright in this code to the project,
 #  to be licensed under the same terms as the rest of the code.
 #
-FROM quay.io/artisan/python
+FROM quay.io/artisan/ubi
 
 ARG UNAME=runtime
 
-USER root
+ENV PATH="/root/.local/bin":$PATH
+ENV container=docker
+ENV ANSIBLE_VERSION=2.10.5
 
-RUN mkdir -p /.cache/pip/ && chown -R $UNAME /.cache/pip/ && chmod -R a+wr /.cache/pip/ && \
-    curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py && \
-    python3 get-pip.py --user && \
-    python3 -m pip install --user ansible
+# silence bogus subscription messages
+RUN echo "enabled=0" >> /etc/yum/pluginconf.d/subscription-manager.conf
 
-WORKDIR /app
+# deletes a number of unit files which might cause issues - see https://hub.docker.com/_/centos/
+RUN dnf -y update; dnf clean all; \
+(cd /lib/systemd/system/sysinit.target.wants/; for i in *; do [ $i == systemd-tmpfiles-setup.service ] || rm -f $i; done); \
+rm -f /lib/systemd/system/multi-user.target.wants/*;\
+rm -f /etc/systemd/system/*.wants/*;\
+rm -f /lib/systemd/system/local-fs.target.wants/*; \
+rm -f /lib/systemd/system/sockets.target.wants/*udev*; \
+rm -f /lib/systemd/system/sockets.target.wants/*initctl*; \
+rm -f /lib/systemd/system/basic.target.wants/*;\
+rm -f /lib/systemd/system/anaconda.target.wants/*;
+
+# install pre-requisites
+RUN dnf makecache --timer \
+ && dnf -y install initscripts \
+ && dnf -y update \
+ && dnf -y install sudo which hostname python3 \
+ && dnf clean all
+
+# install and upgrade pip via python
+RUN python3 -m pip install -U pip
+
+# install wheel (required by ansible installation)
+RUN pip3 install wheel
+
+# install the specified ansible version using pip
+RUN pip3 install ansible==${ANSIBLE_VERSION}
+
+# disable requiretty and create default hosts file
+RUN sed -i -e 's/^\(Defaults\s*requiretty\)/#--- \1/'  /etc/sudoers \
+ && mkdir -p /etc/ansible \
+ && mkdir -p /.ansible/tmp \
+ && echo -e '[local]\nlocalhost ansible_connection=local' > /etc/ansible/hosts
+
+# add the ansible configuration file
+COPY ansible.cfg /etc/ansible
+
+# ensure ansible folders are accessible by the runtime user
+RUN chown -R ${UNAME}:0 /.ansible && chmod -R g+rw /.ansible \
+ && chown -R ${UNAME}:0 /etc/ansible && chmod -R g+rw /etc/ansible
 
 USER $UNAME
