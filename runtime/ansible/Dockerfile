@@ -51,7 +51,7 @@ RUN sed -i -e 's/^\(Defaults\s*requiretty\)/#--- \1/'  /etc/sudoers \
  && echo -e '[local]\nlocalhost ansible_connection=local' > /etc/ansible/hosts
 
 # add the ansible configuration file
-COPY ansible.cfg /etc/ansible
+COPY ansible.cfg /etc/ansible/ansible.cfg
 
 # ensure ansible folders are accessible by the runtime user
 RUN chown -R ${UNAME}:0 /.ansible && chmod -R g+rw /.ansible \
