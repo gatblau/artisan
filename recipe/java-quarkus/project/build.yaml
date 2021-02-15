@@ -59,7 +59,7 @@ input:
       required: true
       type: name
 
-    # env variables required bt bc_launcher
+    # env variables required by bc_launcher
     - name: BC_APPLICATION_NAME
       description: openshift app name
       required: true
@@ -88,7 +88,7 @@ input:
       description: application runtime image registry name
       required: true
       type: string
-    - name: BC_ARTEFACT_NAME
+    - name: BC_PACKAGE_NAME
       description: name for the artefact that will be downloaded
       required: true
       type: string
@@ -100,7 +100,6 @@ input:
       description: email id which is used to genearte crypto signature keys
       required: true
       type: string
-
 
   secret:
     - name: ART_REG_USER
@@ -140,6 +139,11 @@ input:
     - name: BC_SIGNING_KEY
       description: the private PGP key required to digitally sign the docker image
       private: true
+      path: /
+
+    - name: VERIFICATION_KEY
+      description: the public PGP key required to open the artefacts
+      path: /
 
 profiles:
   - name: app
@@ -148,7 +152,7 @@ profiles:
     type: content/java
     run:
       # copy the docker file to build the jvm version to the artefact(target) package folder
-      - cp _build/image/Dockerfile target/target/Dockerfile
+      - cp _build/image/Dockerfile target/target/Dockerfile 
       # copy the build.yaml file to build the jvm version to the artefact(target) package folder
       - cp _build/image/build.yaml target/target
     target: target/target
@@ -194,7 +198,7 @@ functions:
       - oc create -f _build/flows/buildconfig.yaml
       - oc start-build ${BC_APPLICATION_NAME}-custom-build -F | tee buildconfig.log
       - oc delete -f _build/flows/buildconfig.yaml
-    input:
+    input:  
       var:
         - BC_APPLICATION_NAME
         - BC_BUILDER_IMAGE
@@ -203,8 +207,8 @@ functions:
         - BC_PUSH_IMAGE_NAME
         - BC_PUSH_IMAGE_VERSION
         - BC_PULL_IMAGE_REGISTRY
-        - BC_ARTEFACT_NAME
-        - BC_FX_NAME
+        - BC_PACKAGE_NAME
+        - BC_FX_NAME  
         - BC_CRYPTO_KEY_EMAIL
       secret:
         - BC_PULL_IMAGE_REGISTRY_UNAME
@@ -214,7 +218,7 @@ functions:
         - BC_ART_REG_USER
         - BC_ART_REG_PWD
       key:
-        - BC_SIGNING_KEY
+        - VERIFICATION_KEY
 
   - name: init
     description: initialises the project and creates pipelines
