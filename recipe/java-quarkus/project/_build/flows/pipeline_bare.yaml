@@ -1,5 +1,5 @@
 ---
-name: java-app-package
+name: java-app
 description: build, package, sign and publish a Java Application
 
 steps:

@@ -25,51 +25,45 @@ spec:
           value: "${BC_PUSH_IMAGE_VERSION}"
         - name: "PULL_IMAGE_REGISTRY"
           value: "${BC_PULL_IMAGE_REGISTRY}"
-        - name: "ARTEFACT_NAME"
-          value: "${BC_ARTEFACT_NAME}"
         - name: "PACKAGE_NAME"
           value: "${BC_PACKAGE_NAME}"
-        - name: "PUB_KEY_PATH"
-          value: "${BC_PUB_KEY_PATH}"
         - name: "FX_NAME"
           value: "${BC_FX_NAME}"
-        - name: "PRI_KEY_PATH"
-          value: "${BC_PRI_KEY_PATH}"
         - name: "CRYPTO_KEY_EMAIL"
           value: "${BC_CRYPTO_KEY_EMAIL}"
         - name: PULL_IMAGE_REGISTRY_UNAME
           valueFrom:
             secretKeyRef:
               key: BC_PULL_IMAGE_REGISTRY_UNAME
-              name: sap-equip-jvm-image-builder
+              name: ${BC_APPLICATION_NAME}-creds-secret
         - name: PULL_IMAGE_REGISTRY_PWD
           valueFrom:
             secretKeyRef:
               key: BC_PULL_IMAGE_REGISTRY_PWD
-              name: sap-equip-jvm-image-builder
+              name: ${BC_APPLICATION_NAME}-creds-secret
         - name: PUSH_IMAGE_REGISTRY_UNAME
           valueFrom:
             secretKeyRef:
               key: BC_PUSH_IMAGE_REGISTRY_UNAME
-              name: sap-equip-jvm-image-builder
+              name: ${BC_APPLICATION_NAME}-creds-secret
         - name: PUSH_IMAGE_REGISTRY_PWD
           valueFrom:
             secretKeyRef:
               key: BC_PUSH_IMAGE_REGISTRY_PWD
-              name: sap-equip-jvm-image-builder
+              name: ${BC_APPLICATION_NAME}-creds-secret
         - name: ART_REG_USER
           valueFrom:
             secretKeyRef:
               key: BC_ART_REG_USER
-              name: sap-equip-jvm-image-builder
+              name: ${BC_APPLICATION_NAME}-creds-secret
         - name: ART_REG_PWD
           valueFrom:
             secretKeyRef:
               key: BC_ART_REG_PWD
-              name: sap-equip-jvm-image-builder
+              name: ${BC_APPLICATION_NAME}-creds-secret
       secrets:
       - secretSource:
-          name: "${BC_CRYPTO_KEY_NAME}"
+          name: "${BC_APPLICATION_NAME}-keys-secret"
         mountPath: "/keys/"
   output:
     to:
