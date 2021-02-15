@@ -6,10 +6,10 @@ This folder contains dictionaries to internationalise Artisan in the following l
 
 | code | ISO 639-1 language name |
 |---|---|
-| de | [german](de.i18n) |
+| de | [german](de_i18n.toml) |
 | en | english (default) |
-| es | [spanish](es.i18n) |
-| fr | [french](fr.i18n) |
-| hi | [hindi](hi.i18n) |
-| zh | [chinese](zh.i18n) |
+| es | [spanish](es_i18n.toml) |
+| fr | [french](fr_i18n.toml) |
+| hi | [hindi](hi_i18n.toml) |
+| zh | [chinese](zh_i18n.toml) |
 
