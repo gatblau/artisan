@@ -1,0 +1,164 @@
+---
+# this is the build file required to build the quarkus application
+app_icon: quarkus
+
+env:
+  APP_NAME: app
+
+input:
+  var:
+    - name: PROJECT_GROUP_ID
+      description: the maven group id for the project
+      required: true
+      type: string
+
+    - name: PROJECT_ARTIFACT_ID
+      description: the maven artifact id for the application
+      required: true
+      type: string
+
+    - name: PROJECT_ARTIFACT_VERSION
+      description: the version of the application artifact
+      required: true
+      type: string
+      default: 0.0.1
+
+    - name: APP_PACKAGE_NAME
+      description: the name:tag for the application package to be published (e.g. registry-host/app-group/app-name)
+      required: true
+      type: name
+
+    # env variables required by build-image function
+    - name: BC_APPLICATION_NAME
+      description: the openshift application name
+      required: true
+      type: string
+    - name: BC_BUILDER_IMAGE
+      description: the image builder name (buildah image)
+      required: true
+      type: string
+    - name: BC_PUSH_IMAGE_REGISTRY
+      description: the image registry name (eg. registry.gitlab.com)
+      required: true
+      type: string
+    - name: BC_PUSH_IMAGE_REPO
+      description: the image repo name (eg. sap7)
+      required: true
+      type: string
+    - name: BC_PUSH_IMAGE_NAME
+      description: the application image name
+      required: true
+      type: string
+    - name: BC_PUSH_IMAGE_VERSION
+      description: the application image version/tag
+      required: true
+      type: string
+    - name: BC_PULL_IMAGE_REGISTRY
+      description: application runtime image registry name (eg. registry.gitlab.com)
+      required: true
+      type: string
+    - name: BC_PACKAGE_NAME
+      description: the name for the application package that will be downloaded (e.g. registry-host/app-group/app-name)
+      required: true
+      type: string
+    - name: BC_FX_NAME
+      description: the function name to build image (eg. build-image)
+      required: true
+      type: string
+    - name: BC_CRYPTO_KEY_EMAIL
+      description: the email id which is used to genearte crypto signature keys
+      required: true
+      type: string
+
+  secret:
+    - name: ART_REG_USER
+      description: the artisan registry user
+    - name: ART_REG_PWD
+      description: the artisan registry password
+
+  key:
+    - name: SIGNING_KEY
+      description: the private PGP key required to digitally sign the application package
+      private: true
+      path: /
+
+    - name: VERIFICATION_KEY
+      description: the public PGP key required to open the application package
+      path: /
+
+profiles:
+  - name: app
+    description: packages the java application uber jar file (called within publish-app function)
+    default: true
+    type: content/java
+    run:
+      # add Dockerfile to packaging folder
+      - cp image/Dockerfile target/target/Dockerfile
+      # add build file to packaging folder
+      - cp image/build.yaml target/target
+    target: target/target
+
+functions:
+  - name: build-app
+    description: compiles and tests the application
+    run:
+      # compile and package the java app
+      - mvn package -DskipTests=true
+      # run tests
+      - mvn test
+      # create a folder for the 'app' profile
+      - mkdir target/target
+      # copy the jar file to the folder
+      - cp target/${PROJECT_ARTIFACT_ID}-${PROJECT_ARTIFACT_VERSION}-runner.jar target/target
+      # copy the dependencies to the folder
+      - cp -r target/lib/. target/target/lib
+    input:
+      var:
+        - PROJECT_ARTIFACT_ID
+        - PROJECT_ARTIFACT_VERSION
+
+  - name: publish-app
+    description: packages and publishes the application
+    run:
+      # run the app profile: create Artisan package containing the application jar, its dependencies,
+      # a Dockerfile and supporting container image build files
+      - art build -t=${APP_PACKAGE_NAME} -p app
+      # push the Artisan package to the registry
+      - art push ${APP_PACKAGE_NAME} -u=${ART_REG_USER}:${ART_REG_PWD}
+    input:
+      var:
+        - APP_PACKAGE_NAME
+      secret:
+        - ART_REG_USER
+        - ART_REG_PWD
+      key:
+        # needs this binding to mount the key in the container
+        - SIGNING_KEY
+
+  - name: build-image
+    description: build the container image for the app
+    run:
+      # call shell script which contains commands to create OpenShift custom build configuration to build application image
+      - sh start-build.sh ${BC_APPLICATION_NAME}
+    input:
+      var:
+        - BC_APPLICATION_NAME
+        - BC_BUILDER_IMAGE
+        - BC_PUSH_IMAGE_REGISTRY
+        - BC_PUSH_IMAGE_REPO
+        - BC_PUSH_IMAGE_NAME
+        - BC_PUSH_IMAGE_VERSION
+        - BC_PULL_IMAGE_REGISTRY
+        - BC_PACKAGE_NAME
+        - BC_FX_NAME  
+        - BC_CRYPTO_KEY_EMAIL
+      secret:
+        - BC_PULL_IMAGE_REGISTRY_UNAME
+        - BC_PULL_IMAGE_REGISTRY_PWD
+        - BC_PUSH_IMAGE_REGISTRY_UNAME
+        - BC_PUSH_IMAGE_REGISTRY_PWD
+        - BC_ART_REG_USER
+        - BC_ART_REG_PWD
+      key:
+        - VERIFICATION_KEY
+...
