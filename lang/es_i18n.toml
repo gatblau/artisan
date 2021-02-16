@@ -1,17 +1,14 @@
-# --------------------------------------------------------------
-# Artisan Dictionary for Spanish Language
-# --------------------------------------------------------------
-
-# mensajes de error
-ERR_CANT_CREATE_REGISTRY_FOLDER = "no puedo crear la carpeta del registro local '%s', el inicio del usuario es: '%s'"
-ERR_CANT_EXEC_FUNC_IN_PACKAGE   = "no puedo ejecutar la funcion '%s' en el paquete '%s'"
-ERR_CANT_LOAD_PRIV_KEY          = "no puedo cargar la llave privada"
-ERR_CANT_PUSH_PACKAGE           = "no puedo empujar el paquete"
-ERR_INVALID_PACKAGE_NAME        = "el nombre del paquete es invalido"
-
-# mensages the informacion
-INFO_PUSHED                     = "empujado: %s\n"
-INFO_NOTHING_TO_PUSH            = "nada que empujar\n"
-
-# etiquetas
-LBL_LS_HEADER                   = "REPOSITORIO\tETIQUETA\tIDENTIFICADOR DE PAQUETE\tTIPO DE PAQUETE\tCREADO\tTAMANO"
+ERR_CANT_CREATE_REGISTRY_FOLDER = "no se pudo crear la carpeta del registro local '%s', el inicio del usuario es: '%s'"
+ERR_CANT_DOWNLOAD_LANG = "no se pudo bajar el diccionario de idioma de '%s'"
+ERR_CANT_EXEC_FUNC_IN_PACKAGE = "no se pudo ejecutar la funcion '%s' en el paquete '%s'"
+ERR_CANT_LOAD_PRIV_KEY = "no se pudo cargar la llave privada"
+ERR_CANT_PUSH_PACKAGE = "no se pudo empujar el paquete"
+ERR_CANT_READ_RESPONSE = "no se pudo leer el cuerpo de la respuesta de HTTP"
+ERR_CANT_SAVE_FILE = "no se pudo guardar el archivo"
+ERR_CANT_UPDATE_LANG_FILE = "cannot update language file"
+ERR_INSUFFICIENT_ARGS = "argumentos insuficientes"
+ERR_INVALID_PACKAGE_NAME = "el nombre del paquete es invalido"
+ERR_TOO_MANY_ARGS = "demasiados argumentos"
+INFO_NOTHING_TO_PUSH = "nada que empujar\n"
+INFO_PUSHED = "empujado: %s\n"
+LBL_LS_HEADER = "REPOSITORIO\tETIQUETA\tIDENTIFICADOR DE PAQUETE\tTIPO DE PAQUETE\tCREADO\tTAMANO"
