@@ -1,28 +1,24 @@
 ---
 input:
   var:
-    - name: ARTEFACT_NAME
-      description: artefact registry name
-      required: true
-      type: string
     - name: PULL_IMAGE_REGISTRY
-      description: application runtime image registry name
+      description: application runtime image registry name (eg. registry.gitlab.com)
       required: true
       type: string
     - name: PUSH_IMAGE_REGISTRY
-      description: application image registry name
+      description: the image registry name (eg. registry.gitlab.com)
       required: true
       type: string
     - name: PUSH_IMAGE_REPO
-      description: application image repo name
+      description: the image repo name (eg. sap7)
       required: true
       type: string
     - name: PUSH_IMAGE_NAME
-      description: application image name
+      description: the application image name
       required: true
       type: string
     - name: PUSH_IMAGE_VERSION
-      description: application image version/tag
+      description: the application image version/tag
       required: true
       type: string
     - name: CRYPTO_KEY_EMAIL
@@ -44,27 +40,21 @@ input:
     - name: ART_REG_PWD
       description: the pwd of the user to open the application package
 
-  key:
-    - name: IMAGE_SIGNING_KEY
-      description: the private PGP key required to digitally sign the container image
-      private: true
-      path: /
-
 functions:
   - name: build-image
     description: build application image & push into the image registry
     runtime: buildah
     export: true
     run:
-      # Download sap-equip-jvm artefacts from repo
-      - art open -u=${ART_REG_USER}:${ART_REG_PWD} ${ARTEFACT_NAME}
       - buildah login -u ${PULL_IMAGE_REGISTRY_UNAME} -p ${PULL_IMAGE_REGISTRY_PWD} ${PULL_IMAGE_REGISTRY}
+      # build image
       - buildah bud --isolation chroot -t ${PUSH_IMAGE_REGISTRY}/${PUSH_IMAGE_REPO}/${PUSH_IMAGE_NAME}:${PUSH_IMAGE_VERSION} .
+      # import gpg key to sign & push image
       - gpg --import /.artisan/keys/root_rsa_key.pgp
       - skopeo copy --sign-by=${CRYPTO_KEY_EMAIL} --dest-tls-verify=false --dest-creds ${PUSH_IMAGE_REGISTRY_UNAME}:${PUSH_IMAGE_REGISTRY_PWD} containers-storage:${PUSH_IMAGE_REGISTRY}/${PUSH_IMAGE_REPO}/${PUSH_IMAGE_NAME}:${PUSH_IMAGE_VERSION} docker://${PUSH_IMAGE_REGISTRY}/${PUSH_IMAGE_REPO}/${PUSH_IMAGE_NAME}:${PUSH_IMAGE_VERSION}
     input:
       var:
-        - ARTEFACT_NAME
+        - PACKAGE_NAME
         - PULL_IMAGE_REGISTRY
         - PUSH_IMAGE_REGISTRY
         - PUSH_IMAGE_REPO
@@ -78,6 +68,4 @@ functions:
         - PUSH_IMAGE_REGISTRY_PWD
         - ART_REG_USER
         - ART_REG_PWD
-      key:
-        - IMAGE_SIGNING_KEY
 ...
