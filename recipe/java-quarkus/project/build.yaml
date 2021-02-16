@@ -54,11 +54,6 @@ input:
       type: string
       default: 0.0.1
 
-    - name: BC_LAUNCHER_PACKAGE_NAME
-      description: the name:tag for the build configuration launcher package used to trigger the image build in OpenShift
-      required: true
-      type: name
-
     # env variables required by bc_launcher
     - name: BC_APPLICATION_NAME
       description: openshift app name
@@ -136,11 +131,6 @@ input:
       private: true
       path: /
 
-    - name: BC_SIGNING_KEY
-      description: the private PGP key required to digitally sign the docker image
-      private: true
-      path: /
-
     - name: VERIFICATION_KEY
       description: the public PGP key required to open the artefacts
       path: /
@@ -198,7 +188,9 @@ functions:
       - oc create -f _build/flows/buildconfig.yaml
       - oc start-build ${BC_APPLICATION_NAME}-custom-build -F | tee buildconfig.log
       - oc delete -f _build/flows/buildconfig.yaml
-    input:  
+      # check for errors in BuildConfig
+      - sh check_error.sh
+    input:
       var:
         - BC_APPLICATION_NAME
         - BC_BUILDER_IMAGE
@@ -234,19 +226,9 @@ functions:
       - rm -R ${PROJECT_ARTIFACT_ID}
     input:
       var:
-        - GIT_URI
         - PROJECT_GROUP_ID
         - PROJECT_ARTIFACT_ID
         - PROJECT_ARTIFACT_VERSION
-        - SONAR_URI
-        - SONAR_PROJECT_KEY
-        - SONAR_SOURCES
-        - SONAR_BINARIES
-        - SONAR_TOKEN
-        - APP_PACKAGE_NAME
-        - ART_REG_USER
-        - ART_REG_PWD
-        - SIGNING_KEY
 
   - name: git-init
     description: initialises the git repository
@@ -256,6 +238,9 @@ functions:
       - git commit -m first_commit
       - git remote add origin ${GIT_URI}
       - git push -u origin master
+    input:
+      var:
+        - GIT_URI
 
   - name: ci-pipeline
     description: create a tekton pipeline in openshift to build the application
