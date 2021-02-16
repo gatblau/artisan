@@ -54,45 +54,45 @@ input:
       type: string
       default: 0.0.1
 
-    # env variables required by bc_launcher
+    # env variables required by build-image function
     - name: BC_APPLICATION_NAME
-      description: openshift app name
+      description: the openshift application name
       required: true
       type: string
     - name: BC_BUILDER_IMAGE
-      description: image builder name (buildah image)
+      description: the image builder name (buildah image)
       required: true
       type: string
     - name: BC_PUSH_IMAGE_REGISTRY
-      description: application image registry name
+      description: the image registry name (eg. registry.gitlab.com)
       required: true
       type: string
     - name: BC_PUSH_IMAGE_REPO
-      description: application image repo name
+      description: the image repo name (eg. sap7)
       required: true
       type: string
     - name: BC_PUSH_IMAGE_NAME
-      description: application image name
+      description: the application image name
       required: true
       type: string
     - name: BC_PUSH_IMAGE_VERSION
-      description: application image version/tag
+      description: the application image version/tag
       required: true
       type: string
     - name: BC_PULL_IMAGE_REGISTRY
-      description: application runtime image registry name
+      description: application runtime image registry name (eg. registry.gitlab.com)
       required: true
       type: string
     - name: BC_PACKAGE_NAME
-      description: name for the artefact that will be downloaded
+      description: the name for the application package that will be downloaded (e.g. registry-host/app-group/app-name)
       required: true
       type: string
     - name: BC_FX_NAME
-      description: function name to build image
+      description: the function name to build image (eg. build-image)
       required: true
       type: string
     - name: BC_CRYPTO_KEY_EMAIL
-      description: email id which is used to genearte crypto signature keys
+      description: the email id which is used to genearte crypto signature keys
       required: true
       type: string
 
@@ -132,7 +132,7 @@ input:
       path: /
 
     - name: VERIFICATION_KEY
-      description: the public PGP key required to open the artefacts
+      description: the public PGP key required to open the application package
       path: /
 
 profiles:
@@ -146,12 +146,6 @@ profiles:
       # copy the build.yaml file to build the jvm version to the artefact(target) package folder
       - cp _build/image/build.yaml target/target
     target: target/target
-
-  - name: image
-    description: builds the image builder package
-    runtime: buildah
-    type: exe/image/builder
-    target: _build/image
 
 functions:
   - name: build-app
@@ -184,7 +178,7 @@ functions:
 
   - name: build-image
     run:
-      # call shell script which contains commands to create BuildConfig to Build Application Image
+      # call shell script which contains commands to create buildconfig to build application image
       - sh start-build.sh ${BC_APPLICATION_NAME}
     input:
       var:

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# consuming environment variables which are set in the img-builder pipeline 
+# consuming environment variables which are set by the build-image function
 art merge _build/flows/buildconfig.yaml.tem
 if [ "$?" -ne 0 ]; then
   echo "failed to merge buildconfig.yaml.tem"
