@@ -35,7 +35,7 @@ ENV MAVEN_HOME /usr/lib/mvn
 ENV PATH $MAVEN_HOME/bin:$GRADLE_HOME/bin:$PATH
 
 # installs JDK 11
-RUN microdnf install -y java-11-openjdk-devel && \
+RUN microdnf install -y java-11-openjdk-devel git && \
     microdnf clean all && rm -rf /var/cache /var/log/dnf* /var/log/yum.* && \
     mkdir -p /.m2/repository/ && chown -R $UNAME /.m2/ && chmod -R a+wr /.m2/
 
