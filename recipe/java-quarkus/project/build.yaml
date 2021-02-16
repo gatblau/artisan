@@ -184,12 +184,8 @@ functions:
 
   - name: build-image
     run:
-      - art merge _build/flows/buildconfig.yaml.tem
-      - oc create -f _build/flows/buildconfig.yaml
-      - oc start-build ${BC_APPLICATION_NAME}-custom-build -F | tee buildconfig.log
-      - oc delete -f _build/flows/buildconfig.yaml
-      # check for errors in BuildConfig
-      - sh check_error.sh
+      # call shell script which contains commands to create BuildConfig to Build Application Image
+      - sh start-build.sh ${BC_APPLICATION_NAME}
     input:
       var:
         - BC_APPLICATION_NAME
