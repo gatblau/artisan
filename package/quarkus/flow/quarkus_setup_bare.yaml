@@ -1,0 +1,24 @@
+---
+# pipeline to setup Quarkus project
+name: quarkus-setup
+description: creates project and tekton pipelines for a Quarkus Java Application
+
+steps:
+  - name: create-project
+    description: create a quarkus scaffold
+    runtime: java
+    package: java
+    function: init-mvn
+
+  - name: push-to-git
+    description: initialise git repo and pushes project
+    runtime: java
+    package: java
+    function: init-git
+
+  - name: create-pipeline
+    description: create tekton pipeline
+    runtime: k8s
+    package: java
+    function: init-tkn
+...

@@ -1,0 +1,71 @@
+kind: BuildConfig
+apiVersion: build.openshift.io/v1
+metadata:
+  name: ${BC_APPLICATION_NAME}-custom-build
+  labels:
+    name: ${BC_APPLICATION_NAME}-custom-build
+  annotations:
+    template.alpha.openshift.io/wait-for-ready: 'true'
+spec:
+  strategy:
+    type: Custom
+    customStrategy:
+      forcePull: true
+      from:
+        kind: DockerImage
+        name: ${BC_BUILDER_IMAGE}
+      env:
+        - name: "PUSH_IMAGE_REGISTRY"
+          value: "${BC_PUSH_IMAGE_REGISTRY}"
+        - name: "PUSH_IMAGE_REPO"
+          value: "${BC_PUSH_IMAGE_REPO}"
+        - name: "PUSH_IMAGE_NAME"
+          value: "${BC_PUSH_IMAGE_NAME}"
+        - name: "PUSH_IMAGE_VERSION"
+          value: "${BC_PUSH_IMAGE_VERSION}"
+        - name: "PULL_IMAGE_REGISTRY"
+          value: "${BC_PULL_IMAGE_REGISTRY}"
+        - name: "PACKAGE_NAME"
+          value: "${BC_PACKAGE_NAME}"
+        - name: "FX_NAME"
+          value: "${BC_FX_NAME}"
+        - name: "CRYPTO_KEY_EMAIL"
+          value: "${BC_CRYPTO_KEY_EMAIL}"
+        - name: PULL_IMAGE_REGISTRY_UNAME
+          valueFrom:
+            secretKeyRef:
+              key: BC_PULL_IMAGE_REGISTRY_UNAME
+              name: ${BC_APPLICATION_NAME}-creds-secret
+        - name: PULL_IMAGE_REGISTRY_PWD
+          valueFrom:
+            secretKeyRef:
+              key: BC_PULL_IMAGE_REGISTRY_PWD
+              name: ${BC_APPLICATION_NAME}-creds-secret
+        - name: PUSH_IMAGE_REGISTRY_UNAME
+          valueFrom:
+            secretKeyRef:
+              key: BC_PUSH_IMAGE_REGISTRY_UNAME
+              name: ${BC_APPLICATION_NAME}-creds-secret
+        - name: PUSH_IMAGE_REGISTRY_PWD
+          valueFrom:
+            secretKeyRef:
+              key: BC_PUSH_IMAGE_REGISTRY_PWD
+              name: ${BC_APPLICATION_NAME}-creds-secret
+        - name: ART_REG_USER
+          valueFrom:
+            secretKeyRef:
+              key: BC_ART_REG_USER
+              name: ${BC_APPLICATION_NAME}-creds-secret
+        - name: ART_REG_PWD
+          valueFrom:
+            secretKeyRef:
+              key: BC_ART_REG_PWD
+              name: ${BC_APPLICATION_NAME}-creds-secret
+      secrets:
+      - secretSource:
+          name: "${BC_APPLICATION_NAME}-keys-secret"
+        mountPath: "/keys/"
+  output:
+    to:
+      kind: DockerImage
+      name: ${BC_PUSH_IMAGE_REGISTRY}
