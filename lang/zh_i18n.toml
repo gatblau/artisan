@@ -1,17 +1,14 @@
-# --------------------------------------------------------------
-# Artisan Dictionary for Chinese Traditional Language
-# --------------------------------------------------------------
-
-# 錯誤訊息
 ERR_CANT_CREATE_REGISTRY_FOLDER = "無法創建本地註冊表文件夾“％s”，用戶主目錄：“％s”"
-ERR_CANT_EXEC_FUNC_IN_PACKAGE   = "無法執行軟件包“％s”中的功能“％s”"
-ERR_CANT_LOAD_PRIV_KEY          = "無法加載私鑰"
-ERR_CANT_PUSH_PACKAGE           = "不能推包"
-ERR_INVALID_PACKAGE_NAME        = "無效的包裹名稱"
-
-# 信息消息
-INFO_PUSHED                     = "推: %s\n"
-INFO_NOTHING_TO_PUSH            = "沒什麼可推\n"
-
-# 標籤
-LBL_LS_HEADER                   = "倉庫\t標籤\t包裹識別符\t包裝類型\t已建立\t尺寸"
+ERR_CANT_DOWNLOAD_LANG = "無法從“％s”下載語言詞典"
+ERR_CANT_EXEC_FUNC_IN_PACKAGE = "無法執行軟件包“％s”中的功能“％s”"
+ERR_CANT_LOAD_PRIV_KEY = "無法加載私鑰"
+ERR_CANT_PUSH_PACKAGE = "不能推包"
+ERR_CANT_READ_RESPONSE = "無法讀取HTTP響應正文"
+ERR_CANT_SAVE_FILE = "無法保存文件"
+ERR_CANT_UPDATE_LANG_FILE = "無法更新語言文件"
+ERR_INSUFFICIENT_ARGS = "論據不足"
+ERR_INVALID_PACKAGE_NAME = "無效的包裹名稱"
+ERR_TOO_MANY_ARGS = "爭論太多"
+INFO_NOTHING_TO_PUSH = "沒什麼可推\n"
+INFO_PUSHED = "推: %s\n"
+LBL_LS_HEADER = "倉庫\t標籤\t包裹識別符\t包裝類型\t已建立\t尺寸"

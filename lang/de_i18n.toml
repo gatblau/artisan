@@ -1,17 +1,14 @@
-# -------------------------------------------------------------
-# Artisan Dictionary for German Language
-# -------------------------------------------------------------
-
-# fehlermeldungen
 ERR_CANT_CREATE_REGISTRY_FOLDER = "der lokale registrierungsordner '%s' kann nicht erstellt werden. benutzerhome: '%s'"
-ERR_CANT_EXEC_FUNC_IN_PACKAGE   = "funktion '%s' kann im paket '%s' nicht ausgeführt werden"
-ERR_CANT_LOAD_PRIV_KEY          = "der private schlüssel kann nicht geladen werden"
-ERR_CANT_PUSH_PACKAGE           = "paket kann nicht gepusht werden"
-ERR_INVALID_PACKAGE_NAME        = "ungültiger paketname"
-
-# informationsnachrichten
-INFO_PUSHED                     = "geschoben: %s\n"
-INFO_NOTHING_TO_PUSH            = "nichts zu schieben\n"
-
-# etiketten
-LBL_LS_HEADER                   = "REPOSITORY\tETIKETT\tPAKET-ID\tPAKETTYP\tERSTELLT\tGRÖSSE"
+ERR_CANT_DOWNLOAD_LANG = "sprachwörterbuch kann nicht von '%s' heruntergeladen werden"
+ERR_CANT_EXEC_FUNC_IN_PACKAGE = "funktion '%s' kann im paket '%s' nicht ausgeführt werden"
+ERR_CANT_LOAD_PRIV_KEY = "der private schlüssel kann nicht geladen werden"
+ERR_CANT_PUSH_PACKAGE = "paket kann nicht gepusht werden"
+ERR_CANT_READ_RESPONSE = "HTTP-Antworttext kann nicht gelesen werden"
+ERR_CANT_SAVE_FILE = "datei kann nicht gespeichert werden"
+ERR_CANT_UPDATE_LANG_FILE = "sprachdatei kann nicht aktualisiert werden"
+ERR_INSUFFICIENT_ARGS = "unzureichende argumente"
+ERR_INVALID_PACKAGE_NAME = "ungültiger paketname"
+ERR_TOO_MANY_ARGS = "too many arguments"
+INFO_NOTHING_TO_PUSH = "nichts zu schieben\n"
+INFO_PUSHED = "geschoben: %s\n"
+LBL_LS_HEADER = "REPOSITORY\tETIKETT\tPAKET-ID\tPAKETTYP\tERSTELLT\tGRÖSSE"

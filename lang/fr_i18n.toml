@@ -1,18 +1,14 @@
-# --------------------------------------------------------------
-# Artisan Dictionary for French Language
-# --------------------------------------------------------------
-
-# messages d'erreur
 ERR_CANT_CREATE_REGISTRY_FOLDER = "impossible de créer le dossier de registre local '%s', accueil de l'utilisateur: '%s'"
-ERR_CANT_EXEC_FUNC_IN_PACKAGE   = "impossible d'exécuter la fonction '%s' dans le package '%s'"
-ERR_CANT_LOAD_PRIV_KEY          = "impossible de charger la clé privée"
-ERR_CANT_PUSH_PACKAGE           = "impossible de pousser le paquet"
-ERR_INVALID_PACKAGE_NAME        = "nom de package non valide"
-
-# messages d'information
-INFO_PUSHED                     = "poussé: %s\n"
-INFO_NOTHING_TO_PUSH            = "rien à pousser\n"
-
-# étiquettes
-LBL_LS_HEADER                   = "DÉPÔT\tÉTIQUETER\tID DU PACKAGE\tTYPE D'PACKAGE\tCRÉÉ\tTAILLE"
-
+ERR_CANT_DOWNLOAD_LANG = "impossible de télécharger le dictionnaire de langue à partir de '%s'"
+ERR_CANT_EXEC_FUNC_IN_PACKAGE = "impossible d'exécuter la fonction '%s' dans le package '%s'"
+ERR_CANT_LOAD_PRIV_KEY = "impossible de charger la clé privée"
+ERR_CANT_PUSH_PACKAGE = "impossible de pousser le paquet"
+ERR_CANT_READ_RESPONSE = "impossible de lire le corps de la réponse HTTP"
+ERR_CANT_SAVE_FILE = "impossible d'enregistrer le fichier"
+ERR_CANT_UPDATE_LANG_FILE = "impossible de mettre à jour le fichier de langue"
+ERR_INSUFFICIENT_ARGS = "arguments insuffisants"
+ERR_INVALID_PACKAGE_NAME = "nom de package non valide"
+ERR_TOO_MANY_ARGS = "trop d'arguments"
+INFO_NOTHING_TO_PUSH = "rien à pousser\n"
+INFO_PUSHED = "poussé: %s\n"
+LBL_LS_HEADER = "DÉPÔT\tÉTIQUETER\tID DU PACKAGE\tTYPE D'PACKAGE\tCRÉÉ\tTAILLE"
