@@ -145,11 +145,9 @@ functions:
       # the plugin version below might need upgrading if the current one is not available anymore
       - mvn io.quarkus:quarkus-maven-plugin:1.11.2.Final:create -DprojectGroupId=${PROJECT_GROUP_ID} -DprojectArtifactId=${PROJECT_ARTIFACT_ID} -DprojectVersion=${PROJECT_ARTIFACT_VERSION}
       # copy project files to the correct location
-      - cp -r ${PROJECT_ARTIFACT_ID}/. .
+      - cp -r ${PROJECT_ARTIFACT_ID}/. ../app
       # remove old folder
       - rm -R ${PROJECT_ARTIFACT_ID}
-      # copy build file into quarkus scaffold
-      - cp app/build.yaml .
     input:
       var:
         - PROJECT_GROUP_ID
@@ -161,11 +159,7 @@ functions:
     runtime: java
     export: true
     run:
-      - git init
-      - git add .
-      - git commit -m "first commit"
-      - git remote add origin ${GIT_URI}
-      - git push -u origin master
+      - sh init-git.sh
     input:
       var:
         - GIT_URI
@@ -176,9 +170,9 @@ functions:
     export: true
     run:
       # create a tekton pipeline resources file
-      - art flow merge -b . --tkn flow/quarkus_ci_bare.yaml
+      - art flow merge -b . --tkn quarkus_ci_bare.yaml
       # apply pipeline to OpenShift
-      - oc apply -f flow/quarkus_ci_tkn.yaml
+      - oc apply -f quarkus_ci_tkn.yaml
     input:
       key:
         - SIGNING_KEY
