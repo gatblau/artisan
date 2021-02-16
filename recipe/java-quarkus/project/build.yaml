@@ -220,10 +220,10 @@ functions:
       key:
         - VERIFICATION_KEY
 
-  - name: init
+  - name: init-mvn
     description: initialises the project and creates pipelines
-    export: true
     runtime: java
+    export: true
     run:
       # creates the quarkus scaffold for the project
       # the plugin version below might need upgrading if the current one is not available anymore
@@ -248,20 +248,60 @@ functions:
         - ART_REG_PWD
         - SIGNING_KEY
 
-  - name: git-init
+  - name: init-git
     description: initialises the git repository
+    runtime: java
+    export: true
     run:
       - git init
       - git add .
       - git commit -m first_commit
       - git remote add origin ${GIT_URI}
       - git push -u origin master
+    input:
+      var:
+        - GIT_URI
 
-  - name: ci-pipeline
+  - name: init-tkn
     description: create a tekton pipeline in openshift to build the application
+    runtime: k8s
+    export: true
     run:
       # create a tekton pipeline resources file
       - art flow merge -b . --tkn _build/flows/pipeline_bare.yaml
       # apply pipeline to OpenShift
       - oc apply -f _build/flows/pipeline_tkn.yaml
+    input:
+      key:
+        - SIGNING_KEY
+        - VERIFICATION_KEY
+      secret:
+        - SONAR_TOKEN
+        - ART_REG_USER
+        - ART_REG_PWD
+        - BC_PULL_IMAGE_REGISTRY_UNAME
+        - BC_PULL_IMAGE_REGISTRY_PWD
+        - BC_PUSH_IMAGE_REGISTRY_UNAME
+        - BC_PUSH_IMAGE_REGISTRY_PWD
+        - BC_ART_REG_USER
+        - BC_ART_REG_PWD
+      var:
+        - PROJECT_ARTIFACT_ID
+        - PROJECT_ARTIFACT_VERSION
+        - GIT_URI
+        - SONAR_URI
+        - SONAR_PROJECT_KEY
+        - SONAR_SOURCES
+        - SONAR_BINARIES
+        - APP_PACKAGE_NAME
+        - BC_APPLICATION_NAME
+        - BC_BUILDER_IMAGE
+        - BC_PUSH_IMAGE_REGISTRY
+        - BC_PUSH_IMAGE_REPO
+        - BC_PUSH_IMAGE_NAME
+        - BC_PUSH_IMAGE_VERSION
+        - BC_PULL_IMAGE_REGISTRY
+        - BC_PACKAGE_NAME
+        - BC_FX_NAME
+        - BC_CRYPTO_KEY_EMAIL
 ...
