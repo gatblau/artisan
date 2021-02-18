@@ -95,6 +95,14 @@ input:
       description: the email id which is used to genearte crypto signature keys
       required: true
       type: string
+    - name: GIT_REPO_EMAIL
+      description: git user email id to push the code
+      required: true
+      type: string
+    - name: GIT_REPO_PROTOCAL
+      description: git protocol id to push the code (eg. gitlab.com)
+      required: true
+      type: string
 
   secret:
     - name: ART_REG_USER
@@ -123,6 +131,12 @@ input:
       type: string
     - name: BC_ART_REG_PWD
       description: artefact registry user password
+      aggregate: true
+    - name: GIT_REPO_UNAME
+      description: git repo user name to push the code
+      aggregate: true
+    - name: GIT_REPO_PWD
+      description: git repo user password to push the code
       aggregate: true
 
   key:
@@ -225,7 +239,10 @@ functions:
     runtime: java
     export: true
     run:
+      - sh setup-git.sh ${GIT_REPO_PROTOCAL} ${GIT_REPO_UNAME} ${GIT_REPO_PWD}
       - git init
+      - git config --global user.email "${GIT_REPO_EMAIL}"
+      - git config --global user.name "${GIT_REPO_UNAME}"
       - git add .
       - git commit -m first_commit
       - git remote add origin ${GIT_URI}
@@ -233,6 +250,11 @@ functions:
     input:
       var:
         - GIT_URI
+        - GIT_REPO_PROTOCAL
+        - GIT_REPO_EMAIL
+      secret:
+        - GIT_REPO_UNAME
+        - GIT_REPO_PWD
 
   - name: init-tkn
     description: create a tekton pipeline in openshift to build the application
