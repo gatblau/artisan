@@ -27,11 +27,30 @@ if [[ -n "${PACKAGE_NAME+x}" ]]; then
   fi
   # if a function has been defined executes the package with the function
   if [[ -n "${FX_NAME+x}" ]]; then
-      # pass the function name
+    # if a package source has been provided
+    if [[ -n "${PACKAGE_SOURCE+x}" ]]; then
+       case "$PACKAGE_SOURCE" in
+          "create" | "CREATE")
+              # remove any existing files in the source folder
+              rm -rf /workspace/source/*
+              # open package in the source folder and leave files there
+              art exe -u=${ART_REG_USER}:${ART_REG_PWD} --path /workspace/source -f ${PACKAGE_NAME} ${FX_NAME}
+              ;;
+          "merge" | "MERGE")
+              # open package in the source folder and leave files there
+              art exe -u=${ART_REG_USER}:${ART_REG_PWD} --path /workspace/source -f ${PACKAGE_NAME} ${FX_NAME}
+              ;;
+          *)
+              printf "invalid PACKAGE_SOURCE value: %s, valid values are either 'new' or 'update'\n" ${PACKAGE_SOURCE}
+              ;;
+       esac
+    else
+      # no source type provided then use a transient source
       art exe -u=${ART_REG_USER}:${ART_REG_PWD} ${PACKAGE_NAME} ${FX_NAME}
+    fi
   else
-      # executes the default function
-      art exe -u=${ART_REG_USER}:${ART_REG_PWD} ${PACKAGE_NAME}
+      printf "A function name is required for package %s, ensure FX_NAME is provided\n" ${PACKAGE_NAME}
+      exit 1
   fi
   # else if only a function has been defined
 elif [[ -n "${FX_NAME+x}" ]]; then
