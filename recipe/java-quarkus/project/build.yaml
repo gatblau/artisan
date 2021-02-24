@@ -103,6 +103,10 @@ input:
       description: git host to push the code (eg. gitlab.com)
       required: true
       type: string
+    - name: PACKAGE_NAME
+      description: the java quarkus recepie package name
+      required: true
+      type: string
 
   secret:
     - name: ART_REG_USER
@@ -261,6 +265,7 @@ functions:
     runtime: k8s
     export: true
     run:
+      - art merge _build/flows/pipeline_bare.yaml.tem
       # create a tekton pipeline resources file
       - art flow merge -b . --tkn _build/flows/pipeline_bare.yaml
       # apply pipeline to OpenShift
@@ -298,4 +303,16 @@ functions:
         - BC_PACKAGE_NAME
         - BC_FX_NAME
         - BC_CRYPTO_KEY_EMAIL
+
+  - name: setup-pipeline
+    description: create a tekton pipeline in openshift to build the quarkus scoffold & create application pipeline
+    runtime: k8s
+    export: true
+    run:
+      - art merge _build/flows/setup_flow_bare.yaml.tem 
+      - art flow merge --tkn _build/flows/setup_flow_bare.yaml
+      - oc create -f _build/flows/setup_flow_tkn.yaml
+    input:
+      var:
+        - PACKAGE_NAME
 ...

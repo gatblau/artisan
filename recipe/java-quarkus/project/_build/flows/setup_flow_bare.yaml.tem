@@ -6,18 +6,16 @@ steps:
   - name: create-project
     description: create a quarkus scaffold
     runtime: java
-    package: java
+    package: ${PACKAGE_NAME}
     function: init-mvn
 
   - name: push-to-git
     description: initialise git repo and pushes project
     runtime: java
-    package: java
     function: init-git
 
   - name: create-pipeline
     description: create tekton pipeline
     runtime: k8s
-    package: java
     function: init-tkn
 ...
