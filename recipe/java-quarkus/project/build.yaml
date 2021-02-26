@@ -10,140 +10,186 @@ input:
       required: true
       type: uri
       description: |-
-            the URI of the project git repository
-            eg is
+            the URI of the project git repository. create empty git project and pass that uri here
+            eg. https://gitlab.com/sap7/java-quarkus.git
 
     - name: SONAR_URI
-      description: the URI of the SonarQube server to use for code quality reporting
       required: true
       type: uri
+      description: |-
+            the URI of the SonarQube server to use for code quality reporting
+            eg. https://<host-name>
 
     - name: SONAR_PROJECT_KEY
-      description: the unique key identifying the project in the SonarQube server
       required: true
       type: string
+      description: |-
+            the unique key identifying the project in the SonarQube server
+            eg. net.atos:<app-name>
 
     - name: SONAR_SOURCES
-      description: the path the sonar scanner should use to scan source code
       required: true
       type: path
       default: src/
+      description: the path the sonar scanner should use to scan source code
 
     - name: SONAR_BINARIES
-      description: the path the sonar scanner should use to scan binary files
       required: true
       type: path
       default: target/classes
+      description: the path the sonar scanner should use to scan binary files
 
     - name: APP_PACKAGE_NAME
-      description: the name:tag for the application package to be published (e.g. registry-host/app-group/app-name)
       required: true
       type: name
+      description: |-
+            the name:tag for the application package to be published (e.g. registry-host/app-group/app-name)
+            it contains artefacts built by the pipeline
 
     - name: PROJECT_GROUP_ID
-      description: the maven group id for the project
       required: true
       type: string
+      description: |-
+            the maven group id for the project. You can pass the project name as PROJECT_GROUP_ID
 
     - name: PROJECT_ARTIFACT_ID
-      description: the maven artifact id for the application
       required: true
       type: string
+      description: the maven artifact id for the application eg. sap
 
     - name: PROJECT_ARTIFACT_VERSION
-      description: the version of the application artifact
       required: true
       type: string
       default: 0.0.1
+      description: the version of the application artifact
 
     # env variables required by build-image function
     - name: BC_APPLICATION_NAME
-      description: the openshift application name
       required: true
       type: string
+      description: the application name to create openshift tekton pipeline resources eg. EventListner & PipelineResources 
+
     - name: BC_BUILDER_IMAGE
-      description: the image builder name (buildah image)
       required: true
       type: string
+      description: the image builder name (buildah image) to build application image (eg quay.io/artisan/buildah)
+
     - name: BC_PUSH_IMAGE_REGISTRY
-      description: the image registry name (eg. registry.gitlab.com)
       required: true
       type: string
+      description: |- 
+            the image registry name (eg. registry.gitlab.com)
+            it's use to push application image into the image registry
+
     - name: BC_PUSH_IMAGE_REPO
-      description: the image repo name (eg. sap7)
       required: true
       type: string
+      description: |-
+            the image repo name (eg. sap7)
+            repo name of the image registry where image to be pushed. if repo is created under user then it will be username eg pratik10596
+            if it's created inside the specific group then it would be a group name
+
     - name: BC_PUSH_IMAGE_NAME
-      description: the application image name
       required: true
       type: string
+      description: |- 
+            the application image name. it's a final image name that will be pushed into the img registry
+            we can pass any name (eg. java-app)
+
     - name: BC_PUSH_IMAGE_VERSION
-      description: the application image version/tag
       required: true
       type: string
+      description: |-
+             the application image version/tag. it's a docker image tag used to identify the img uniquely
+
     - name: BC_PULL_IMAGE_REGISTRY
-      description: application runtime image registry name (eg. registry.gitlab.com)
       required: true
       type: string
+      description: |-
+            application runtime image registry name (eg. registry.gitlab.com)
+            this is the name of the image registry where base docker image is stored. it can be redhat, gitlab or quay registry
+
     - name: BC_PACKAGE_NAME
-      description: the name for the application package that will be downloaded (e.g. registry-host/app-group/app-name)
       required: true
       type: string
+      description: |- 
+            the name for the application package that will be downloaded (e.g. registry-host/app-group/app-name)
+            this package contains application artfacts, dockerfile & build.yaml file. it's used by image builder to build the application img
+
     - name: BC_FX_NAME
-      description: the function name to build image (eg. build-image)
       required: true
       type: string
+      description: |-
+            the function name to build image (eg. build-image)
+            this is the function name executed by the image builder. it contains commands to build, sign & push application img 
+
     - name: BC_CRYPTO_KEY_EMAIL
-      description: the email id which is used to genearte crypto signature keys
       required: true
       type: string
+      description: |- 
+            the email id which is used to generate crypto signature keys by using art cli
+            this email id is used by img builder to sign the application image
+
     - name: GIT_REPO_EMAIL
-      description: git user email id to push the code
       required: true
       type: string
+      description: |- 
+            git user email id to push the quarkus scaffold code
+            email id is used to get authenticate with the code repo
+
     - name: GIT_REPO_HOST
-      description: git host to push the code (eg. gitlab.com)
       required: true
       type: string
+      description: |- 
+            git host to push the quarkus scaffold code (eg. gitlab.com)
+
     - name: PACKAGE_NAME
-      description: the java quarkus recepie package name
       required: true
       type: string
+      description: |-
+            the name:tag for the quarkus recepie package to download (e.g. registry-host/app-group/package-name)
+            it contains setup & pipeline flow alongwith build.yaml file
+            this package should be already available in the artefact registry like nexus
 
   secret:
     - name: ART_REG_USER
-      description: the artisan registry user
+      description: the artisan registry user name which is deployed into the openshift
+
     - name: ART_REG_PWD
-      description: the artisan registry password
+      description: the artisan registry password which is deployed into the openshift
+
     - name: SONAR_TOKEN
-      description: the token to access the Sonar server
+      description: |- 
+            the token to access the sonar server
+            open sonar dashboard -> click on My Account -> Security -> Genearte new token
+
     - name: BC_PULL_IMAGE_REGISTRY_UNAME
       description: user name for the container registry where the base image is located
-      aggregate: true
-      type: string
+
     - name: BC_PULL_IMAGE_REGISTRY_PWD
       description: password for the container registry where the base image is located
-      aggregate: true
+    
     - name: BC_PUSH_IMAGE_REGISTRY_UNAME
       description: user name for the container registry where the application image will be pushed
-      aggregate: true
-      type: string
+      
     - name: BC_PUSH_IMAGE_REGISTRY_PWD
       description: password for the container registry where the application image will be pushed
-      aggregate: true
+      
     - name: BC_ART_REG_USER
-      description: artefact registry user name
-      aggregate: true
-      type: string
+      description: artefact registry user name where artefact will be pushed
+      
     - name: BC_ART_REG_PWD
-      description: artefact registry user password
-      aggregate: true
+      description: artefact registry password where artefact will be pushed
+      
     - name: GIT_REPO_UNAME
-      description: git repo user name to push the code
-      aggregate: true
+      description: |-
+            git repo user name to push the code
+            it's used to push the code generated by the quarkus scaffold
+
     - name: GIT_REPO_PWD
-      description: git repo user password to push the code
-      aggregate: true
+      description: |- 
+            git repo password to push the code
+            it's used to push the code generated by the quarkus scaffold
 
   key:
     - name: SIGNING_KEY
