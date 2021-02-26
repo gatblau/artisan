@@ -11,7 +11,7 @@ input:
       type: uri
       description: |-
             the URI of the project git repository. create empty git project and pass that uri here
-            eg. https://gitlab.com/sap7/java-quarkus.git
+            eg. https://gitlab.com/<group-name>/<project-name>.git
 
     - name: SONAR_URI
       required: true
@@ -55,7 +55,7 @@ input:
     - name: PROJECT_ARTIFACT_ID
       required: true
       type: string
-      description: the maven artifact id for the application eg. sap
+      description: the maven artifact id for the application eg. <project-name>
 
     - name: PROJECT_ARTIFACT_VERSION
       required: true
@@ -85,8 +85,8 @@ input:
       required: true
       type: string
       description: |-
-            the image repo name (eg. sap7)
-            repo name of the image registry where image to be pushed. if repo is created under user then it will be username eg pratik10596
+            the image repo name
+            repo name of the image registry where image to be pushed. if repo is created under user then it will be username
             if it's created inside the specific group then it would be a group name
 
     - name: BC_PUSH_IMAGE_NAME
@@ -224,6 +224,7 @@ profiles:
     target: target/target
 
 functions:
+  # this function is used by CI pipeline
   - name: build-app
     description: compiles and tests the application
     run:
@@ -237,6 +238,7 @@ functions:
         - PROJECT_ARTIFACT_ID
         - PROJECT_ARTIFACT_VERSION
 
+  # this function is used by CI pipeline
   - name: publish-app
     description: packages and publishes the application
     run:
@@ -252,6 +254,7 @@ functions:
         # needs this binding to mount the key in the container
         - SIGNING_KEY
 
+  # this function is used by CI pipeline
   - name: build-image
     run:
       # call shell script which contains commands to create buildconfig to build application image
@@ -278,6 +281,7 @@ functions:
       key:
         - VERIFICATION_KEY
 
+  # this function is used by setup pipeline
   - name: init-mvn
     description: initialises the project and creates pipelines
     runtime: java
@@ -296,6 +300,7 @@ functions:
         - PROJECT_ARTIFACT_ID
         - PROJECT_ARTIFACT_VERSION
 
+  # this function is used by setup pipeline
   - name: init-git
     description: initialises the git repository
     runtime: java
@@ -318,6 +323,7 @@ functions:
         - GIT_REPO_UNAME
         - GIT_REPO_PWD
 
+  # this function is used by setup pipeline
   - name: init-tkn
     description: create a tekton pipeline in openshift to build the application
     runtime: k8s
@@ -362,6 +368,7 @@ functions:
         - BC_FX_NAME
         - BC_CRYPTO_KEY_EMAIL
 
+  # used this function on VM/local m/c to create the java-quarkus setup tekton pipeline into openshift
   - name: setup-quarkus
     description: create a tekton pipeline in openshift to build, push the quarkus scoffold & create application pipeline
     runtime: k8s

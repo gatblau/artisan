@@ -10,7 +10,7 @@ input:
       required: true
       type: string
     - name: PUSH_IMAGE_REPO
-      description: the image repo name (eg. sap7)
+      description: the image repo name
       required: true
       type: string
     - name: PUSH_IMAGE_NAME
