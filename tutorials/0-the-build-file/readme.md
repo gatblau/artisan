@@ -19,11 +19,11 @@ On more trivial cases, a build file could contain functions to build and package
 
 As the build file is not technology specific, it can be used to build any software with any toolchain, *it is just a command line orchestrator*.
 
-Typically, any complex automation has to be configurable. Configuration in Artisan is managed mostly via environment variables, as this is aligned with the way [linux containers](https://www.redhat.com/en/topics/containers/whats-a-linux-container) work.
-
 ## The *functions* section
 
 The *functions* section defines the functions available to call by *Artisan* as well as the commands that need to be executed in the command line when the function is called.
+
+:exclamation: note that input bindings as shown in the example below are explained in the *input* section further down.
 
 The sctructure of the *functions* section is as follows:
 
@@ -58,7 +58,7 @@ functions:
         # pgp key bindings
         key:
            - MY_KEY_1
-           _ MY_KEY_2
+           - MY_KEY_2
     
     - name: another-function-here
 ...
@@ -92,7 +92,9 @@ For clarity, a specific concrete example is provided below:
 
 ## The *input* section
 
-In order to tell *Artisan* what input is required by each function in the build file, the build file contains a section describing:
+Typically, any complex automation has to be configurable. Configuration in Artisan is managed mostly via environment variables, as this is aligned with the way [linux containers](https://www.redhat.com/en/topics/containers/whats-a-linux-container) work.
+
+In order to tell *Artisan* what input information is required by each function in the build file, the build file contains a section describing:
   
 - variables: these are plain environment variables
 - secrets: these are variables that contain sensitive information like credentials
@@ -121,6 +123,18 @@ input:
 
 ### Binding variables
 
-Variables need to be bound to a function to tell *Artisan* that the function uses it.
+Variables must to be bound to a function to tell *Artisan* that the variable is need by such function.
 
-Bindings 
+Bindings are written using a similar syntax to the input definition. The following example ilustrates how to bind the USER variable to the greet-user function:
+
+```yaml
+---
+functions:
+    - name: greet-user
+      run:
+        - echo ${USER}
+      input:
+         var:
+           - GREETING
+...
+```
