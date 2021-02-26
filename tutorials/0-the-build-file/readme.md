@@ -105,6 +105,7 @@ In order to tell *Artisan* what input information is required by each function i
 ```yaml
 ---
 input:
+  # variables definition below
   var:
     - name: GREETING_VARIABLE
       description: the description for GREETING_VARIABLE that will be used for documentation generation and to advice users if using command line interactive mode.
@@ -118,6 +119,14 @@ input:
       default: "hello world"
         
     - name: OTHER_VARIABLES_HERE
+  
+  # secrets definitions below
+  # secrets are variables that are treated as confidential information
+  secret:
+    - name: MY_USER_NAME
+      description: login username
+    - name: MY_USER_PWD
+      description: login password
 ...
 ```
 
@@ -129,12 +138,34 @@ Bindings are written using a similar syntax to the input definition. The followi
 
 ```yaml
 ---
+input:
+   # variable definition section
+   var: 
+     - name: USER
+       description: the name of the user to greet
+       required: true
+       default: gatblau
+       type: string
+
 functions:
     - name: greet-user
       run:
-        - echo ${USER}
+        - echo Hello ${USER}!
       input:
+         # variable binding section
          var:
-           - GREETING
+           - USER
 ...
+```
+
+:boom: To test it, place the above content in a build.yaml file and run the following commands:
+
+```bash
+$ art run greet-user
+ Hello gatblau!
+
+$ export USER="Mickey Mouse"
+$ art run greet-user
+  Hello Mickey Mouse!
+
 ```
