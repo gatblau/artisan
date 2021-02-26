@@ -1,6 +1,6 @@
 # The build file
 
-In the same [GNU make](https://www.gnu.org/software/make/) uses a [Makefile](https://www.gnu.org/software/make/manual/make.html#Introduction), you need a file called **build.yaml** (the build file) to tell *Artisan* what to do.
+In the same way that [GNU make](https://www.gnu.org/software/make/) uses a [Makefile](https://www.gnu.org/software/make/manual/make.html#Introduction), you need a file called **build.yaml** (the build file) to tell *Artisan* what to do.
 
 The build file tells *Artisan* how to run *functions*, that is, a sequence of instructions from the command line.
 
@@ -25,6 +25,8 @@ Typically, any complex automation has to be configurable. Configuration in Artis
 
 The *functions* section defines the functions available to call by *Artisan* as well as the commands that need to be executed in the command line when the function is called.
 
+The sctructure of the *functions* section is as follows:
+
 ```yaml
 ---
 # a list of functions 
@@ -36,7 +38,9 @@ functions:
         description line 1 here
         description line 2 here
         more lines if needed...
-      # a flag to tell Artisan to include the function in the package manifest (make the function available to package users to call - i.e. public)
+      # a flag to tell Artisan to include the function in the 
+      # package manifest (make the function available to 
+      # package users to call - i.e. public)
       export: true
       # a list of commands to be invoved sequntially
       run:
@@ -60,13 +64,13 @@ functions:
 ...
 ```
 
-For clarity, a specifi concrete example is below:
+For clarity, a specific concrete example is provided below:
 
 ```yaml
 ---
     - name: build-app
-    description: compiles and tests the application
-    run:
+      description: compiles and tests the application
+      run:
         # compile and package the java app
         - mvn package -DskipTests=true
         # run tests
@@ -77,11 +81,12 @@ For clarity, a specifi concrete example is below:
         - cp target/${PROJECT_ARTIFACT_ID}-${PROJECT_ARTIFACT_VERSION}-runner.jar ./final
         # copy the dependencies to the new folder
         - cp -r target/lib/. ./final/lib
-    input:
-        # these bindings are defined in the general input section of the build file
+      input:
+        # these bindings are defined in the general input 
+        # section of the build file
         var:
-        - PROJECT_ARTIFACT_ID
-        - PROJECT_ARTIFACT_VERSION
+          - PROJECT_ARTIFACT_ID
+          - PROJECT_ARTIFACT_VERSION
 ...
 ```
 
@@ -98,16 +103,19 @@ In order to tell *Artisan* what input is required by each function in the build 
 ```yaml
 ---
 input:
-    var:
-        - name: GREETING_VARIABLE
-          description: the description for GREETING_VARIABLE that will be used for documentation generation and to advice users if using command line interactive mode.
-          # a boolean flag indicating if the variable is mandatory, it is used for input validation
-          required: true
-          # the type of the variable for the purpose of validation. Possible types are: path (a file path), uri (a unique resource identifier), name (an Artisan package name), string (any string)
-          type: string
-          default: "hello world"
+  var:
+    - name: GREETING_VARIABLE
+      description: the description for GREETING_VARIABLE that will be used for documentation generation and to advice users if using command line interactive mode.
+      # a boolean flag indicating if the variable is 
+      # mandatory, it is used for input validation
+      required: true
+      # the type of the variable for the purpose of validation. 
+      # Possible types are: path (a file path), uri (a unique resource identifier), 
+      # name (an Artisan package name), string (any string)
+      type: string
+      default: "hello world"
         
-        - name: OTHER_VARIABLES_HERE
+    - name: OTHER_VARIABLES_HERE
 ...
 ```
 
