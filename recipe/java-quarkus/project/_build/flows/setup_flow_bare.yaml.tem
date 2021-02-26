@@ -7,6 +7,7 @@ steps:
     description: create a quarkus scaffold
     runtime: java
     package: ${PACKAGE_NAME}
+    source: create
     function: init-mvn
 
   - name: push-to-git

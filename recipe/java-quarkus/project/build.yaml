@@ -7,9 +7,11 @@ env:
 input:
   var:
     - name: GIT_URI
-      description: the URI of the project git repository
       required: true
       type: uri
+      description: |-
+            the URI of the project git repository
+            eg is
 
     - name: SONAR_URI
       description: the URI of the SonarQube server to use for code quality reporting
@@ -304,8 +306,8 @@ functions:
         - BC_FX_NAME
         - BC_CRYPTO_KEY_EMAIL
 
-  - name: setup-pipeline
-    description: create a tekton pipeline in openshift to build the quarkus scoffold & create application pipeline
+  - name: setup-quarkus
+    description: create a tekton pipeline in openshift to build, push the quarkus scoffold & create application pipeline
     runtime: k8s
     export: true
     run:
@@ -313,6 +315,42 @@ functions:
       - art flow merge --tkn _build/flows/setup_flow_bare.yaml
       - oc create -f _build/flows/setup_flow_tkn.yaml
     input:
+      key:
+        - SIGNING_KEY
+        - VERIFICATION_KEY
+      secret:
+        - GIT_REPO_UNAME
+        - GIT_REPO_PWD
+        - SONAR_TOKEN
+        - ART_REG_USER
+        - ART_REG_PWD
+        - BC_PULL_IMAGE_REGISTRY_UNAME
+        - BC_PULL_IMAGE_REGISTRY_PWD
+        - BC_PUSH_IMAGE_REGISTRY_UNAME
+        - BC_PUSH_IMAGE_REGISTRY_PWD
+        - BC_ART_REG_USER
+        - BC_ART_REG_PWD
       var:
         - PACKAGE_NAME
+        - PROJECT_GROUP_ID
+        - PROJECT_ARTIFACT_ID
+        - PROJECT_ARTIFACT_VERSION
+        - GIT_URI
+        - GIT_REPO_HOST
+        - GIT_REPO_EMAIL
+        - SONAR_URI
+        - SONAR_PROJECT_KEY
+        - SONAR_SOURCES
+        - SONAR_BINARIES
+        - APP_PACKAGE_NAME
+        - BC_APPLICATION_NAME
+        - BC_BUILDER_IMAGE
+        - BC_PUSH_IMAGE_REGISTRY
+        - BC_PUSH_IMAGE_REPO
+        - BC_PUSH_IMAGE_NAME
+        - BC_PUSH_IMAGE_VERSION
+        - BC_PULL_IMAGE_REGISTRY
+        - BC_PACKAGE_NAME
+        - BC_FX_NAME
+        - BC_CRYPTO_KEY_EMAIL
 ...
