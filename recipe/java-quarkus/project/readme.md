@@ -1,4 +1,4 @@
-### How to use Java-Quarkus receipe
+### How to use Java-Quarkus recipe
 
 Ensure you have the following:
 - artisan CLI installed
@@ -15,11 +15,11 @@ mkdir java-quarkus
 # go inside java-quarkus
 cd java-quarkus/
 
-# open java-quarkus receipe
+# open java-quarkus recipe
 art open -u=<ART_REG_USER>:<ART_REG_PWD> {{registry-url}}/recipe/java-quarkus
 
 # create empty project in gitlab
-# then pull java-quarkus receipe from the artefact registry
+# then pull java-quarkus recipe from the artefact registry
 art pull -u=<ART_REG_USER>:<ART_REG_PWD> {{registry-url}}/recipe/java-quarkus
 
 # now setup .env file. the below command will create .env file in the current folder
