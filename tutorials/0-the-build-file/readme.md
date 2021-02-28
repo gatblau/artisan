@@ -125,47 +125,131 @@ input:
   secret:
     - name: MY_USER_NAME
       description: login username
+
     - name: MY_USER_PWD
       description: login password
+
+  # PGP keys
+  key:
+    - name: MY_PUBLIC_KEY
+      description: "I use this key to verify a digital signature"
+      # is it private or public?
+      private: false
+      # what is the default path for the key in the local
+      # Artisan registry
+      path: /
 ...
 ```
 
 ### Binding variables
 
-Variables must to be bound to a function to tell *Artisan* that the variable is need by such function.
+Variables must to be bound to a function to tell *Artisan* that the variable is needed by such function.
 
-Bindings are written using a similar syntax to the input definition. The following example ilustrates how to bind the USER variable to the greet-user function:
+This is mostly required when a function is exported so that its required inputs can be added to the package manifest.
+
+:exclamation: this will be clarified when Artisan packages are discussed.
+
+Bindings are written using a similar syntax to the input definition. The following example ilustrates how to bind the **USER_TO_GREET** variable to the **greet-user** function:
 
 ```yaml
 ---
 input:
    # variable definition section
    var: 
-     - name: USER
+     - name: USER_TO_GREET
        description: the name of the user to greet
        required: true
-       default: gatblau
+       default: Gatblau
        type: string
 
 functions:
     - name: greet-user
       run:
-        - echo Hello ${USER}!
+        - echo Hello ${USER_TO_GREET}!
       input:
          # variable binding section
          var:
-           - USER
+           - USER_TO_GREET
 ...
 ```
 
-:boom: To test it, place the above content in a build.yaml file and run the following commands:
+:boom: To test it, run the following commands:
 
 ```bash
-$ art run greet-user
- Hello gatblau!
+# the following example assumes Linux/OSX operating system:
 
-$ export USER="Mickey Mouse"
-$ art run greet-user
-  Hello Mickey Mouse!
+# tell Artisan to run the "greet-user" function from the 
+# build file located at the "sample_1" folder
+$  art run greet-user sample_1 
 
+# you should see an error message as the variable 
+# USER_TO_GREET is not defined
+error!
+* USER_TO_GREET is required
+
+# now try interactive mode, so the command line interface 
+# will ask you to enter the missing variables
+# note the -i flag to tell Artisan to run in interactive mode
+$  art run -i greet-user sample_1 
+
+# you should be able to see the following prompt
+# note the default value in brackets
+? var => USER_TO_GREET (the name of the user to greet): (Gatblau) 
+
+# press enter to use the default value
+# you should now see the message below
+Hello Gatblau!
+
+# now export an environment variable 
+$ export USER_TO_GREET="Mickey Mouse"
+$ art run greet-user sample_1
+  
+# you should now see the message below
+Hello Mickey Mouse!
+
+# now unset the variable USER_TO_GREET
+$ unset USER_TO_GREET
+
+# Artisan can also load variables from a file
+# the file can contain one or more environment variables
+# to test it, create an environment file as follows
+$ echo USER_TO_GREET="Black Pete" >> sample_1/.env
+
+# now try and run the command below
+# note the -e flag to tell Artisan to load the 
+# new environment file
+$ art run -e sample_1/.env greet-user sample_1 sample_1
+
+# you should see the following message
+Hello Black Pete!
+```
+
+### Unbound variables
+
+In some cases, you might not want to create a binding but still want Artisan to prompt for the value of a variable if missing. This is normally the case when you do not intend to export functions but still want to run them locally.
+
+In this case, the build file would simply look like the following:
+
+```yaml
+---
+functions:
+  - name: greet-user
+    run:
+      - echo Hello ${USER_TO_GREET}!
+...
+```
+
+:boom: to test it run the following commands:
+
+```bash
+$ art run greet-user sample_2
+
+# you should see the following message
+error!
+* the environment variable 'USER_TO_GREET' is not defined, are you missing a binding? you can always run the command in interactive mode to manually input its value
+
+# now try and do the following and observe what happens:
+# 1. run Artisan in interactive mode (use the -i flag)
+# 2. export the required variable
+# 3. load the variable from an environment file (use the -e flag)
 ```
