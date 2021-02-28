@@ -100,7 +100,9 @@ In order to tell *Artisan* what input information is required by each function i
 - secrets: these are variables that contain sensitive information like credentials
 - keys: these are the definition of [PGP](https://en.wikipedia.org/wiki/Pretty_Good_Privacy) keys that are used by Artisan to sign and verify packages
 
-:exclamation: Using different sections for the different types of input allows *Artisan* to provide differenciated treatment for each type of input.
+:exclamation: Using different names for the different types of input allows *Artisan* to provide differenciated treatment for each of them.
+
+For instance, secrets are variables that try and hide its value where posiible. Keys are variables but containing PGP keys and typically allow for easy loading, for example fro Artisan local registry.
 
 ```yaml
 ---
