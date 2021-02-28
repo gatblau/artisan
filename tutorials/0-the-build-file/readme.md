@@ -94,11 +94,11 @@ For clarity, a specific concrete example is provided below:
 
 Typically, any complex automation has to be configurable. Configuration in Artisan is managed mostly via environment variables, as this is aligned with the way [linux containers](https://www.redhat.com/en/topics/containers/whats-a-linux-container) work.
 
-In order to tell *Artisan* what input information is required by each function in the build file, the build file contains a section describing:
+Input information required by the build file, is defined in the iput section containing three sub sections as follows:
   
-- variables: these are plain environment variables
-- secrets: these are variables that contain sensitive information like credentials
-- keys: these are the definition of [PGP](https://en.wikipedia.org/wiki/Pretty_Good_Privacy) keys that are used by Artisan to sign and verify packages
+- `var`: these are plain environment variables
+- `secret`: these are variables that contain sensitive information like credentials
+- `key`: these are the definition of [PGP](https://en.wikipedia.org/wiki/Pretty_Good_Privacy) keys that are used by Artisan to sign and verify packages
 
 :exclamation: Using different names for the different types of input allows *Artisan* to provide differenciated treatment for each of them.
 
