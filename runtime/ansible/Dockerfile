@@ -38,16 +38,14 @@ RUN dnf makecache --timer \
 # install and upgrade pip via python
 RUN python3 -m pip install -U pip
 
-# install wheel (required by ansible installation)
-RUN pip3 install wheel
-
-# install the specified ansible version using pip
-RUN pip3 install ansible==${ANSIBLE_VERSION}
+# install wheel (required by ansible installation), boto3 required by ec2 module and ansible
+RUN pip3 install wheel boto3 ansible==${ANSIBLE_VERSION}
 
 # disable requiretty and create default hosts file
 RUN sed -i -e 's/^\(Defaults\s*requiretty\)/#--- \1/'  /etc/sudoers \
  && mkdir -p /etc/ansible \
  && mkdir -p /.ansible/tmp \
+ && mkdir -p /.cache/pip \
  && echo -e '[local]\nlocalhost ansible_connection=local' > /etc/ansible/hosts
 
 # add the ansible configuration file
@@ -55,6 +53,7 @@ COPY ansible.cfg /etc/ansible/ansible.cfg
 
 # ensure ansible folders are accessible by the runtime user
 RUN chown -R ${UNAME}:0 /.ansible && chmod -R g+rw /.ansible \
- && chown -R ${UNAME}:0 /etc/ansible && chmod -R g+rw /etc/ansible
+ && chown -R ${UNAME}:0 /etc/ansible && chmod -R g+rw /etc/ansible \
+ && chown -R ${UNAME}:0 /.cache/pip && chmod -R g+rw /.cache/pip
 
 USER $UNAME
