@@ -50,12 +50,12 @@ input:
       required: true
       type: string
       description: |-
-            the maven group id for the project. You can pass the project name as PROJECT_GROUP_ID
+            the maven group id for the project.
 
     - name: PROJECT_ARTIFACT_ID
       required: true
       type: string
-      description: the maven artifact id for the application eg. <project-name>
+      description: the maven artifact id for the application
 
     - name: PROJECT_ARTIFACT_VERSION
       required: true
