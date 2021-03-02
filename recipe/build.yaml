@@ -1,8 +1,0 @@
-# build recipes
----
-profiles:
-  - name: java-quarkus
-    description: builds the java recipe
-    type: recipe/java
-    target: java-quarkus/project
-...
