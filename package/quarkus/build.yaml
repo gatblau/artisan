@@ -139,13 +139,12 @@ functions:
   - name: init-mvn
     description: initialises the project and creates pipelines
     runtime: java
-    export: true
     run:
       # creates the quarkus scaffold for the project
       # the plugin version below might need upgrading if the current one is not available anymore
       - mvn io.quarkus:quarkus-maven-plugin:1.11.2.Final:create -DprojectGroupId=${PROJECT_GROUP_ID} -DprojectArtifactId=${PROJECT_ARTIFACT_ID} -DprojectVersion=${PROJECT_ARTIFACT_VERSION}
       # copy project files to the correct location
-      - cp -r ${PROJECT_ARTIFACT_ID}/. ../app
+      - cp -r ${PROJECT_ARTIFACT_ID}/. ./app
       # remove old folder
       - rm -R ${PROJECT_ARTIFACT_ID}
     input:
@@ -154,25 +153,32 @@ functions:
         - PROJECT_ARTIFACT_ID
         - PROJECT_ARTIFACT_VERSION
 
+  # this function is used by setup pipeline
   - name: init-git
     description: initialises the git repository
     runtime: java
-    export: true
     run:
-      - sh init-git.sh
+      - sh setup/setup-git.sh ${GIT_REPO_HOST} ${GIT_REPO_UNAME} ${GIT_REPO_PWD}
     input:
       var:
         - GIT_URI
+        - GIT_REPO_HOST
+        - GIT_REPO_EMAIL
+      secret:
+        - GIT_REPO_UNAME
+        - GIT_REPO_PWD
 
+  # this function is used by setup pipeline
   - name: init-tkn
     description: create a tekton pipeline in openshift to build the application
     runtime: k8s
-    export: true
     run:
+      # merge flow name into template
+      - art merge setup/ci_flow_bare.yaml.tem
       # create a tekton pipeline resources file
-      - art flow merge -b . --tkn quarkus_ci_bare.yaml
+      - art flow merge -b . --tkn setup/ci_flow_bare.yaml
       # apply pipeline to OpenShift
-      - oc apply -f quarkus_ci_tkn.yaml
+      - oc apply -f setup/ci_flow_tkn.yaml
     input:
       key:
         - SIGNING_KEY
@@ -206,4 +212,73 @@ functions:
         - BC_PACKAGE_NAME
         - BC_FX_NAME
         - BC_CRYPTO_KEY_EMAIL
+
+  - name: deploy-app
+    description: deploys the Quarkus application to OpenShift
+    run:
+      # merges OpenShift template
+      - art merge setup/deploy.yaml.tem
+      # apply template
+      - oc apply -f setup/deploy.yaml
+    input:
+      var:
+        - BC_APPLICATION_NAME
+        - BC_PUSH_IMAGE_NAME
+        - BC_PUSH_IMAGE_VERSION
+        - PROJECT_ARTIFACT_VERSION
+
+  # used this function on VM/local m/c to create the java-quarkus setup tekton pipeline into openshift
+  - name: setup
+    description: create a tekton pipeline in openshift to build, push the quarkus scaffold & create application pipeline
+    runtime: k8s
+    export: true
+    run:
+      - art merge setup/setup_flow_bare.yaml.tem
+      - art flow merge --tkn setup/setup_flow_bare.yaml
+      - oc create -f setup/setup_flow_tkn.yaml
+    input:
+      key:
+        - JAVA_SETUP_CREATE_PROJECT_VERIFICATION_KEY
+          SIGNING_KEY
+          VERIFICATION_KEY
+      secret:
+        - ART_REG_PWD
+        - ART_REG_USER
+        - BC_ART_REG_PWD
+        - BC_ART_REG_USER
+        - BC_PULL_IMAGE_REGISTRY_PWD
+        - BC_PULL_IMAGE_REGISTRY_UNAME
+        - BC_PUSH_IMAGE_REGISTRY_PWD
+        - BC_PUSH_IMAGE_REGISTRY_UNAME
+        - GIT_REPO_PWD
+        - GIT_REPO_UNAME
+        - JAVA_SETUP_CREATE_PROJECT_ART_REG_PWD
+        - JAVA_SETUP_CREATE_PROJECT_ART_REG_USER
+        - OPENSHIFT_TOKEN
+        - SONAR_TOKEN
+      var:
+        - APP_PACKAGE_NAME
+        - BC_APPLICATION_NAME
+        - BC_BUILDER_IMAGE
+        - BC_CRYPTO_KEY_EMAIL
+        - BC_FX_NAME
+        - BC_PACKAGE_NAME
+        - BC_PULL_IMAGE_REGISTRY
+        - BC_PUSH_IMAGE_NAME
+        - BC_PUSH_IMAGE_REGISTRY
+        - BC_PUSH_IMAGE_REPO
+        - BC_PUSH_IMAGE_VERSION
+        - GIT_REPO_EMAIL
+        - GIT_REPO_HOST
+        - GIT_URI
+        - OPENSHIFT_PROJECT_NAME
+        - OPENSHIFT_SERVER
+        - PACKAGE_NAME
+        - PROJECT_ARTIFACT_ID
+        - PROJECT_ARTIFACT_VERSION
+        - PROJECT_GROUP_ID
+        - SONAR_BINARIES
+        - SONAR_PROJECT_KEY
+        - SONAR_SOURCES
+        - SONAR_URI
 ...

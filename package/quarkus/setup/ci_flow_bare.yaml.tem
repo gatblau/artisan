@@ -1,6 +1,5 @@
 ---
-# CI pipeline for Quarkus
-name: quarkus-ci
+name: ${BC_APPLICATION_NAME}
 description: build, package, sign and publish a Java Application
 
 steps:
