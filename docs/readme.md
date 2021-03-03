@@ -17,7 +17,7 @@ Artisan achieves this by combining the functions in the following core component
 
 - `the packaging engine`: packages files and unpackage files.
   
-- `the execution engine`: execute logic within the packages using standard containerised runtimes with the toolchains required to run the automation. The execution engine can run different tasks with different runtime using flows [^1].
+- `the execution engine`: execute logic within the packages using standard containerised runtimes with the toolchains required to run the automation. The execution engine can run different tasks with different runtime using flows(<sup>[1](#flow_footnote)</sup>).
   
 - `the distribution engine`: provides the means to tag, push, pull and open packages, using cryptographic verification of author/source.
   
@@ -35,4 +35,4 @@ The packaging engine packages any files required to run a certain automation tas
 
 
 
-[^1]: Artisan flows are yaml files simply describing a sequence of execution steps. It can be thought of as a logical pipeline and it is very high level. A runner will transpile the flow into the physical environment and run it. For example, an Artisan Runner in Kubernetes transpiles the flow into a TekdtonCD pipeline. 
+<a name="flow_footnote">(1)</a>: *Artisan flows are [yaml files](https://en.wikipedia.org/wiki/YAML) that simply describe a sequence of execution steps. They can be thought of as a logical pipeline and the emphasis is to make them human readable. An Artisan Runner then takes a flow and transpile it to the physical environment format where they run. For example, an Artisan Runner in Kubernetes transpiles the flow into a [Tekton](https://tekton.dev/) pipeline.*
