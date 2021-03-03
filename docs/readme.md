@@ -1,9 +1,11 @@
+<img src="https://github.com/gatblau/artisan/raw/master/artisan.png" width="150" align="right"/>
+
 # Artisan
 
 Artisan is a [command line interface (CLI)](https://en.wikipedia.org/wiki/Command-line_interface) that standardise and secure the packaging, execution and distribution of
 automation code across the enterprise.
 
-Artisan is part of the [Onix](https://onix.gatblau.org) Build System.
+Artisan is part of the [Onix Configuration Manager](https://onix.gatblau.org) Build System that deals with *build time* configuration.
 
 Typically, DevOps teams need to use multiple toolchains to meet the automation requirements related to building and configuring software.
 
@@ -11,13 +13,17 @@ Standardisation means that both development and operational teams can combine to
 
 It facilitates the creation of a generic automation library regardless of the various chosen toolchains required to resolve a problem.
 
-Artisan achieves this by combining the power of the following components:
+Artisan achieves this by combining the functions in the following core components:
 
-- `the packaging engine`: packages files and digitally sign them.
+- `the packaging engine`: packages files and unpackage files.
   
-- `the execution engine`: provides various modes for executing automation, typically using standard containerised runtimes with the toolchains required to run the automation. This means all tools are containerised and can run in container platforms.
+- `the execution engine`: execute logic within the packages using standard containerised runtimes with the toolchains required to run the automation. The execution engine can run different tasks with different runtime using flows [^1].
   
 - `the distribution engine`: provides the means to tag, push, pull and open packages, using cryptographic verification of author/source.
+  
+- `the input engine`:
+
+- `the cryptographic engine`:
   
 ## Packaging engine
 
@@ -27,3 +33,6 @@ The packaging engine packages any files required to run a certain automation tas
 
 ## Distribution engine
 
+
+
+[^1]: Artisan flows are yaml files simply describing a sequence of execution steps. It can be thought of as a logical pipeline and it is very high level. A runner will transpile the flow into the physical environment and run it. For example, an Artisan Runner in Kubernetes transpiles the flow into a TekdtonCD pipeline. 
