@@ -1,3 +1,5 @@
+<img src="https://github.com/gatblau/artisan/raw/master/artisan.png" width="150" align="right"/>
+
 # The build file
 
 In the same way that [GNU make](https://www.gnu.org/software/make/) uses a [Makefile](https://www.gnu.org/software/make/manual/make.html#Introduction), you need a file called **build.yaml** (the build file) to tell *Artisan* what to do.
