@@ -1,4 +1,5 @@
 apiVersion: template.openshift.io/v1
+name: ${BC_APPLICATION_NAME}
 kind: Template
 labels:
   template: ${BC_APPLICATION_NAME}-template

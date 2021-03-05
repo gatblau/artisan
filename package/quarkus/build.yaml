@@ -1,9 +1,6 @@
 ---
 app_icon: quarkus
 
-env:
-  APP_NAME: app
-
 input:
   var:
     - name: GIT_URI
@@ -139,6 +136,7 @@ functions:
   - name: init-mvn
     description: initialises the project and creates pipelines
     runtime: java
+    export: true
     run:
       # creates the quarkus scaffold for the project
       # the plugin version below might need upgrading if the current one is not available anymore
@@ -157,6 +155,7 @@ functions:
   - name: init-git
     description: initialises the git repository
     runtime: java
+    export: true
     run:
       - sh setup/setup-git.sh ${GIT_REPO_HOST} ${GIT_REPO_UNAME} ${GIT_REPO_PWD}
     input:
@@ -172,11 +171,12 @@ functions:
   - name: init-tkn
     description: create a tekton pipeline in openshift to build the application
     runtime: k8s
+    export: true
     run:
       # merge flow name into template
       - art merge setup/ci_flow_bare.yaml.tem
       # create a tekton pipeline resources file
-      - art flow merge -b . --tkn setup/ci_flow_bare.yaml
+      - art flow merge -b app --tkn setup/ci_flow_bare.yaml
       # apply pipeline to OpenShift
       - oc apply -f setup/ci_flow_tkn.yaml
     input:
@@ -215,6 +215,8 @@ functions:
 
   - name: deploy-app
     description: deploys the Quarkus application to OpenShift
+    runtime: k8s
+    export: true
     run:
       # merges OpenShift template
       - art merge setup/deploy.yaml.tem
