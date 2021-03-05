@@ -40,6 +40,10 @@ if [[ -n "${PACKAGE_NAME+x}" ]]; then
               # open package in the source folder and leave files there
               art exe -u=${ART_REG_USER}:${ART_REG_PWD} --path /workspace/source -f ${PACKAGE_NAME} ${FX_NAME}
               ;;
+          "read" | "READ")
+              # run from existing source
+              art run ${FX_NAME} /workspace/source/
+              ;;
           *)
               printf "invalid PACKAGE_SOURCE value: %s, valid values are either 'new' or 'update'\n" ${PACKAGE_SOURCE}
               ;;
