@@ -13,15 +13,18 @@ steps:
   - name: push-to-git
     description: initialise git repo and pushes project
     runtime: java
+    source: read
     function: init-git
 
   - name: create-pipeline
     description: create tekton pipeline
     runtime: k8s
+    source: read
     function: init-tkn
 
   - name: create-app-deployment
     description: create application deployment in OpenShift
     runtime: k8s
+    source: read
     function: deploy-app
 ...
