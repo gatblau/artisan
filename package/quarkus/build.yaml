@@ -332,7 +332,6 @@ functions:
         - GIT_REPO_UNAME
         - JAVA_SETUP_CREATE_PROJECT_ART_REG_PWD
         - JAVA_SETUP_CREATE_PROJECT_ART_REG_USER
-        - OPENSHIFT_TOKEN
         - SONAR_TOKEN
       var:
         - APP_PACKAGE_NAME
@@ -349,8 +348,6 @@ functions:
         - GIT_REPO_EMAIL
         - GIT_REPO_HOST
         - GIT_URI
-        - OPENSHIFT_PROJECT_NAME
-        - OPENSHIFT_SERVER
         - PACKAGE_NAME
         - PROJECT_ARTIFACT_ID
         - PROJECT_ARTIFACT_VERSION
