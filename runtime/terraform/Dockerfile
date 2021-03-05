@@ -1,5 +1,5 @@
 #
-#  Onix Config Manager - Base Artisan Runtime Image - Java + Maven + Gradle
+#  Onix Config Manager - Artisan Runtime Image - Terraform
 #  Copyright (c) 2018-2021 by www.gatblau.org
 #  Licensed under the Apache License, Version 2.0 at http://www.apache.org/licenses/LICENSE-2.0
 #
