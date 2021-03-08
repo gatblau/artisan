@@ -1,11 +1,11 @@
 apiVersion: template.openshift.io/v1
-name: ${BC_APPLICATION_NAME}
 kind: Template
 labels:
   template: ${BC_APPLICATION_NAME}-template
   xpaas: 1.0.0
 message: ${BC_APPLICATION_NAME} Service has been created in your project.
 metadata:
+  name: ${BC_APPLICATION_NAME}
   annotations:
     description: ${BC_APPLICATION_NAME} Service.
     iconClass: icon-quarkus
