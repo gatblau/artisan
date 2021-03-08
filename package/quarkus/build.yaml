@@ -303,6 +303,8 @@ functions:
     input:
       var:
         - BC_APPLICATION_NAME
+        - BC_PUSH_IMAGE_REGISTRY
+        - BC_PUSH_IMAGE_REPO
         - BC_PUSH_IMAGE_NAME
         - BC_PUSH_IMAGE_VERSION
         - PROJECT_ARTIFACT_VERSION
