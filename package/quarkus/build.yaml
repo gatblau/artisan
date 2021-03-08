@@ -298,6 +298,8 @@ functions:
       - art merge setup/deploy.yaml.tem
       # apply template
       - oc apply -f setup/deploy.yaml
+      # create a new app from the template
+      - oc new-app --template=${BC_APPLICATION_NAME}
     input:
       var:
         - BC_APPLICATION_NAME
