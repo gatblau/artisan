@@ -172,10 +172,10 @@ input:
     - name: BC_PUSH_IMAGE_REGISTRY_PWD
       description: password for the container registry where the application image will be pushed
 
-    - name: BC_ART_REG_USER
+    - name: BC_REGISTRY_USER
       description: artefact registry user name where artefact will be pushed
 
-    - name: BC_ART_REG_PWD
+    - name: BC_REGISTRY_PWD
       description: artefact registry password where artefact will be pushed
 
     - name: GIT_REPO_UNAME
@@ -273,8 +273,8 @@ functions:
         - BC_PULL_IMAGE_REGISTRY_PWD
         - BC_PUSH_IMAGE_REGISTRY_UNAME
         - BC_PUSH_IMAGE_REGISTRY_PWD
-        - BC_ART_REG_USER
-        - BC_ART_REG_PWD
+        - BC_REGISTRY_USER
+        - BC_REGISTRY_PWD
       key:
         - VERIFICATION_KEY
 ...
