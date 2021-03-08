@@ -215,9 +215,9 @@ profiles:
     type: content/java
     run:
       # copy the docker file to build the jvm version to the artefact(target) package folder
-      - cp _build/image/Dockerfile target/target/Dockerfile
+      - cp img/Dockerfile target/target/Dockerfile
       # copy the build.yaml file to build the jvm version to the artefact(target) package folder
-      - cp _build/image/build.yaml target/target
+      - cp img/build.yaml target/target
     target: target/target
 
 functions:

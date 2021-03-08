@@ -1,0 +1,71 @@
+---
+input:
+  var:
+    - name: PULL_IMAGE_REGISTRY
+      description: application runtime image registry name (eg. registry.gitlab.com)
+      required: true
+      type: string
+    - name: PUSH_IMAGE_REGISTRY
+      description: the image registry name (eg. registry.gitlab.com)
+      required: true
+      type: string
+    - name: PUSH_IMAGE_REPO
+      description: the image repo name
+      required: true
+      type: string
+    - name: PUSH_IMAGE_NAME
+      description: the application image name
+      required: true
+      type: string
+    - name: PUSH_IMAGE_VERSION
+      description: the application image version/tag
+      required: true
+      type: string
+    - name: CRYPTO_KEY_EMAIL
+      description: email id which is used to genearte crypto signature keys
+      required: true
+      type: string
+
+  secret:
+    - name: PULL_IMAGE_REGISTRY_UNAME
+      description: user name for the container registry where the base image is located
+    - name: PULL_IMAGE_REGISTRY_PWD
+      description: password for the container registry where the base image is located
+    - name: PUSH_IMAGE_REGISTRY_UNAME
+      description: user name for the container registry where the application image will be pushed
+    - name: PUSH_IMAGE_REGISTRY_PWD
+      description: password for the container registry where the application image will be pushed
+    - name: ART_REG_USER
+      description: the user to open the application package
+    - name: ART_REG_PWD
+      description: the pwd of the user to open the application package
+
+functions:
+  - name: build-image
+    description: build application image & push into the image registry
+    runtime: buildah
+    export: true
+    run:
+      - buildah login -u ${PULL_IMAGE_REGISTRY_UNAME} -p ${PULL_IMAGE_REGISTRY_PWD} ${PULL_IMAGE_REGISTRY}
+      # build image
+      - buildah bud --isolation chroot -t ${PUSH_IMAGE_REGISTRY}/${PUSH_IMAGE_REPO}/${PUSH_IMAGE_NAME}:${PUSH_IMAGE_VERSION} .
+      # import gpg key to sign & push image
+      - gpg --import /.artisan/keys/root_rsa_key.pgp
+      - skopeo copy --sign-by=${CRYPTO_KEY_EMAIL} --dest-tls-verify=false --dest-creds ${PUSH_IMAGE_REGISTRY_UNAME}:${PUSH_IMAGE_REGISTRY_PWD} containers-storage:${PUSH_IMAGE_REGISTRY}/${PUSH_IMAGE_REPO}/${PUSH_IMAGE_NAME}:${PUSH_IMAGE_VERSION} docker://${PUSH_IMAGE_REGISTRY}/${PUSH_IMAGE_REPO}/${PUSH_IMAGE_NAME}:${PUSH_IMAGE_VERSION}
+    input:
+      var:
+        - PACKAGE_NAME
+        - PULL_IMAGE_REGISTRY
+        - PUSH_IMAGE_REGISTRY
+        - PUSH_IMAGE_REPO
+        - PUSH_IMAGE_NAME
+        - PUSH_IMAGE_VERSION
+        - CRYPTO_KEY_EMAIL
+      secret:
+        - PULL_IMAGE_REGISTRY_UNAME
+        - PULL_IMAGE_REGISTRY_PWD
+        - PUSH_IMAGE_REGISTRY_UNAME
+        - PUSH_IMAGE_REGISTRY_PWD
+        - ART_REG_USER
+        - ART_REG_PWD
+...
