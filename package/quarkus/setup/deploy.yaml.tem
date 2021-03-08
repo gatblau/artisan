@@ -25,7 +25,7 @@ objects:
     - annotations: null
       from:
         kind: DockerImage
-        name: ${BC_PUSH_IMAGE_NAME}:${BC_PUSH_IMAGE_VERSION}
+        name: ${PUSH_IMAGE_REGISTRY}/${PUSH_IMAGE_REPO}/${PUSH_IMAGE_NAME}:${PUSH_IMAGE_VERSION}
       generation: 1
       importPolicy:
         scheduled: true
