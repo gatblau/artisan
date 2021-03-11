@@ -11,7 +11,7 @@ steps:
     function: init-mvn
 
   - name: push-to-git
-    descriptiosn: initialise git repo and pushes project
+    description: initialise git repo and pushes project
     runtime: java
     package: ${PACKAGE_NAME}
     source: read

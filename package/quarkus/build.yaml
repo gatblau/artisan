@@ -148,6 +148,16 @@ input:
         it contains setup & pipeline flow alongwith build.yaml file
         this package should be already available in the artefact registry like nexus
 
+    - name: OPENSHIFT_NAMESPACE
+      required: true
+      type: string
+      description: the name of the OpenShift namespace where the pipelines should be created
+
+    - name: ART_RUNNER_URI
+      required: true
+      type: string
+      description: the URI of the Artisan runner to use
+
   secret:
     - name: ART_REG_USER
       description: the artisan registry user name which is deployed into the openshift
@@ -193,6 +203,12 @@ input:
 
     - name: JAVA_SETUP_CREATE_PROJECT_ART_REG_PWD
       description: password for the container registry to download the recipe package
+
+    - name: ART_RUNNER_UNAME
+      description: the user to authenticate with the Artisan Runner
+
+    - name: ART_RUNNER_PWD
+      description: the password to authenticate with the Artisan Runner
 
   key:
     - name: SIGNING_KEY
@@ -246,15 +262,13 @@ functions:
   # this function is used by setup pipeline
   - name: init-tkn
     description: create a tekton pipeline in openshift to build the application
-    runtime: k8s
+    runtime: ubi-min
     export: true
     run:
       # merge flow name into template
       - art merge setup/ci_flow_bare.yaml.tem
       # create a tekton pipeline resources file
-      - art flow merge -b app --tkn setup/ci_flow_bare.yaml
-      # apply pipeline to OpenShift
-      - oc apply -f setup/ci_flow_tkn.yaml
+      - art flow run -l namespace=${OPENSHIFT_NAMESPACE} -u=${ART_RUNNER_UNAME}:${ART_RUNNER_PWD} setup/ci_flow_bare.yaml -b app ${ART_RUNNER_URI}
     input:
       key:
         - SIGNING_KEY
@@ -269,6 +283,8 @@ functions:
         - BC_PUSH_IMAGE_REGISTRY_PWD
         - BC_REGISTRY_USER
         - BC_REGISTRY_PWD
+        - ART_RUNNER_UNAME
+        - ART_RUNNER_PWD
       var:
         - PROJECT_ARTIFACT_ID
         - PROJECT_ARTIFACT_VERSION
@@ -288,6 +304,8 @@ functions:
         - BC_PACKAGE_NAME
         - BC_FX_NAME
         - BC_CRYPTO_KEY_EMAIL
+        - OPENSHIFT_NAMESPACE
+        - ART_RUNNER_URI
 
   - name: deploy-app
     description: deploys the Quarkus application to OpenShift
@@ -298,8 +316,6 @@ functions:
       - art merge setup/deploy.yaml.tem
       # apply template
       - oc apply -f setup/deploy.yaml
-      # create a new app from the template
-#      - oc new-app --template=${BC_APPLICATION_NAME}
     input:
       var:
         - BC_APPLICATION_NAME
@@ -312,17 +328,16 @@ functions:
   # used this function on VM/local m/c to create the java-quarkus setup tekton pipeline into openshift
   - name: setup
     description: create a tekton pipeline in openshift to build, push the quarkus scaffold & create application pipeline
-    runtime: k8s
+    runtime: ubi-min
     export: true
     run:
       - art merge setup/setup_flow_bare.yaml.tem
-      - art flow merge --tkn setup/setup_flow_bare.yaml
-      - oc create -f setup/setup_flow_tkn.yaml
+      - art flow run -l namespace=${OPENSHIFT_NAMESPACE} -u=${ART_RUNNER_UNAME}:${ART_RUNNER_PWD} setup/setup_flow_bare.yaml -b . ${ART_RUNNER_URI}
     input:
       key:
         - JAVA_SETUP_CREATE_PROJECT_VERIFICATION_KEY
-          SIGNING_KEY
-          VERIFICATION_KEY
+        - SIGNING_KEY
+        - VERIFICATION_KEY
       secret:
         - ART_REG_PWD
         - ART_REG_USER
@@ -337,6 +352,8 @@ functions:
         - JAVA_SETUP_CREATE_PROJECT_ART_REG_PWD
         - JAVA_SETUP_CREATE_PROJECT_ART_REG_USER
         - SONAR_TOKEN
+        - ART_RUNNER_UNAME
+        - ART_RUNNER_PWD
       var:
         - APP_PACKAGE_NAME
         - BC_APPLICATION_NAME
@@ -360,7 +377,8 @@ functions:
         - SONAR_PROJECT_KEY
         - SONAR_SOURCES
         - SONAR_URI
-
+        - OPENSHIFT_NAMESPACE
+        - ART_RUNNER_URI
 
   - name: cleanup
     description: remove all resources created by setup
