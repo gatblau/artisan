@@ -335,7 +335,7 @@ functions:
       - art flow run -l namespace=${OPENSHIFT_NAMESPACE} -u=${ART_RUNNER_UNAME}:${ART_RUNNER_PWD} setup/setup_flow_bare.yaml -b . ${ART_RUNNER_URI}
     input:
       key:
-        - JAVA_SETUP_CREATE_PROJECT_VERIFICATION_KEY
+        - QUARKUS_SETUP_CREATE_PROJECT_VERIFICATION_KEY
         - SIGNING_KEY
         - VERIFICATION_KEY
       secret:
@@ -349,8 +349,8 @@ functions:
         - BC_PUSH_IMAGE_REGISTRY_UNAME
         - GIT_REPO_PWD
         - GIT_REPO_UNAME
-        - JAVA_SETUP_CREATE_PROJECT_ART_REG_PWD
-        - JAVA_SETUP_CREATE_PROJECT_ART_REG_USER
+        - QUARKUS_SETUP_CREATE_PROJECT_ART_REG_PWD
+        - QUARKUS_SETUP_CREATE_PROJECT_ART_REG_USER
         - SONAR_TOKEN
         - ART_RUNNER_UNAME
         - ART_RUNNER_PWD
