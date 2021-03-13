@@ -23,7 +23,7 @@ Artisan achieves all the above by combining the functions in the following core 
   
 - `the execution engine`: executes the logic within the packages using toolchain specific [standard containerised runtimes](https://github.com/gatblau/artisan/tree/master/runtime). The execution engine can run different functions requiring different toolchains using flows(<sup>[1](#flow_footnote)</sup>).
   
-- `the distribution engine`: provides the means to tag, push, pull and open packages, enforcing the cryptographic verification of author/source.
+- `the publishing engine`: provides the means to tag, push, pull and open packages, enforcing the cryptographic verification of author/source.
   
 - `the input engine`: to improve usability and foster reusability, automation packages must have a standard way to publish and consume variables and generate variable specifications. The input engine provide options for automated generation of variable files and loading variables from different sources.
 
@@ -126,7 +126,29 @@ The *Artisan* CLI can request the execution of a flow by sending the flow defini
 
 A runner is an HTTP service that is in charge of the execution the flow. At some point different types of runners will be provided. For now, there is an OpenShift runner that uses [Tekton Pipelines](https://cloud.google.com/tekton/) to execute the steps in the flow definition.
 
-## Distribution engine
+## Publishing engine
+
+The publishing engine goal is to facilitate the distribution of packages but equally the dynamic installation of packages into runtimes.
+
+The *Artisan CLI* can create, tag and push packages to a registry. Once there, they can be pulled and opened within runtimes ready for execution.
+
+At the heart of the publishing engine is the Artisan Registry.
+
+### ___The Artisan Registry___
+
+In a similar way to a [Docker registry](https://docs.docker.com/registry/), the *Artisan Registry* is a stateless, highly scalable server side application that stores and lets you distribute *Artisan Packages*.
+
+The registry can sit in front of various backends, such as a [Nexus Repository](https://www.sonatype.com/nexus/repository-pro). Other backends such as S3 or Artifactory can be implemented in the future.
+
+The registry is typically package as a container image which can run from any [Kubernetes](https://kubernetes.io/) implementation.
+
+### ___Discoverable Automation Library___
+
+The *Artisan Registry* can be used to implement an enterprise wide automation library made of digitally signed, black boxed and discoverable packages that can be ubiquitously run using a container runtime, fully encapsulating the implementaion details and the undrlying toolchains.
+
+Packages in the library can be mixed and matched using flows, to cater for a wide range of complex Enterprise automation scenarios.
+
+---
 
 <a name="flow_footnote">[1]</a> *Artisan flows are [yaml files](https://en.wikipedia.org/wiki/YAML) that simply describe a sequence of execution steps. They can be thought of as a logical pipeline and the emphasis is to make them human readable. An Artisan Runner then takes a flow and transpile it to the physical environment format where they run. For example, an Artisan Runner in Kubernetes transpiles the flow into a [Tekton](https://tekton.dev/) pipeline.*
 
