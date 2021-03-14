@@ -1,6 +1,6 @@
 <img src="https://github.com/gatblau/artisan/raw/master/artisan.png" width="150" align="right"/>
 
-# Artisan
+# Artisan synopsis
 
 Artisan is a [command line interface (CLI)](https://en.wikipedia.org/wiki/Command-line_interface) that standardise and secure the packaging, execution and distribution of
 automation code across the enterprise.
@@ -28,7 +28,9 @@ Artisan achieves all the above by combining the functions in the following core 
 - `the input engine`: to improve usability and foster reusability, automation packages must have a standard way to publish and consume variables and generate variable specifications. The input engine provide options for automated generation of variable files and loading variables from different sources.
 
 - `the crypto engine`: every package is digitally signed by default using [PGP Keys](https://en.wikipedia.org/wiki/Pretty_Good_Privacy). When the execution engine opens a package, it verifies its digital seal(<sup>[2](#digi_seal_footnote)</sup>) to ensure it is trusted. The crypto engine can create, import, encrypt and decrypt files, and sign and verify packages.
-  
+
+---
+
 ## Packaging engine
 
 Automation typically comes as a set of disparate files that need to be executed in a particular order using specific toolchains.
@@ -57,6 +59,8 @@ The manifest declares the functions that can be executed on such package as well
 
 This model simplifies the signing, distribution and execution of automation and reduces the storage and bandwidth requirements for their distribution.
 
+---
+
 ## Execution engine
 
 The execution engine provides a structured framework to run automation scripts.
@@ -65,11 +69,11 @@ The execution engine provides a structured framework to run automation scripts.
 
 At the core of the execution engine is the build file: a [YAML file](https://en.wikipedia.org/wiki/YAML) that defines:
 
-- one or more functions: functions are lists of commands that have to be executed in sequence
+- ***functions***: functions are lists of commands that have to be executed in sequence. For those familiar with GNU Make, *Artisan* functions are similar to [make functions](https://www.gnu.org/software/make/manual/html_node/Functions.html).
   
-- one or more build profiles: profiles describe how to create packages
+- ***profiles***: describe the operations required to create *Artisan* packages. In the simplest form they can be just the location of a target folder to zip, in a more complex case, they might involve execution of shell commands or other *Artisan* functions required to prepare the contents of a package.
 
-- one or more inputs: inputs define the information required by functions and profiles to work
+- ***inputs***: inputs define the information required by functions and profiles to work. Inputs can be ordinary variables, secrets or (PGP) keys.
 
 Build files can be chained, that is, one can call one build file from another build file. This allow to break complex functions in a manageable way.
 
@@ -142,6 +146,8 @@ The *Artisan* CLI can request the execution of a flow by sending the flow defini
 
 A runner is an HTTP service that is in charge of the execution the flow. At some point different types of runners will be provided. For now, there is an OpenShift runner that uses [Tekton Pipelines](https://cloud.google.com/tekton/) to execute the steps in the flow definition.
 
+---
+
 ## Publishing engine
 
 The publishing engine goal is to facilitate the distribution of packages and the dynamic installation of packages into runtimes.
@@ -160,9 +166,18 @@ The registry is typically package as a container image which can run from any [K
 
 ### ___Discoverable Automation Library___
 
-The *Artisan Registry* can be used to implement an enterprise wide automation library made of digitally signed, black boxed and discoverable packages that can be ubiquitously run using a container runtime, fully encapsulating the implementaion details and the undrlying toolchains.
+The *Artisan Registry* can be used to implement an enterprise wide automation library made of digitally signed, black boxed and discoverable packages that can be ubiquitously run using container runtimes, fully encapsulating the implementaion details and the underlying toolchains.
 
 Packages in the library can be mixed and matched using flows, to cater for a wide range of complex Enterprise automation scenarios.
+
+---
+
+## Input engine
+
+---
+
+## Cryptographic engine
+
 
 ---
 
