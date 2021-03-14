@@ -15,7 +15,7 @@ Standardisation means that both development and operational teams can combine to
 
 Although this is technologically possible, without a consistent set of standards and abstractions that guide the way logic is packaged, distributed and consumed across a plethora of automation vendors, teams usually find themselves reinventing the wheel for every new project and have to manage more than one toolchain in different ways.
 
-:boom: *Artisan* acts as the <u>craftman in the middle</u> of container technology and automation technology, providing a generic way to amalgamate them to facilitate its use.
+:boom: *Artisan* acts as the ***craftman in the middle*** of container and automation technology, providing a generic way to amalgamate them to facilitate its use.
 
 Standardisation facilitates the creation of generic automation libraries regardless of the various chosen toolchains required to execute the scripts that comprise those libraries.
 
@@ -32,6 +32,16 @@ Sometimes standardisation is associated with opinionated and inflexible. *Artisa
 Cryptography is hard, so *Artisan* works hard to make it easy to use and implicitly engrained in the fabric of packages.
 
 Using Pretty Good Privacy (PGP) keys by default, *Artisan* can automatically validate that the package being executed comes from a trusted source and it is safe to run.
+
+## Embedded SOPs
+
+When companies onboard new employees or team members, they need to go through a learning curve before they can be effective at their jobs. Time is always in short supply for training.
+
+Standard Operating Procedures (SOP) are documents that contain the necessary instructions to complete critical processes. 
+
+SOPs ensure that a business can keep running smoothly as employees come and go, thus providing business continuity.
+
+:boom: *Artisan* can embed SOPs in packages making them easy to distribute and readily available to operators.
 
 ## Key Components
 
