@@ -19,10 +19,6 @@ Linux containers provide the basis to resolve this problem. However, it takes a 
 
 :boom: *Artisan* acts as the ***craftman in the middle*** of container and scripting technology, providing a generic way to amalgamate them and facilitate its use: package disparate sets of scripts, store them in a library (registry) and execute them in toolchain containers (runtimes). 
 
-Standardisation reduces the complexity involved in creating automation libraries, and delaing with the various chosen toolchains required to execute them.
-
-These libraries, can then be placed in a registry where they can be pulled on demand into standard container runtimes for execution.
-
 ## Standard but flexible
 
 Sometimes standardisation is associated with opinionated and inflexible. *Artisan* tries hard to be flexible by placing the control in the hands of the developers.
