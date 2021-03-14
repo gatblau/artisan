@@ -2,20 +2,38 @@
 
 # Artisan synopsis
 
-Artisan is a [command line interface (CLI)](https://en.wikipedia.org/wiki/Command-line_interface) that standardise and secure the packaging, execution and distribution of
-automation code across the enterprise.
+*Artisan is a [command line interface (CLI)](https://en.wikipedia.org/wiki/Command-line_interface) written in [Go](https://golang.org/) that helps to standardise and secure the packaging, execution and distribution of
+disparate scripts, code, configuration and other required files across the enterprise.*
 
 Artisan is part of the [Onix Configuration Manager](https://onix.gatblau.org) Build System that deals with *build time* configuration.
 
-Typically, DevOps teams need to use multiple toolchains to meet the automation requirements related to building and configuring software.
+## Why Artisan?
+
+Typically, DevOps teams need to use multiple toolchains and technologies to meet the automation requirements related to building and configuring software.
 
 Standardisation means that both development and operational teams can combine toolchains and execute them in the same consistent and secure way, regardless of the stage in the [application development lifecycle](https://en.wikipedia.org/wiki/Systems_development_life_cycle).
 
-Standardisation facilitates the creation of generic automation libraries regardless of the various chosen toolchains required to execute the scripts that comprise the libraries.
+Although this is technologically possible, without a consistent set of standards and abstractions that guide the way logic is packaged, distributed and consumed across a plethora of automation vendors, teams usually find themselves reinventing the wheel for every new project and have to manage more than one toolchain in different ways.
 
-These libraries, are then placed in a registry where they can be pulled on demand into standard container runtimes for execution.
+:boom: *Artisan* acts as the <u>craftman in the middle</u> of container technology and automation technology, providing a generic way to amalgamate them to facilitate its use.
 
-[Cryptographic signatures](https://en.wikipedia.org/wiki/Digital_signature) allow Artisan to validate that the package being executed comes from a trusted source and it is safe to run.
+Standardisation facilitates the creation of generic automation libraries regardless of the various chosen toolchains required to execute the scripts that comprise those libraries.
+
+These libraries, can then be placed in a registry where they can be pulled on demand into standard container runtimes for execution.
+
+## Standard but flexible
+
+Sometimes standardisation is associated with opinionated and inflexible. *Artisan* tries hard to be flexible by placing the control in the hands of the developers.
+
+:exclamation:*Artisan* takes intructions from a configuration file (i.e. the build file). This file allows developers to inject instructions at key parts of the process, telling *Artisan* exactly what to do, and thus providing the freedom to customise the execution logic. *Artisan* then takes these instructions and execute them in well defined and standard process.
+
+## Secure by default
+
+Cryptography is hard, so *Artisan* works hard to make it easy to use and implicitly engrained in the fabric of packages.
+
+Using Pretty Good Privacy (PGP) keys by default, *Artisan* can automatically validate that the package being executed comes from a trusted source and it is safe to run.
+
+## Key Components
 
 Artisan achieves all the above by combining the functions in the following core subsystems:
 
