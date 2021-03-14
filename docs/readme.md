@@ -15,9 +15,9 @@ Standardisation means that both development and operational teams can combine to
 
 Although this is technologically possible, without a consistent set of standards and abstractions that guide the way logic is packaged, distributed and consumed across a plethora of automation vendors, teams usually find themselves reinventing the wheel for every new project and have to manage more than one toolchain in different ways.
 
-:boom: *Artisan* acts as the ***craftman in the middle*** of container and automation technology, providing a generic way to amalgamate them to facilitate its use.
+:boom: *Artisan* acts as the ***craftman in the middle*** of container and automation technology, providing a generic way to amalgamate them and facilitate its use.
 
-Standardisation facilitates the creation of generic automation libraries regardless of the various chosen toolchains required to execute the scripts that comprise those libraries.
+Standardisation reduces the complexity involved in creating automation libraries, and delaing with the various chosen toolchains required to execute them.
 
 These libraries, can then be placed in a registry where they can be pulled on demand into standard container runtimes for execution.
 
@@ -25,13 +25,13 @@ These libraries, can then be placed in a registry where they can be pulled on de
 
 Sometimes standardisation is associated with opinionated and inflexible. *Artisan* tries hard to be flexible by placing the control in the hands of the developers.
 
-:exclamation:*Artisan* takes intructions from a configuration file (i.e. the build file). This file allows developers to inject instructions at key parts of the process, telling *Artisan* exactly what to do, and thus providing the freedom to customise the execution logic. *Artisan* then takes these instructions and execute them in well defined and standard process.
+:exclamation: *Artisan* takes commands from a configuration file (i.e. the build file). This file allows developers to inject instructions at key parts of the process, telling *Artisan* exactly what to do, and thus providing the freedom to customise the execution logic. *Artisan* then takes these instructions and execute them in well defined, secure and standard process.
 
 ## Secure by default
 
-Cryptography is hard, so *Artisan* works hard to make it easy to use and implicitly engrained in the fabric of packages.
+Cryptography is hard, so *Artisan* puts the emphasis on making cryptography seamless, easy to use and implicitly engrained in the fabric of packages.
 
-Using Pretty Good Privacy (PGP) keys by default, *Artisan* can automatically validate that the package being executed comes from a trusted source and it is safe to run.
+Using [Pretty Good Privacy (PGP)](https://en.wikipedia.org/wiki/Pretty_Good_Privacy) keys by default, *Artisan* can automatically validate that the package being executed comes from a trusted source and it is safe to run.
 
 ## Embedded SOPs
 
@@ -43,7 +43,7 @@ SOPs ensure that a business can keep running smoothly as employees come and go, 
 
 :boom: *Artisan* can embed SOPs in packages making them easy to distribute and readily available to operators.
 
-## Key Components
+## Core Subsystems
 
 Artisan achieves all the above by combining the functions in the following core subsystems:
 
