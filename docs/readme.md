@@ -17,8 +17,19 @@ Although this is technologically possible, without a consistent set of standards
 
 Linux containers provide the basis to resolve this problem. However, it takes a great deal of effort and knowledge to use containers in a consistent and secure way.
 
-:boom: *Artisan* acts as the ***craftman in the middle*** of container and scripting technology, providing a generic way to amalgamate them and facilitate its use: package disparate sets of scripts, store them in a library (registry) and execute them in toolchain containers (runtimes). 
+:boom: *Artisan* acts as the ***craftman in the middle*** of container and scripting technology, providing a generic way to amalgamate them and facilitate its use: package disparate sets of scripts, store them in a library (registry) and execute them in toolchain containers (runtimes).
 
+## How Artisan Packages compare to Container Images?
+
+*Artisan* packages are created in a similar way as container images. Once created, they can be tagged, pushed to and pulled from an *Artisan* registry.
+
+However, *Artisan* packages are smaller than container images, and are designed to be deployed in a container at runtime.
+
+This allows for the creation of runtime libraries consisting of standard container images with specific toolchains.
+
+Packages are the logic and containers are the environment where the logic runs.
+
+:exclamation: by separating them at build time and combining them at runtime complex flows can be easily created to execute any combination of packaged functions.
 ## Standard but flexible
 
 Sometimes standardisation is associated with opinionated and inflexible. *Artisan* tries hard to be flexible by placing the control in the hands of the developers.
