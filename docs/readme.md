@@ -15,7 +15,9 @@ Standardisation means that both development and operational teams can combine to
 
 Although this is technologically possible, without a consistent set of standards and abstractions that guide the way logic is packaged, distributed and consumed across a plethora of automation vendors, teams usually find themselves reinventing the wheel for every new project and have to manage more than one toolchain in different ways.
 
-:boom: *Artisan* acts as the ***craftman in the middle*** of container and automation technology, providing a generic way to amalgamate them and facilitate its use.
+Linux containers provide the basis to resolve this problem. However, it takes a great deal of effort and knowledge to use containers in a consistent and secure way.
+
+:boom: *Artisan* acts as the ***craftman in the middle*** of container and scripting technology, providing a generic way to amalgamate them and facilitate its use: package disparate sets of scripts, store them in a library (registry) and execute them in toolchain containers (runtimes). 
 
 Standardisation reduces the complexity involved in creating automation libraries, and delaing with the various chosen toolchains required to execute them.
 
@@ -31,7 +33,7 @@ Sometimes standardisation is associated with opinionated and inflexible. *Artisa
 
 Cryptography is hard, so *Artisan* puts the emphasis on making cryptography seamless, easy to use and implicitly engrained in the fabric of packages.
 
-Using [Pretty Good Privacy (PGP)](https://en.wikipedia.org/wiki/Pretty_Good_Privacy) keys by default, *Artisan* can automatically validate that the package being executed comes from a trusted source and it is safe to run.
+:boom: Using [Pretty Good Privacy (PGP)](https://en.wikipedia.org/wiki/Pretty_Good_Privacy) keys by default, *Artisan* can automatically validate that the package being executed comes from a trusted source and it is safe to run.
 
 ## Embedded SOPs
 
@@ -171,6 +173,8 @@ steps:
 ```
 
 The *Artisan* CLI can request the execution of a flow by sending the flow definition to an *Artisan Runner*.
+
+### ___Artisan Runners___
 
 A runner is an HTTP service that is in charge of the execution the flow. At some point different types of runners will be provided. For now, there is an OpenShift runner that uses [Tekton Pipelines](https://cloud.google.com/tekton/) to execute the steps in the flow definition.
 
