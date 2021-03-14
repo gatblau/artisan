@@ -75,19 +75,33 @@ Build files can be chained, that is, one can call one build file from another bu
 
 *Artisan* has two distinct ways to execute logic, and each of those ways can happen within a container or within a host.
 
-### ___Development vs Production Execution___
+### ___In Place Execution___
 
-The two execution modes are:
+In place execution is when *Artisan* executes functions or profiles in build files that have not been encapsulated in a package.
 
-- **In place execution**: executes functions or profiles in build files in a location in the file system, typically, where the command line is. This is useful for development purposes as execution can be done without creating a package. Two functions are available for this, namely **run** and **runc**.
+Source code sits in a location in the file system, typically, where the command line terminal prompt is. This is useful mostly for development purposes as execution can be done without creating a package.
 
-- **In package execution**: executes functions or profiles in build files that are embedded in a package. This is the way logic is executed in operations once the package is released. Two functions are available for this, namely **exe** and **exec**.
+:boom: *Artisan* uses in place execution within a runtime that is part of a flow with a git source. If a flow uses a git source, the files have already being mounted in the runtime a package is not required.
+
+:exclamation: In place execution can be triggered using the **run** command. Alternatively, **runc** can be used to execute a function within a runtime.
+
+### ___Package Execution___
+
+- Package execution executes functions or profiles in build files that are embedded in a package. This is the way logic is mostly executed in operation environments once a package is released.
+
+:boom: *Artisan* uses in package execution within a flow when there is no need to bind to a git source (e.g. for development / Contonuous Integration purposes). This is normally the scenario where operations are permorming one-time configurations or installations.
+
+:exclamation: package execution can be triggered using the **exe** command. 
 
 ### ___Container Execution___
 
 **Artisan** can launch a container on a host with docker or podman, and execute the logic within the container. This is useful when the toolchain required to run the automation is not installed on the host.
 
 For example, consider a package that requires [Ansible](https://www.ansible.com/) and you want to run it on a Windows host. As Ansible command line does not work on Windows, **Artisan** can lunch a Linux based Ansible runtime container and execute the logic within it.
+
+:boom: container execution can be used with both in-place and package execution.
+
+:exclamation: use **runc** instead of **run** to add container execution in-place. Use **exec** instead of *exe* to add container execution for a packaged function.
 
 ### ___Runtimes___
 
@@ -128,7 +142,7 @@ A runner is an HTTP service that is in charge of the execution the flow. At some
 
 ## Publishing engine
 
-The publishing engine goal is to facilitate the distribution of packages but equally the dynamic installation of packages into runtimes.
+The publishing engine goal is to facilitate the distribution of packages and the dynamic installation of packages into runtimes.
 
 The *Artisan CLI* can create, tag and push packages to a registry. Once there, they can be pulled and opened within runtimes ready for execution.
 
