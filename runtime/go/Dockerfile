@@ -8,6 +8,8 @@
 #
 FROM quay.io/artisan/ubi-min
 
+USER root
+
 ARG UNAME=runtime
 
 RUN microdnf install go -y && \

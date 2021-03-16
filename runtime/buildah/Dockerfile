@@ -8,6 +8,8 @@
 #
 FROM quay.io/artisan/ubi
 
+USER root
+
 ARG UNAME=runtime
 
 # install the kubic repository with latest buildah stable releases

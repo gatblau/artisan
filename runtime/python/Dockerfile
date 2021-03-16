@@ -8,6 +8,8 @@
 #
 FROM quay.io/artisan/ubi-min
 
+USER root
+
 ARG UNAME=runtime
 
 RUN microdnf install python36 -y && rm -rf /var/cache/yum && microdnf clean all
