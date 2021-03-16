@@ -19,9 +19,7 @@ RUN wget https://github.com/openshift/okd/releases/download/$OKD_VERSION/openshi
 FROM quay.io/artisan/ubi-min
 
 ARG UNAME=runtime
-
+USER root
 WORKDIR /app/
-
 COPY --from=builder /app/kubectl /app/oc /usr/bin/
-
 USER $UNAME

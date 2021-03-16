@@ -40,3 +40,5 @@ WORKDIR /app/
 RUN chmod ug+x /usr/bin/art && chmod ug+x /app/boot.sh
 
 CMD ["sh", "/app/boot.sh"]
+
+USER $UNAME

@@ -14,6 +14,8 @@ ENV PATH="/root/.local/bin":$PATH
 ENV container=docker
 ENV ANSIBLE_VERSION=2.10.5
 
+USER root
+
 # silence bogus subscription messages
 RUN echo "enabled=0" >> /etc/yum/pluginconf.d/subscription-manager.conf
 

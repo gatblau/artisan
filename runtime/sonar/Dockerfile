@@ -21,6 +21,8 @@ RUN apk add zip && \
 
 FROM quay.io/artisan/ubi-min
 
+USER root
+
 ARG UNAME=runtime
 
 ENV PATH $PATH:/sonar/bin

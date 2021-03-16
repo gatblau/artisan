@@ -24,6 +24,8 @@ RUN wget http://archive.apache.org/dist/maven/maven-3/$MAVEN_VERSION/binaries/ap
 
 FROM quay.io/artisan/ubi-min
 
+USER root
+
 ARG UNAME=runtime
 
 ENV MAVEN_VERSION 3.6.3
