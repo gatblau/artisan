@@ -16,33 +16,33 @@ mkdir -p ${HOME}/.artisan/keys
 cp -R /keys ${HOME}/.artisan
 
 # if a package name has been provided
-if [[ -n "${PACKAGE_NAME+x}" ]]; then
+if [[ -n "${OXART_PACKAGE_NAME+x}" ]]; then
   # if a user name is defined
-  if [[ -n "${ART_REG_USER+x}" ]]; then
+  if [[ -n "${OXART_REG_USER+x}" ]]; then
     # then requires a corresponding password
-    if [[ -z "${ART_REG_PWD+x}" ]]; then
+    if [[ -z "${OXART_REG_PWD+x}" ]]; then
       echo "The password for the Artisan Registry user is required: ART_REG_PWD must be provided"
       exit 1
     fi
   fi
   # if a function has been defined executes the package with the function
-  if [[ -n "${FX_NAME+x}" ]]; then
+  if [[ -n "${OXART_FX_NAME+x}" ]]; then
     # if a package source has been provided
-    if [[ -n "${PACKAGE_SOURCE+x}" ]]; then
-       case "$PACKAGE_SOURCE" in
+    if [[ -n "${OXART_PACKAGE_SOURCE+x}" ]]; then
+       case "$OXART_PACKAGE_SOURCE" in
           "create" | "CREATE")
               # remove any existing files in the source folder
               rm -rf /workspace/source/*
               # open package in the source folder and leave files there
-              art exe -u=${ART_REG_USER}:${ART_REG_PWD} --path /workspace/source -f ${PACKAGE_NAME} ${FX_NAME}
+              art exe -u=${OXART_REG_USER}:${OXART_REG_PWD} --path /workspace/source -f ${OXART_PACKAGE_NAME} ${OXART_FX_NAME}
               ;;
           "merge" | "MERGE")
               # open package in the source folder and leave files there
-              art exe -u=${ART_REG_USER}:${ART_REG_PWD} --path /workspace/source -f ${PACKAGE_NAME} ${FX_NAME}
+              art exe -u=${OXART_REG_USER}:${OXART_REG_PWD} --path /workspace/source -f ${OXART_PACKAGE_NAME} ${OXART_FX_NAME}
               ;;
           "read" | "READ")
               # run from existing source
-              art run ${FX_NAME} /workspace/source/
+              art run ${OXART_FX_NAME} /workspace/source/
               ;;
           *)
               printf "invalid PACKAGE_SOURCE value: %s, valid values are either 'new' or 'update'\n" ${PACKAGE_SOURCE}
@@ -50,16 +50,16 @@ if [[ -n "${PACKAGE_NAME+x}" ]]; then
        esac
     else
       # no source type provided then use a transient source
-      art exe -u=${ART_REG_USER}:${ART_REG_PWD} ${PACKAGE_NAME} ${FX_NAME}
+      art exe -u=${OXART_REG_USER}:${OXART_REG_PWD} ${OXART_PACKAGE_NAME} ${OXART_FX_NAME}
     fi
   else
       printf "A function name is required for package %s, ensure FX_NAME is provided\n" ${PACKAGE_NAME}
       exit 1
   fi
   # else if only a function has been defined
-elif [[ -n "${FX_NAME+x}" ]]; then
+elif [[ -n "${OXART_FX_NAME+x}" ]]; then
   # run the function from the build.yaml in the mounted source
-  art run ${FX_NAME} /workspace/source/
+  art run ${OXART_FX_NAME} /workspace/source/
 else
   # no package and no function have been defined then run the runtime bootstrapping script
   sh /app/run.sh

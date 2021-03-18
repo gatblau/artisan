@@ -21,12 +21,13 @@ The interface of any runtime is defined by the following environment variables t
 
 | variable | description | required |
 |---|---|---|
-| `PACKAGE_NAME` | the fully qualified artisan package name | false |
-| `ART_REG_USER` | the username to log in the artisan registry where the package is located | only if authentication is required |
-| `ART_REG_PWD` |  the password for the username used to log in the artisan registry | only if `username` is defined |
-| `FX_NAME` | the name of the artisan function to run either in the package or the source `build.yaml` file | false |
+| `OXART_PACKAGE_NAME` | the fully qualified artisan package name | false |
+| `OXART_ART_REG_USER` | the username to log in the artisan registry where the package is located | only if authentication is required |
+| `OXART_REG_PWD` |  the password for the username used to log in the artisan registry | only if `username` is defined |
+| `OXFX_NAME` | the name of the artisan function to run either in the package or the source `build.yaml` file | false |
+| `OXART_PACKAGE_SOURCE` | the of source to use when the package runs in a flow. Possible values are: **none**: transient, **create**: uses the source from the executing package, **merge**: adds the source of the executing package to the existing source; and **read**: just uses existing source. |
 
-## Runtime File System
+:exclamation: variables starting with `OXART_` are artisan reserved variables.
 
 | folder | description |
 |---|---|
