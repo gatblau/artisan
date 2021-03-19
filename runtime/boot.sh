@@ -21,7 +21,7 @@ if [[ -n "${OXART_PACKAGE_NAME+x}" ]]; then
   if [[ -n "${OXART_REG_USER+x}" ]]; then
     # then requires a corresponding password
     if [[ -z "${OXART_REG_PWD+x}" ]]; then
-      echo "The password for the Artisan Registry user is required: ART_REG_PWD must be provided"
+      echo "The password for the Artisan Registry user is required: OXART_REG_PWD must be provided"
       exit 1
     fi
   fi
@@ -45,7 +45,7 @@ if [[ -n "${OXART_PACKAGE_NAME+x}" ]]; then
               art run ${OXART_FX_NAME} /workspace/source/
               ;;
           *)
-              printf "invalid PACKAGE_SOURCE value: %s, valid values are either 'new' or 'update'\n" ${PACKAGE_SOURCE}
+              printf "invalid OXART_PACKAGE_SOURCE value: %s, valid values are either 'new' or 'update'\n" ${OXART_PACKAGE_SOURCE}
               ;;
        esac
     else
@@ -53,7 +53,7 @@ if [[ -n "${OXART_PACKAGE_NAME+x}" ]]; then
       art exe -u=${OXART_REG_USER}:${OXART_REG_PWD} ${OXART_PACKAGE_NAME} ${OXART_FX_NAME}
     fi
   else
-      printf "A function name is required for package %s, ensure FX_NAME is provided\n" ${PACKAGE_NAME}
+      printf "A function name is required for package %s, ensure FX_NAME is provided\n" ${OXART_PACKAGE_NAME}
       exit 1
   fi
   # else if only a function has been defined
