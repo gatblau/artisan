@@ -218,6 +218,8 @@ profiles:
       - cp img/Dockerfile target/target/Dockerfile
       # copy the build.yaml file to build the jvm version to the artefact(target) package folder
       - cp img/build.yaml target/target
+      # copy the sign-image.sh file to build the jvm version to the artefact(target) package folder
+      - cp img/sign-image.sh target/target/sign-image.sh
     target: target/target
 
 functions:
