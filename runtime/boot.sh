@@ -9,11 +9,13 @@
 #
 
 # copy any mounted keys to the artisan registry in the user home
-#echo creating ${HOME}/.artisan/keys folder
+# folder required for tekton
 mkdir -p ${HOME}/.artisan/keys
+mkdir -p ${HOME}/.artisan/files
 
 #echo copying keys from /keys mount to ${HOME}/.artisan artisan registry
 cp -R /keys ${HOME}/.artisan
+cp -R /files ${HOME}/.artisan
 
 # if a package name has been provided
 if [[ -n "${OXART_PACKAGE_NAME+x}" ]]; then

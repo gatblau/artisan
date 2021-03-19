@@ -27,7 +27,9 @@ RUN microdnf update --disablerepo=* --enablerepo=ubi-8-appstream --enablerepo=ub
     # app folder
     mkdir -p /app/ && chown $UNAME /app/ && chmod a+rwx /app/ && \
     # keys volume mount
-    mkdir -p /keys/
+    mkdir -p /keys/ && \
+    # files volume mount
+    mkdir -p /files/
 
 # artisan CLI
 COPY art /usr/bin/
