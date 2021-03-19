@@ -25,9 +25,9 @@ spec:
           value: "${BC_PUSH_IMAGE_VERSION}"
         - name: "PULL_IMAGE_REGISTRY"
           value: "${BC_PULL_IMAGE_REGISTRY}"
-        - name: "PACKAGE_NAME"
+        - name: "OXART_PACKAGE_NAME"
           value: "${BC_PACKAGE_NAME}"
-        - name: "FX_NAME"
+        - name: "OXART_FX_NAME"
           value: "${BC_FX_NAME}"
         - name: "CRYPTO_KEY_EMAIL"
           value: "${BC_CRYPTO_KEY_EMAIL}"
@@ -51,12 +51,12 @@ spec:
             secretKeyRef:
               key: BC_PUSH_IMAGE_REGISTRY_PWD
               name: ${BC_APPLICATION_NAME}-creds-secret
-        - name: ART_REG_USER
+        - name: OXART_REG_USER
           valueFrom:
             secretKeyRef:
               key: BC_REGISTRY_USER
               name: ${BC_APPLICATION_NAME}-creds-secret
-        - name: ART_REG_PWD
+        - name: OXART_REG_PWD
           valueFrom:
             secretKeyRef:
               key: BC_REGISTRY_PWD
