@@ -35,10 +35,6 @@ input:
       description: user name for the container registry where the application image will be pushed
     - name: PUSH_IMAGE_REGISTRY_PWD
       description: password for the container registry where the application image will be pushed
-    - name: ART_REG_USER
-      description: the user to open the application package
-    - name: ART_REG_PWD
-      description: the pwd of the user to open the application package
 
 functions:
   - name: build-image
@@ -65,6 +61,4 @@ functions:
         - PULL_IMAGE_REGISTRY_PWD
         - PUSH_IMAGE_REGISTRY_UNAME
         - PUSH_IMAGE_REGISTRY_PWD
-        - ART_REG_USER
-        - ART_REG_PWD
 ...

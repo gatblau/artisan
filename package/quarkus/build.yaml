@@ -204,6 +204,12 @@ input:
     - name: ART_RUNNER_PWD
       description: the password to authenticate with the Artisan Runner
 
+    - name: ART_REG_USER
+      description: the user to authenticate with the Artisan Registry (used by Application publish-app function)
+
+    - name: ART_REG_PWD
+      description: the password to authenticate with the Artisan Registry (used by Application publish-app function)
+
   key:
     - name: SIGNING_KEY
       description: the private PGP key required to digitally sign the application package
@@ -268,6 +274,8 @@ functions:
         - SIGNING_KEY
         - VERIFICATION_KEY
       secret:
+        - ART_REG_USER
+        - ART_REG_PWD
         - SONAR_TOKEN
         - BC_PULL_IMAGE_REGISTRY_UNAME
         - BC_PULL_IMAGE_REGISTRY_PWD
