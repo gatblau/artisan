@@ -13,7 +13,7 @@ RUN wget https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform
 RUN unzip terraform_${TERRAFORM_VERSION}_linux_amd64.zip
 
 FROM quay.io/artisan/ubi-min
-USER roots
+USER root
 ARG TERRAFORM_VERSION
 ARG UNAME=runtime
 COPY --from=builder /app/terraform /usr/local/bin/
