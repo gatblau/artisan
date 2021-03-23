@@ -12,4 +12,5 @@ functions:
       - art run build-image sonar
       - art run build-image go
       - art run build-image ansible
+      - art run build-image terraform
 ...
