@@ -35,12 +35,11 @@ if [[ -n "${OXART_PACKAGE_NAME+x}" ]]; then
           "create" | "CREATE")
               # remove any existing files in the source folder
               rm -rf /workspace/source/*
-              # open package in the source folder and leave files there
+              # execute package in the source folder and leave files there
               art exe -u=${OXART_REG_USER}:${OXART_REG_PWD} --path /workspace/source -f ${OXART_PACKAGE_NAME} ${OXART_FX_NAME}
               ;;
           "merge" | "MERGE")
-              # open package in the source folder and leave files there
-              art exe -u=${OXART_REG_USER}:${OXART_REG_PWD} --path /workspace/source -f ${OXART_PACKAGE_NAME} ${OXART_FX_NAME}
+              printf "OXART_PACKAGE_SOURCE=merge is not valid when function name exist OXART_FX_NAME= %s\n" ${OXART_FX_NAME}
               ;;
           "read" | "READ")
               # run from existing source
@@ -55,8 +54,21 @@ if [[ -n "${OXART_PACKAGE_NAME+x}" ]]; then
       art exe -u=${OXART_REG_USER}:${OXART_REG_PWD} ${OXART_PACKAGE_NAME} ${OXART_FX_NAME}
     fi
   else
-      printf "A function name is required for package %s, ensure FX_NAME is provided\n" ${OXART_PACKAGE_NAME}
+    # if a package source has been provided
+    if [[ -n "${OXART_PACKAGE_SOURCE+x}" ]]; then
+      case "$OXART_PACKAGE_SOURCE" in
+        "merge" | "MERGE")
+            # open package in the source folder and leave files there
+            art open -u=${OXART_REG_USER}:${OXART_REG_PWD} ${OXART_PACKAGE_NAME} /workspace/source
+            ;;
+        *)
+            printf "only OXART_PACKAGE_SOURCE=merge is allowed when no package name is provided\n"
+            ;;
+     esac
+    else
+      printf "A function name is required for package %s, ensure OXART_FX_NAME is provided\n" ${OXART_PACKAGE_NAME}
       exit 1
+    fi
   fi
   # else if only a function has been defined
 elif [[ -n "${OXART_FX_NAME+x}" ]]; then
