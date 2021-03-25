@@ -34,7 +34,7 @@ rm -f /lib/systemd/system/anaconda.target.wants/*;
 RUN dnf makecache --timer \
  && dnf -y install initscripts \
  && dnf -y update \
- && dnf -y install sudo which hostname python3 \
+ && dnf -y install sudo which hostname python3 openssh-clients \
  && dnf clean all
 
 # install and upgrade pip via python
