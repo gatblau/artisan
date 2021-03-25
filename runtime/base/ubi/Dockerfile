@@ -28,7 +28,7 @@ RUN dnf update --disablerepo=* --enablerepo=ubi-8-appstream --enablerepo=ubi-8-b
     # keys volume mount
     mkdir -p /keys/ && \
     # files volume mount
-    mkdir -p /files/
+    mkdir -p /files/ && chown $UNAME /files/ && chmod a+r /files/
 
 # artisan CLI
 COPY art /usr/bin/
