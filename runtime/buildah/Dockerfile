@@ -27,8 +27,8 @@ RUN sed -i -e 's|^#mount_program|mount_program|g' -e '/additionalimage.*/a "/var
     mkdir /.local/ && chown -R $UNAME /.local/ && chmod -R ug+wr /.local/
 
 # set the uid and gid maps for the user
-RUN echo "$UNAME:100000:65536" >> /etc/subuid
-RUN echo "$UNAME:100000:65536" >> /etc/subgid
+RUN echo "$UNAME:100000000:65536" >> /etc/subuid
+RUN echo "$UNAME:100000000:65536" >> /etc/subgid
 
 # Set up environment variables to note that this is not starting with usernamespace and default to isolate the filesystem with chroot.
 ENV _BUILDAH_STARTED_IN_USERNS="" BUILDAH_ISOLATION=chroot
