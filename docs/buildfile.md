@@ -183,8 +183,8 @@ functions:
 # the following example assumes Linux/OSX operating system:
 
 # tell Artisan to run the "greet-user" function from the 
-# build file located at the "exercise/build_1" sub-folder
-$  art run greet-user exercise/build_1 
+# build file located at the "exercise/ex_01" sub-folder
+$  art run greet-user exercise/ex_01 
 
 # you should see an error message as the variable 
 # USER_TO_GREET is not defined
@@ -194,7 +194,7 @@ error!
 # now try interactive mode, so the command line interface 
 # will ask you to enter the missing variables
 # note the -i flag to tell Artisan to run in interactive mode
-$  art run -i greet-user exercise/build_1
+$  art run -i greet-user exercise/01
 
 # you should be able to see the following prompt
 # note the default value in brackets
@@ -206,7 +206,7 @@ Hello Gatblau!
 
 # now export an environment variable 
 $ export USER_TO_GREET="Mickey Mouse"
-$ art run greet-user exercise/build_1
+$ art run greet-user exercises/01
   
 # you should now see the message below
 Hello Mickey Mouse!
@@ -217,12 +217,12 @@ $ unset USER_TO_GREET
 # Artisan can also load variables from a file
 # the file can contain one or more environment variables
 # to test it, create an environment file as follows
-$ echo USER_TO_GREET="Black Pete" >> exercise/build_1/.env
+$ echo USER_TO_GREET="Black Pete" >> exercise/01/.env
 
 # now try and run the command below
 # note the -e flag to tell Artisan to load the 
 # new environment file
-$ art run -e exercise/build_1/.env greet-user exercise/build_1
+$ art run -e exercise/01/.env greet-user exercise/01
 
 # you should see the following message
 Hello Black Pete!
@@ -246,7 +246,7 @@ functions:
 :boom: to test it run the following commands:
 
 ```bash
-$ art run greet-user exercise/build_2
+$ art run greet-user exercise/02
 
 # you should see the following message
 error!
