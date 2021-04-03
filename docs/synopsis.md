@@ -227,7 +227,8 @@ Four types of *inputs* are available as follows:
 
 4. `data`: allows to load and pass arbitrary files to packages and flows.
 
-:exclamation: *As any piece of input could be used by one or more functions or profiles, inputs have to be bound to them. Bindings allow Artisan to actively required the inputs before the execution of a function can take place.*
+:exclamation: *As any piece of input could be used by one or more functions or profiles, inputs have to be bound to them. 
+Bindings allow Artisan to actively require the inputs before the execution of a function can take place.*
 
 ---
 
