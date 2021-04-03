@@ -56,15 +56,15 @@ SOPs ensure that a business can keep running smoothly as employees come and go, 
 
 Artisan achieves all the above by combining the functions in the following core subsystems:
 
-- `the packaging engine`: packages and unpackage files using the [zip compression format](https://en.wikipedia.org/wiki/ZIP_(file_format)).
+1. [the packaging engine](#packaging-engine) packages and unpackage files using the [zip compression format](https://en.wikipedia.org/wiki/ZIP_(file_format)).
   
-- `the execution engine`: executes the logic within the packages using toolchain specific [standard containerised runtimes](https://github.com/gatblau/artisan/tree/master/runtime). The execution engine can run different functions requiring different toolchains using flows(<sup>[1](#flow_footnote)</sup>).
+2. `the execution engine` executes the logic within the packages using toolchain specific [standard containerised runtimes](https://github.com/gatblau/artisan/tree/master/runtime). The execution engine can run different functions requiring different toolchains using flows(<sup>[1](#flow_footnote)</sup>).
   
-- `the publishing engine`: provides the means to tag, push, pull and open packages, enforcing the cryptographic verification of author/source.
+3. `the publishing engine` provides the means to tag, push, pull and open packages, enforcing the cryptographic verification of author/source.
   
-- `the input engine`: to improve usability and foster reusability, automation packages must have a standard way to publish and consume variables and generate variable specifications. The input engine provide options for automated generation of variable files and loading variables from different sources.
+4. `the input engine` to improve usability and foster reusability, automation packages must have a standard way to publish and consume variables and generate variable specifications. The input engine provide options for automated generation of variable files and loading variables from different sources.
 
-- `the crypto engine`: every package is digitally signed by default using [PGP Keys](https://en.wikipedia.org/wiki/Pretty_Good_Privacy). When the execution engine opens a package, it verifies its digital seal(<sup>[2](#digi_seal_footnote)</sup>) to ensure it is trusted. The crypto engine can create, import, encrypt and decrypt files, and sign and verify packages.
+5. `the crypto engine` every package is digitally signed by default using [PGP Keys](https://en.wikipedia.org/wiki/Pretty_Good_Privacy). When the execution engine opens a package, it verifies its digital seal(<sup>[2](#digi_seal_footnote)</sup>) to ensure it is trusted. The crypto engine can create, import, encrypt and decrypt files, and sign and verify packages.
 
 ---
 
