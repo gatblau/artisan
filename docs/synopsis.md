@@ -58,13 +58,13 @@ Artisan achieves all the above by combining the functions in the following core 
 
 1. [the packaging engine](#packaging-engine) packages and unpackage files using the [zip compression format](https://en.wikipedia.org/wiki/ZIP_(file_format)).
   
-2. `the execution engine` executes the logic within the packages using toolchain specific [standard containerised runtimes](https://github.com/gatblau/artisan/tree/master/runtime). The execution engine can run different functions requiring different toolchains using flows(<sup>[1](#flow_footnote)</sup>).
+2. [the execution engine](#execution-engine) executes the logic within the packages using toolchain specific [standard containerised runtimes](https://github.com/gatblau/artisan/tree/master/runtime). The execution engine can run different functions requiring different toolchains using flows(<sup>[1](#flow_footnote)</sup>).
   
-3. `the publishing engine` provides the means to tag, push, pull and open packages, enforcing the cryptographic verification of author/source.
+3. [the publishing engine](#publishing-engine) provides the means to tag, push, pull and open packages, enforcing the cryptographic verification of author/source.
   
-4. `the input engine` to improve usability and foster reusability, automation packages must have a standard way to publish and consume variables and generate variable specifications. The input engine provide options for automated generation of variable files and loading variables from different sources.
+4. [the input engine](#input-engine) to improve usability and foster reusability, automation packages must have a standard way to publish and consume variables and generate variable specifications. The input engine provide options for automated generation of variable files and loading variables from different sources.
 
-5. `the crypto engine` every package is digitally signed by default using [PGP Keys](https://en.wikipedia.org/wiki/Pretty_Good_Privacy). When the execution engine opens a package, it verifies its digital seal(<sup>[2](#digi_seal_footnote)</sup>) to ensure it is trusted. The crypto engine can create, import, encrypt and decrypt files, and sign and verify packages.
+5. [the cryptographic engine](#cryptographic-engine) every package is digitally signed by default using [PGP Keys](https://en.wikipedia.org/wiki/Pretty_Good_Privacy). When the execution engine opens a package, it verifies its digital seal(<sup>[2](#digi_seal_footnote)</sup>) to ensure it is trusted. The crypto engine can create, import, encrypt and decrypt files, and sign and verify packages.
 
 ---
 
@@ -118,7 +118,7 @@ Build files can be chained, that is, one can call one build file from another bu
 
 ### ___In Place Execution___
 
-In place execution is when *Artisan* executes functions or profiles in build files that have not been encapsulated in a package.
+In place execution is when *Artisan* executes functions or profiles in build files that have not been boxed in a package.
 
 Source code sits in a location in the file system, typically, where the command line terminal prompt is. This is useful mostly for development purposes as execution can be done without creating a package.
 
@@ -203,9 +203,9 @@ The registry can sit in front of various backends, such as a [Nexus Repository](
 
 The registry is typically package as a container image which can run from any [Kubernetes](https://kubernetes.io/) implementation.
 
-### ___Discoverable Automation Library___
+### ___Discoverable Library___
 
-The *Artisan Registry* can be used to implement an enterprise wide automation library made of digitally signed, black boxed and discoverable packages that can be ubiquitously run using container runtimes, fully encapsulating the implementaion details and the underlying toolchains.
+The *Artisan Registry* can be used to implement an enterprise wide library made of digitally signed, black boxed and discoverable packages that can be ubiquitously run using container runtimes, fully encapsulating the implementaion details and the underlying toolchains.
 
 Packages in the library can be mixed and matched using flows, to cater for a wide range of complex Enterprise automation scenarios.
 
@@ -213,10 +213,33 @@ Packages in the library can be mixed and matched using flows, to cater for a wid
 
 ## Input engine
 
+The input engine provides the means to pass configuration to packages using environment variables and mounting files.
+
+In order to make functions and profiles configurable *Artisan* can can read input information from a build file or the package manifest.
+
+Four types of *inputs* are available as follows:
+
+1. `var`: variables define information required to run a function or profile.
+
+2. `secret`: are like variables but their values are given a particular treatment to ensure they are protected.
+
+3. `key`: allows to PGP keys easily load and pass PGP keys to packages and flows. 
+
+4. `data`: allows to load and pass arbitrary files to packages and flows.
+
+:exclamation: *As any piece of input could be used by one or more functions or profiles, inputs have to be bound to them. Bindings allow Artisan to actively required the inputs before the execution of a function can take place.*
+
 ---
 
 ## Cryptographic engine
 
+*Artisan* uses PGP encryption to digitally sign every package. A private key is used to sign packages.
+
+In the same way, any package that is executed must pass the verification of its digital signature before they can do so. The counterpart public key is used to verify the package signature.
+
+*Artisan* can create PGP keys, and has a local requistry where keys can be placed. The registry allows to place keys in a hierarchical structure to facilitate overriding following the package group/name convention.
+
+For example placing a key in the root make it usable to sign/verify all packages, where as placing a key withing a specific group and or name make the key usable within that package group or name.
 
 ---
 
