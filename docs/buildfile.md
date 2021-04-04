@@ -4,11 +4,11 @@
 
 In the same way that [GNU make](https://www.gnu.org/software/make/) uses a [Makefile](https://www.gnu.org/software/make/manual/make.html#Introduction), you need a file called **build.yaml** (the build file) to tell *Artisan* what to do.
 
-The build file tells *Artisan* how to run *functions*, that is, a sequence of instructions from the command line.
+The build file tells *Artisan* how to run `functions`, that is, a sequence of command line instructions.
 
 The build file also tells *Artisan* how to create `packages`. *Artisan* packages are [digitally signed](https://en.wikipedia.org/wiki/Digital_signature) [zip files](https://en.wikipedia.org/wiki/ZIP_(file_format)) containing one or more files and folders.
 
-When a build file is placed within a package, the package is said to be `executable`, meaning that functions in the build file can utilise the files in the package to perform complex operations against a target service.
+When a build file is placed within a package, the package becomes `executable`, that is, exported functions in the build file can be executed and use content in the package.
 
 For example, a function in a package that contains a [POM file](https://maven.apache.org/guides/introduction/introduction-to-the-pom.html) could:
 
@@ -21,16 +21,51 @@ On more trivial cases, a build file could contain functions to build and package
 
 As the build file is not technology specific, it can be used to build any software with any toolchain, *it is just a command line orchestrator*.
 
+1. | section | description |
+|---|---|
+| [*functions section*](#the-functions-section)| describes the syntax for the functions section of the build file |
+| [*functions section*](#the-functions-section)| describes the syntax for the functions section of the build file |
+
 ## The *functions* section
 
 The *functions* section defines the functions available to call by *Artisan* as well as the commands that need to be executed in the command line when the function is called.
 
-:exclamation: note that input bindings as shown in the example below are explained in the *input* section further down.
+:exclamation: note that input section and function bindings as shown in the example below are explained in the *input* section further down.
 
 The sctructure of the *functions* section is as follows:
 
 ```yaml
 ---
+# define inputs required by functions in the build file
+input:
+  # define variables 
+  var:
+    - name: MY_VAR_1
+      description: sample variable 1
+      type: string
+
+    - name: MY_VAR_2
+      description: sample variable 2
+      type: string
+
+  # define secrets
+  secret:
+    - name: MY_SECRET_1
+      description: sample secret 1
+
+    - name: MY_SECRET_2
+      description: sample secret 2
+
+  # define PGP keys
+  key: 
+    - name: MY_KEY_1
+      description: sample key 1
+      private: true
+
+    - name: MY_KEY_2
+      description: sample key 2
+      private: false
+
 # a list of functions 
 functions:
     # how the function will be called
@@ -48,6 +83,8 @@ functions:
       run:
         - echo "command 1 here"
         - echo "command 2 here"
+
+      # binds inputs required by the function
       input:
         # variable bindings
         var: 
@@ -66,32 +103,6 @@ functions:
 ...
 ```
 
-For clarity, a specific concrete example is provided below:
-
-```yaml
----
-    - name: build-app
-      description: compiles and tests the application
-      run:
-        # compile and package the java app
-        - mvn package -DskipTests=true
-        # run tests
-        - mvn test
-        # create a folder for the 'app' profile
-        - mkdir ./final
-        # copy the jar file to the folder
-        - cp target/${PROJECT_ARTIFACT_ID}-${PROJECT_ARTIFACT_VERSION}-runner.jar ./final
-        # copy the dependencies to the new folder
-        - cp -r target/lib/. ./final/lib
-      input:
-        # these bindings are defined in the general input 
-        # section of the build file
-        var:
-          - PROJECT_ARTIFACT_ID
-          - PROJECT_ARTIFACT_VERSION
-...
-```
-
 ## The *input* section
 
 Typically, any complex automation has to be configurable. Configuration in Artisan is managed mostly via environment variables, as this is aligned with the way [linux containers](https://www.redhat.com/en/topics/containers/whats-a-linux-container) work.
@@ -101,6 +112,8 @@ Input information required by the build file, is defined in the iput section con
 - `var`: these are plain environment variables
 - `secret`: these are variables that contain sensitive information like credentials
 - `key`: these are the definition of [PGP](https://en.wikipedia.org/wiki/Pretty_Good_Privacy) keys that are used by Artisan to sign and verify packages
+- `data`: these are the paths to specific files that should be available at package execution time, but that are not in the package. Typical examples of these are SSH keys that, due to security reasons, should not be part of a package 
+but are required when the package is running.
 
 :exclamation: Using different names for the different types of input allows *Artisan* to provide differenciated treatment for each of them.
 
@@ -133,7 +146,7 @@ input:
     - name: MY_USER_PWD
       description: login password
 
-  # PGP keys
+  # PGP keys: defines name, description, load path and whther they are private or not
   key:
     - name: MY_PUBLIC_KEY
       description: "I use this key to verify a digital signature"

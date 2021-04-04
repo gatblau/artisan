@@ -238,7 +238,7 @@ Bindings allow Artisan to actively require the inputs before the execution of a 
 
 In the same way, any package that is executed must pass the verification of its digital signature before they can do so. The counterpart public key is used to verify the package signature.
 
-*Artisan* can create PGP keys, and has a local requistry where keys can be placed. The registry allows to place keys in a hierarchical structure to facilitate overriding following the package group/name convention.
+*Artisan* can create PGP keys, and has a local registry where keys can be placed. The registry allows to place keys in a hierarchical structure to facilitate overriding following the package group/name convention.
 
 For example placing a key in the root make it usable to sign/verify all packages, where as placing a key withing a specific group and or name make the key usable within that package group or name.
 
