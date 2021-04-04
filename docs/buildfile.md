@@ -21,10 +21,10 @@ On more trivial cases, a build file could contain functions to build and package
 
 As the build file is not technology specific, it can be used to build any software with any toolchain, *it is just a command line orchestrator*.
 
-1. | section | description |
+| section | description |
 |---|---|
 | [*functions section*](#the-functions-section)| describes the syntax for the functions section of the build file |
-| [*functions section*](#the-functions-section)| describes the syntax for the functions section of the build file |
+| [*input section*](#the-input-section)| describes the syntax used to define inputs in a build file |
 
 ## The *functions* section
 
