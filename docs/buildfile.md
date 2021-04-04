@@ -23,8 +23,12 @@ As the build file is not technology specific, it can be used to build any softwa
 
 | section | description |
 |---|---|
-| [*functions section*](#the-functions-section)| describes the syntax for the functions section of the build file |
-| [*input section*](#the-input-section)| describes the syntax used to define inputs in a build file |
+| [*the function section*](#the-functions-section)| describes the syntax for the functions section of the build file |
+| [*the input section*](#the-input-section)| describes the syntax used to define inputs in a build file |
+| [*the profile section*]() | describes what are build profiles |
+| [*the env section*]() | describes how to define repeated configuration values in a single place |
+| [*the label section*]() | describes how to add labels to a manifest |
+| [*the miscelaneous items*]() | describes miscelaneous items in the build file |
 
 ## The *functions* section
 
@@ -158,9 +162,18 @@ input:
 ...
 ```
 
+:checkered_flag: **try it!**
+
+```bash
+# run the function say-hello in the build file located at exercise/10 folder
+$  art run say-hello exercise/10
+# you should see
+Hello World
+```
+
 ### Binding variables
 
-Variables must to be bound to a function to tell *Artisan* that the variable is needed by such function.
+Variables must be bound to a function to tell *Artisan* that the variable is needed by such function.
 
 This is mostly required when a function is exported so that its required inputs can be added to the package manifest.
 
@@ -196,8 +209,8 @@ functions:
 # the following example assumes Linux/OSX operating system:
 
 # tell Artisan to run the "greet-user" function from the 
-# build file located at the "exercise/ex_01" sub-folder
-$  art run greet-user exercise/ex_01 
+# build file located at the "exercise/20" sub-folder
+$  art run greet-user exercise/20 
 
 # you should see an error message as the variable 
 # USER_TO_GREET is not defined
@@ -207,7 +220,7 @@ error!
 # now try interactive mode, so the command line interface 
 # will ask you to enter the missing variables
 # note the -i flag to tell Artisan to run in interactive mode
-$  art run -i greet-user exercise/01
+$  art run -i greet-user exercise/20
 
 # you should be able to see the following prompt
 # note the default value in brackets
@@ -219,7 +232,7 @@ Hello Gatblau!
 
 # now export an environment variable 
 $ export USER_TO_GREET="Mickey Mouse"
-$ art run greet-user exercises/01
+$ art run greet-user exercises/20
   
 # you should now see the message below
 Hello Mickey Mouse!
@@ -230,12 +243,12 @@ $ unset USER_TO_GREET
 # Artisan can also load variables from a file
 # the file can contain one or more environment variables
 # to test it, create an environment file as follows
-$ echo USER_TO_GREET="Black Pete" >> exercise/01/.env
+$ echo USER_TO_GREET="Black Pete" >> exercise/20/.env
 
 # now try and run the command below
 # note the -e flag to tell Artisan to load the 
 # new environment file
-$ art run -e exercise/01/.env greet-user exercise/01
+$ art run -e exercise/20/.env greet-user exercise/20
 
 # you should see the following message
 Hello Black Pete!
@@ -259,11 +272,12 @@ functions:
 :checkered_flag: **try it!**
 
 ```bash
-$ art run greet-user exercise/02
+$ art run greet-user exercise/30
 
 # you should see the following message
 error!
-* the environment variable 'USER_TO_GREET' is not defined, are you missing a binding? you can always run the command in interactive mode to manually input its value
+* the environment variable 'USER_TO_GREET' is not defined, are you missing a binding? you can always run the command in 
+  interactive mode to manually input its value
 
 # now try and do the following and observe what happens:
 # 1. run Artisan in interactive mode (use the -i flag)
