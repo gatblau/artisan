@@ -35,7 +35,8 @@ RUN dnf makecache --timer \
  && dnf -y install initscripts \
  && dnf -y update \
  && dnf -y install sudo which hostname python3 openssh-clients \
- && dnf clean all
+ && dnf clean all \
+ && mkdir -p /.ssh/ && chown $UNAME /.ssh/ && chmod a+rwx /.ssh/
 
 # install and upgrade pip via python
 RUN python3 -m pip install -U pip
