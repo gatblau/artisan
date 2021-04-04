@@ -190,7 +190,7 @@ functions:
 ...
 ```
 
-:boom: To test it, run the following commands:
+:checkered_flag: **try it!**
 
 ```bash
 # the following example assumes Linux/OSX operating system:
@@ -256,7 +256,7 @@ functions:
 ...
 ```
 
-:boom: to test it run the following commands:
+:checkered_flag: **try it!**
 
 ```bash
 $ art run greet-user exercise/02
