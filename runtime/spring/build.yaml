@@ -1,0 +1,14 @@
+---
+env:
+  REPO_NAME: quay.io/artisan
+  IMG_NAME: spring
+  ART_PACKAGE: artisan
+
+functions:
+  - name: build-image
+    run:
+      - docker build -t=${REPO_NAME}/${IMG_NAME}:${ARTISAN_REF} .
+      - docker tag ${REPO_NAME}/${IMG_NAME}:${ARTISAN_REF} ${REPO_NAME}/${IMG_NAME}:latest
+      - docker push ${REPO_NAME}/${IMG_NAME}:${ARTISAN_REF}
+      - docker push ${REPO_NAME}/${IMG_NAME}:latest
+...
