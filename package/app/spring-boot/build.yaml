@@ -401,6 +401,11 @@ functions:
       - oc delete secrets ${BC_APPLICATION_NAME}-creds-secret
       - oc delete secrets ${BC_APPLICATION_NAME}-keys-secret
       - oc delete template ${BC_APPLICATION_NAME}
+      # delete Listner & Triggers
+      - oc delete EventListener ${BC_APPLICATION_NAME}
+      - oc delete Route ${BC_APPLICATION_NAME}
+      - oc delete TriggerBinding ${BC_APPLICATION_NAME}
+      - oc delete TriggerTemplate ${BC_APPLICATION_NAME}
     input:
       var:
         - BC_APPLICATION_NAME

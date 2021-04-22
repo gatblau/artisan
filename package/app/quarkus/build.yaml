@@ -22,7 +22,6 @@ input:
       type: string
       description: |-
         the unique key identifying the project in the SonarQube server
-        eg. net.atos:<app-name>
 
     - name: SONAR_SOURCES
       required: true
@@ -381,15 +380,28 @@ functions:
   - name: cleanup
     description: remove all resources created by setup
     run:
+      # delete tekton pipeline & resources
       - tkn pipeline delete --all -f
       - tkn pr delete --all -f
       - tkn tasks delete --all -f
       - tkn resources delete --all -f
-      - oc delete -f setup/setup_flow_tkn.yaml
+      # delete application
       - oc delete routes ${BC_APPLICATION_NAME}
       - oc delete services ${BC_APPLICATION_NAME}
       - oc delete imagestream ${BC_APPLICATION_NAME}
       - oc delete deploymentconfig ${BC_APPLICATION_NAME}
-      - oc delete secrets quarkus-setup-creds-secret
-      - oc delete secrets quarkus-setup-keys-secret
+      # delete secrets & template
+      - oc delete secrets springboot-setup-creds-secret
+      - oc delete secrets springboot-setup-keys-secret
+      - oc delete secrets ${BC_APPLICATION_NAME}-creds-secret
+      - oc delete secrets ${BC_APPLICATION_NAME}-keys-secret
+      - oc delete template ${BC_APPLICATION_NAME}
+      # delete Listner & Triggers
+      - oc delete EventListener ${BC_APPLICATION_NAME}
+      - oc delete Route ${BC_APPLICATION_NAME}
+      - oc delete TriggerBinding ${BC_APPLICATION_NAME}
+      - oc delete TriggerTemplate ${BC_APPLICATION_NAME}
+    input:
+      var:
+        - BC_APPLICATION_NAME
 ...
