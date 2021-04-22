@@ -45,9 +45,7 @@ input:
     - name: PROJECT_GROUP_ID
       required: true
       type: string
-      description: |-
-        the spring-boot group id for the project. 
-        keep plian text without any special character like (. , / etc)
+      description: the spring-boot group id for the project. 
 
     - name: PROJECT_ARTIFACT_ID
       required: true
@@ -254,10 +252,6 @@ functions:
     runtime: java
     export: true
     run:
-      # merge java file with PROJECT_GROUP_ID 
-      - art merge setup/MainController.java.tem
-      # add MainController.java file that we can use as an app entrypoint
-      - cp setup/MainController.java app/src/main/java/${PROJECT_GROUP_ID}/
       # push spring-boot scaffold into the code registry
       - sh setup/setup-git.sh ${GIT_REPO_HOST} ${GIT_REPO_UNAME} ${GIT_REPO_PWD}
     input:
@@ -265,7 +259,6 @@ functions:
         - GIT_URI
         - GIT_REPO_HOST
         - GIT_REPO_EMAIL
-        - PROJECT_GROUP_ID
       secret:
         - GIT_REPO_UNAME
         - GIT_REPO_PWD
