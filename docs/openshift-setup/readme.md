@@ -1,4 +1,24 @@
-[[_TOC_]]
+This document contains the list of prerequisites that includes deployment of Registry, ServiceAccount, Secrets etc. We have to do this setup before going ahead with artisan packages. If you have already done this then please [CLICK HERE](https://github.com/gatblau/artisan/tree/master/package/app#how-to-run-the-packages) to know more about How to build & run the packages.
+
+Table of contents
+=================
+
+<!--ts-->
+   * [Setup Nexus Repo](#Setup-Nexus-Repo)
+      * [Prerequisites](#Prerequisites)
+      * [Create Nexus Repo Application](#Create-Nexus-Repo-Application)
+      * [Expose Route for Nexus Repo](#Expose-Route-for-Nexus-Repo)
+      * [Create Nexus Repository](#Create-Nexus-Repository)
+   * [Setup Artisan Registry](#Setup-Artisan-Registry)
+   * [Setup Artisan Runner](#Setup-Artisan-Runner)
+   * [Setup SonnarQube in OpenShift](#Setup-SonnarQube-in-OpenShift)
+      * [Generate Token](#Generate-Token)
+   * [Install Artisan CLI in control machine](#Install-Artisan-CLI-in-control-machine)
+   * [Configure non-privileged user for Artisan & generate keys](#Configure-non-privileged-user-for-Artisan-&-generate-keys)
+   * [CICD using Openshift Tekton Pipeline](#CICD-using-Openshift-Tekton-Pipeline)
+      * [Install Tekton Pipeline Operator](#Install-Tekton-Pipeline-Operator)
+      * [Create Pipeline Registry Secrets](#Create-Pipeline-Registry-Secrets)
+<!--te-->
 
 # Setup Nexus Repo
 
@@ -197,7 +217,14 @@ art pgp import -k=false root_rsa_pub.pgp
 
 OpenShift Pipelines is a cloud-native continuous integration and delivery (CI/CD) solution for building pipelines using Tekton. Tekton is a flexible Kubernetes-native open-source CI/CD framework which enables automating deployments across multiple platforms (Kubernetes, serverless, VMs, etc)
 
-## Prerequisites
+## Install Tekton Pipeline Operator
+
+Install Tekton Pipeline Operator in openshift namespace
+   - Switch to Administrator Perspective
+   - Open OperatorHub -> Search for "Tekton Pipeline Operator"
+   - Select namespace & click on install button
+
+## Create Pipeline Registry Secrets
 
 Create pipeline gitlab secrets & secrets to pull docker image from gitlab registry to deploy application.
 
@@ -222,4 +249,4 @@ oc secrets link default <secret_name1> --for=pull
 oc secrets link default <secret_name2> --for=pull
 ```
 
-We are done with Openshift Setup required to create Tekton Pipeline & Generate Code using artisan package. Now [CLICK HERE](https://github.com/gatblau/artisan/tree/master/package/app#how-to-run-the-packages) to know more about How to build the & run packages.
+We are done with Openshift Setup required to create Tekton Pipeline & Generate Code using artisan package. Now [CLICK HERE](https://github.com/gatblau/artisan/tree/master/package/app#how-to-run-the-packages) to know more about How to build & run the packages.
