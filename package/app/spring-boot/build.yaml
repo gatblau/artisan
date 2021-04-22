@@ -329,7 +329,7 @@ functions:
         - BC_PUSH_IMAGE_VERSION
         - PROJECT_ARTIFACT_VERSION
 
-  # used this function on VM/local m/c to create the spring-boot setup tekton pipeline into openshift
+  # use this function on VM/local m/c to create the spring-boot setup tekton pipeline into openshift
   - name: setup
     description: create a tekton pipeline in openshift to build, push the spring-boot scaffold & create setup pipeline
     runtime: ubi-min
