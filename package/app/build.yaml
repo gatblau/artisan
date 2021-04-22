@@ -1,3 +1,12 @@
 ---
-
+profiles:
+  - name: quarkus
+    description: builds the quarkus utility package library
+    type: lib/quarkus
+    target: quarkus
+    
+  - name: spring-boot
+    description: builds the spring-boot utility package library
+    type: lib/spring-boot
+    target: spring-boot
 ...
