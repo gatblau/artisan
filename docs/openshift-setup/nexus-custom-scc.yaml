@@ -1,0 +1,26 @@
+apiVersion: security.openshift.io/v1
+kind: SecurityContextConstraints
+metadata:
+  name: scc-nexus
+fsGroup:
+  ranges:
+    - max: 2000
+      min: 2000
+  type: MustRunAs
+runAsUser:
+  type: MustRunAs
+  uid: 2000
+seLinuxContext:
+  type: MustRunAs
+supplementalGroups:
+  ranges:
+    - max: 2000
+      min: 2000
+  type: MustRunAs
+volumes:
+  - persistentVolumeClaim
+  - secret
+  - configMap
+  - downwardAPI
+  - emptyDir
+  - projected
