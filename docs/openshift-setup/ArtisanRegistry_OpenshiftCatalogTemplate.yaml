@@ -1,0 +1,199 @@
+apiVersion: template.openshift.io/v1
+kind: Template
+labels:
+  template: artie-registry-template
+  xpaas: 1.0.0
+message: Artefact Registry based application has been created in your project.
+metadata:
+  annotations:
+    description: Artefact Registry - Proxy for artie client. Implemented in golang.
+    iconClass: icon-go-gopher
+    openshift.io/display-name: Artefact Registry - Proxy for artie client
+    openshift.io/provider-display-name: Artisan Project
+    tags: artie, artie registry, artie proxy
+    template.openshift.io/documentation-url: https://github.com/gatblau/onix/tree/develop/artie
+    template.openshift.io/long-description: Artefact Registry - Proxy for artie client.
+    template.openshift.io/support-url: https://access.redhat.com
+    version: 1.0.0
+  labels:
+  name: artie-registry-template
+  selfLink: /apis/template.openshift.io/v1/namespaces/openshift/templates/artie-registry-template
+objects:
+- apiVersion: v1
+  kind: "ImageStream"
+  metadata:
+    labels:
+      application: ${APPLICATION_NAME}
+    name: ${APPLICATION_NAME}
+  spec:
+    lookupPolicy:
+      local: false
+    tags:
+    - annotations: null
+      from:
+        kind: DockerImage
+        name: ${ARTIE_REGISTRY_IMAGE}
+      generation: 1
+      importPolicy: 
+        scheduled: true
+      name: latest
+      referencePolicy:
+        type: Source
+- apiVersion: v1
+  kind: DeploymentConfig
+  metadata:
+    labels:
+      application: ${APPLICATION_NAME}
+      app.kubernetes.io/part-of: Artisan
+      app.openshift.io/runtime: go-gopher
+      app.kubernetes.io/name: openshift-artie-registry
+      app.kubernetes.io/instance: openshift-artie-registry
+      app.kubernetes.io/component: integration
+    annotations:
+      app.openshift.io/connects-to: artie-registry
+    name: ${APPLICATION_NAME}
+  spec:
+    replicas: 1
+    selector:
+      deploymentConfig: ${APPLICATION_NAME}
+    strategy:
+      type: Recreate
+    template:
+      metadata:
+        labels:
+          application: ${APPLICATION_NAME}
+          deploymentConfig: ${APPLICATION_NAME}
+        name: ${APPLICATION_NAME}
+      spec:
+        containers:
+        - env:
+          - name: OXA_METRICS_ENABLED
+            value: ${OXA_METRICS_ENABLED}
+          - name: OXA_SWAGGER_ENABLED
+            value: ${OXA_SWAGGER_ENABLED}
+          - name: OXA_HTTP_UNAME
+            valueFrom:
+              secretKeyRef:
+                key: uname
+                name: ${APPLICATION_NAME}-creds
+          - name: OXA_HTTP_PWD
+            valueFrom:
+              secretKeyRef:
+                key: pwd
+                name: ${APPLICATION_NAME}-creds
+          - name: OXA_HTTP_BACKEND
+            value: ${OXA_HTTP_BACKEND}
+          - name: OXA_HTTP_BACKEND_DOMAIN
+            value: ${OXA_HTTP_BACKEND_DOMAIN}
+          - name: OXA_HTTP_UPLOAD_LIMIT
+            value: ${OXA_HTTP_UPLOAD_LIMIT}
+          image: ${APPLICATION_NAME}
+          readinessProbe:
+            exec:
+              command:
+              - /bin/bash
+              - -c
+              - curl -u ${OXA_HTTP_UNAME}:${OXA_HTTP_PWD} localhost:8082
+            initialDelaySeconds: 15
+            periodSeconds: 20
+            timeoutSeconds: 5
+            failureThreshold: 5
+          imagePullPolicy: Always
+          name: ${APPLICATION_NAME}
+          ports:
+          - containerPort: 8082
+            name: http
+            protocol: TCP
+          resources: {}
+        terminationGracePeriodSeconds: 30
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+    triggers:
+    - imageChangeParams:
+        automatic: true
+        containerNames:
+        - ${APPLICATION_NAME}
+        from:
+          kind: ImageStreamTag
+          name: ${APPLICATION_NAME}:latest
+      type: ImageChange
+    - type: ConfigChange
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      description: The web server's http port.
+    labels:
+      application: ${APPLICATION_NAME}
+    name: ${APPLICATION_NAME}
+  spec:
+    ports:
+    - port: 8082
+      targetPort: 8082
+    selector:
+      deploymentConfig: ${APPLICATION_NAME}
+- apiVersion: v1
+  id: ${APPLICATION_NAME}-https
+  kind: Route
+  metadata:
+    annotations:
+      description: Route for application's https service.
+    labels:
+      application: ${APPLICATION_NAME}
+    name: ${APPLICATION_NAME}
+  spec:
+    port:
+      targetPort: "8082"
+    tls:
+      insecureEdgeTerminationPolicy: Redirect
+      termination: edge
+    to:
+      name: ${APPLICATION_NAME}
+- apiVersion: v1
+  kind: Secret
+  metadata:
+    name: ${APPLICATION_NAME}-creds
+  type: Opaque
+  stringData:
+    uname: "${OXA_HTTP_UNAME}"
+    pwd: "${OXA_HTTP_PWD}"
+parameters:
+- description: The name for the application
+  displayName: Application Name
+  name: APPLICATION_NAME
+  required: true
+  value: artisan-registry
+- description: Repo URL for Artie Registry Image
+  displayName: Artie Registry Image URL
+  name: ARTIE_REGISTRY_IMAGE
+  value: quay.io/gatblau/artisan-registry
+  required: true
+- description: OXA METRICS ENABLED
+  displayName: OXA METRICS ENABLED
+  name: OXA_METRICS_ENABLED
+  value: "true"
+- description: Enable Swagger UI. Pass "true" to enable & "false" (default) to disable Swagger UI
+  displayName: Swagger UI
+  name: OXA_SWAGGER_ENABLED
+  value: "true"
+- description: Enter Artefact Registry User Name
+  displayName: Artefact Registry User Name
+  name: OXA_HTTP_UNAME
+  required: true
+- description: Enter Artefact Registry Password
+  displayName: Artefact Registry Password
+  name: OXA_HTTP_PWD
+  required: true
+- description: Enter Artefact Registry Backend Name
+  displayName: Artefact Registry Backend Name
+  name: OXA_HTTP_BACKEND
+  required: true
+  value: Nexus3
+- description: Enter Artefact Registry Domain
+  displayName: Artefact Registry Domain
+  name: OXA_HTTP_BACKEND_DOMAIN
+  required: true
+- description: Enter Artefact Upload Limit
+  displayName: Artefact Upload Limit
+  name: OXA_HTTP_UPLOAD_LIMIT
+  value: "30"
