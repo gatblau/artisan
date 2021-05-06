@@ -33,4 +33,5 @@ RUN echo "$UNAME:2000:50000" >> /etc/subgid
 # Set up environment variables to note that this is not starting with usernamespace and default to isolate the filesystem with chroot.
 ENV _BUILDAH_STARTED_IN_USERNS="" BUILDAH_ISOLATION=chroot
 
-#USER $UNAME
+# this runtime runs privileged to allow builds in K8S
+# USER $UNAME
