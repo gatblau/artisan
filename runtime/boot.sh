@@ -8,14 +8,17 @@
 #  to be licensed under the same terms as the rest of the code.
 #
 
+# fetch user home directory from /etc/passwd file
+export PIPELINE_HOME=$(awk -F":" '{print $6}' /etc/passwd | grep -m1 `whoami`)
+
 # copy any mounted keys to the artisan registry in the user home
 # folder required for tekton
-mkdir -p ${HOME}/.artisan/keys
-mkdir -p ${HOME}/.artisan/files
+mkdir -p ${PIPELINE_HOME}/.artisan/keys
+mkdir -p ${PIPELINE_HOME}/.artisan/files
 
 #echo copying keys from /keys mount to ${HOME}/.artisan artisan registry
-cp -R /keys ${HOME}/.artisan
-cp -R /files ${HOME}/.artisan
+cp -R /keys ${PIPELINE_HOME}/.artisan
+cp -R /files ${PIPELINE_HOME}/.artisan
 
 # if a package name has been provided
 if [[ -n "${OXART_PACKAGE_NAME+x}" ]]; then
