@@ -23,3 +23,4 @@ The documentation is divided in sections adding progressive knowlegde to make it
 | [*flow sources*]() | describes the different option to inject logic in execution flows |
 | [*registries*]() | shows how registries work to provide a vehicle for publishing an distributing  packages |
 | [*runners*]() | describes the use of runners to execute flows regardless of the implementation platform |
+| [*OpenShift setup*](openshift-setup/readme.md) | explains how to setup the required services to run Artisan automation in the OpenShift container platform. |
