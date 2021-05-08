@@ -23,20 +23,22 @@ As the build file is not technology specific, it can be used to build any softwa
 
 | section | description |
 |---|---|
-| [*the function section*](#the-functions-section)| describes the syntax for the functions section of the build file |
+| [*the function section*](#the-function-section)| describes the syntax for the functions section of the build file |
 | [*the input section*](#the-input-section)| describes the syntax used to define inputs in a build file |
 | [*the profile section*]() | describes what are build profiles |
 | [*the env section*]() | describes how to define repeated configuration values in a single place |
 | [*the label section*]() | describes how to add labels to a manifest |
 | [*the miscelaneous items*]() | describes miscelaneous items in the build file |
 
-## The *functions* section
+## The *function* section 
+
+[ [go to the top](#the-build-file) ]
 
 The *functions* section defines the functions available to call by *Artisan* as well as the commands that need to be executed in the command line when the function is called.
 
 :exclamation: note that input section and function bindings as shown in the example below are explained in the *input* section further down.
 
-The sctructure of the *functions* section is as follows:
+The structure of the *functions* section is as follows:
 
 ```yaml
 ---
@@ -109,6 +111,8 @@ functions:
 
 ## The *input* section
 
+[ [go to the top](#the-build-file) ]
+
 Typically, any complex automation has to be configurable. Configuration in Artisan is managed mostly via environment variables, as this is aligned with the way [linux containers](https://www.redhat.com/en/topics/containers/whats-a-linux-container) work.
 
 Input information required by the build file, is defined in the iput section containing three sub sections as follows:
@@ -172,6 +176,8 @@ Hello World
 ```
 
 ### Binding variables
+
+[ [go to the top](#the-build-file) ]
 
 Variables must be bound to a function to tell *Artisan* that the variable is needed by such function.
 
@@ -256,6 +262,8 @@ Hello Black Pete!
 
 ### Unbound variables
 
+[ [go to the top](#the-build-file) ]
+
 In some cases, you might not want to create a binding but still want Artisan to prompt for the value of a variable if missing. This is normally the case when you do not intend to export functions but still want to run them locally.
 
 In this case, the build file would simply look like the following:
@@ -284,3 +292,9 @@ error!
 # 2. export the required variable
 # 3. load the variable from an environment file (use the -e flag)
 ```
+
+## The *profile* section
+
+[ [go to the top](#the-build-file) ]
+
+
