@@ -10,6 +10,21 @@ This setup is required before executing artisan packages in OpenShift.
 
 If you have already done this skip to the "[How to Build & Run Artisan Packages](https://github.com/gatblau/artisan/tree/master/package/app#how-to-run-the-packages)" section.
 
+## Services Overview
+
+The following image shows the various services required to run Artisan automation in Kubernetes:
+
+![pipeline](../img/pipeline.png)
+
+A typical CI workflow follows:
+
+1. Git commit sent to runner
+2. Runner starts pipeline
+3. Git repository cloned
+4. Application code quality report uploaded to Sonar
+5. Application package pushed to package registry
+6. Application container image pushed to container registry
+
 ## Table of contents
 
 
