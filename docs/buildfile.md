@@ -297,4 +297,52 @@ error!
 
 [ [go to the top](#the-build-file) ]
 
+The *profiles* section defines the package build profiles, that is, the set of instructions required by *Artisan* to create packages.
 
+In its simplest way, a build profile requires a target folder where the files that have to be packaged.
+
+:checkered_flag: **try it!**
+
+You want to package arbitrary files located in the source folder [here](exercise/40/source).
+
+Define a profile in the build file as follows:
+
+```yaml
+---
+profiles:
+  - name: package-it
+    type: files
+    description: packages any files in the target folder
+    target: ./source
+...
+```
+
+Then navigate to the folder [here](exercise/40) and run the following command:
+
+```bash
+# simplest command to build a package
+art build -t mypack 
+
+# check if the package was created by listing packages in the local registry
+art ls
+
+# the output should be
+REPOSITORY                    TAG      PACKAGE ID    PACKAGE TYPE  CREATED          SIZE
+artisan.library/root/mypack   latest   9cd5c9bbc59d  files         14 seconds ago   454B
+```
+
+Now open the package in a folder of your choice:
+
+```bash
+# open the contents of the package in a new test folder
+art open mypack ./test
+
+# list the folder content
+ls -la ./test
+
+# you should see
+-rw-r--r--  1 user  staff   11  8 May 09:03 file_01.txt
+-rw-r--r--  1 user  staff   11  8 May 09:03 file_02.tx
+```
+
+More complex profiles will be explained in the [packages](package.md) section.
