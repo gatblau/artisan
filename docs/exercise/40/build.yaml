@@ -1,0 +1,7 @@
+---
+profiles:
+  - name: package-it
+    type: files
+    description: packages any files in the target folder
+    target: ./source
+...
