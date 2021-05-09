@@ -30,7 +30,7 @@ As the build file is not technology specific, it can be used to build any softwa
 | [*the label section*]() | describes how to add labels to a manifest |
 | [*the miscelaneous items*]() | describes miscelaneous items in the build file |
 
-## The *function* section 
+## The *function* section
 
 [ [go to the top](#the-build-file) ]
 
