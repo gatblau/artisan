@@ -34,7 +34,7 @@ input:
     var:
         - name: HELLO_WORD
           description: "the hello word in the language of choice"
-          type: string
+          required: true
 functions:
     - name: say-hello
       description: "prints a hello greeting to the standard output in a specific language"
