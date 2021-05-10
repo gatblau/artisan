@@ -32,7 +32,7 @@ An expample using all attributes is shown below:
 ---
 input:
     var:
-        - name: HELLO
+        - name: HELLO_WORD
           description: "the hello word in the language of choice"
           type: string
 functions:
@@ -41,11 +41,45 @@ functions:
       export: true
       runtime: quay.io/artisan/ubi-min
       env: 
-        HELLO: Hola
+        NAME_TO_GREET: Gatblau
       input:
         var:
-           - NAME
+           - HELLO_WORD
       run:
-        - echo ${HELLO} ${NAME}  
+        - echo ${HELLO_WORD} ${NAME_TO_GREET}  
 ...
 ```
+
+:checkered_flag: **try it!**
+
+In the command line navigate to [this folder](exercise/50) and execute the following command:
+
+```bash
+# tell artisan to call the "say-hello" function
+art run say-hello
+
+# you should see:
+error!
+* HELLO_WORD is required
+```
+
+Artisan is expecting **HELLO_WORD** as an input in the form of an environment variable. As it is not defined in the environment, then an error message is displayed and execution is not carried out.
+
+So there are a couple of options for passing input, one as described before is to set an environment variable as follows:
+
+```bash
+EXPORT HELLO_WORD=HOLA
+```
+
+Alternatively, you can tell *Artisan* to prompt for the variable using *interactive mode* as follows:
+
+```bash
+# set interactive mode with the -i flag
+art run say-hello -i
+
+# you should see a prompt like:
+? var => HELLO_WORD (the hello word in the language of choice): 
+```
+
+:exclamation: *note that the input description appears in brackets by the prompt to provide a hint.*
+
