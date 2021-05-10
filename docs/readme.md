@@ -24,3 +24,7 @@ The documentation is divided in sections adding progressive knowlegde to make it
 | [*registries*](registry.md) | shows how registries work to provide a vehicle for publishing an distributing  packages |
 | [*runners*](runner.md) | describes the use of runners to execute flows regardless of the implementation platform |
 | [*OpenShift setup*](openshift-setup/readme.md) | explains how to setup the required services to run Artisan automation in the OpenShift container platform. |
+
+## Get the CLI
+
+Download the CLI for your operating system [here](../bin/).
