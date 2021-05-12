@@ -24,6 +24,9 @@ RUN microdnf update --disablerepo=* --enablerepo=ubi-8-appstream --enablerepo=ub
     # artisan local registry folder
     mkdir -p /.artisan/keys && mkdir -p /.artisan/tmp && mkdir -p /.artisan/build && \
     chown -R $UNAME /.artisan/ && chmod -R a+wr /.artisan/ && \
+    # .netrc file to store git creds
+    touch /.netrc
+    chown -R $UNAME /.netrc && chmod -R a+wr /.netrc
     # app folder
     mkdir -p /app/ && chown $UNAME /app/ && chmod a+rwx /app/ && \
     # keys volume mount
