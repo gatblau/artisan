@@ -5,6 +5,7 @@ functions:
     run:
       - art run build-image base/ubi-min
       - art run build-image base/ubi
+      - art run build-image base/ubuntu
       - art run build-image buildah
       - art run build-image k8s
       - art run build-image java
