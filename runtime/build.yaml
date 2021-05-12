@@ -8,8 +8,9 @@ functions:
       - art run build-image buildah
       - art run build-image k8s
       - art run build-image java
-      - art run build-image python
       - art run build-image sonar
+      - art run build-image spring
+      - art run build-image python
       - art run build-image go
       - art run build-image ansible
       - art run build-image terraform
