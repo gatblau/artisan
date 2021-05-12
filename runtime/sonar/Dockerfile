@@ -29,6 +29,7 @@ ENV PATH $PATH:/sonar/bin
 
 WORKDIR /app/
 
+RUN mkdir -p /.sonar/ && chown -R $UNAME /.sonar/ && chmod -R a+wr /.sonar/
 COPY --from=builder /sonar /sonar
 COPY run.sh /app/
 
