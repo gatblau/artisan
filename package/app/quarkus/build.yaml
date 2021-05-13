@@ -7,7 +7,7 @@ input:
       required: true
       type: uri
       description: |-
-        the URI of the project git repository. create empty git project and pass that uri here
+        the URI of the project git repository. create empty git project and pass that uri here.
         eg. https://gitlab.com/<group-name>/<project-name>.git
 
     - name: SONAR_URI
@@ -304,10 +304,8 @@ functions:
     runtime: k8s
     export: true
     run:
-      # merges OpenShift template
-      - art merge setup/deploy.yaml.tem
-      # apply template
-      - oc apply -f setup/deploy.yaml
+      # deploy OpenShift template
+      - sh setup/deploy-template.sh
     input:
       var:
         - APPLICATION_NAME

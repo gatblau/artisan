@@ -1,19 +1,15 @@
 #!/bin/bash
-#Store git Credentials
-cat > ${HOME}/.netrc <<EOF
 
-machine $1
-login $2
-password $3
-protocol https
+# removing https:// substring from the git url
+# because in "git remote add origin" command it's already available
+URI=${GIT_URI:8}
 
-EOF
-
+# initialize the git repo & push into the git
 cd app
 git init
-git config --global user.email "${GIT_REPO_EMAIL}"
-git config --global user.name "${GIT_REPO_UNAME}"
+git config user.email "${GIT_REPO_EMAIL}"
+git config user.name "${GIT_REPO_UNAME}"
 git add .
 git commit -m "first commit"
-git remote add origin ${GIT_URI}
+git remote add origin https://${GIT_REPO_UNAME}:${GIT_REPO_PWD}@$URI
 git push -u origin master
