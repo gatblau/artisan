@@ -3,5 +3,5 @@ functions:
   - name: say-hello
     description: a very simple but not very useful function
     run:
-      - echo "Hello World"
+      - echo 'Hello World'
 ...
