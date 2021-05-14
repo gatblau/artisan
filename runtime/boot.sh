@@ -20,20 +20,20 @@ mkdir -p ${PIPELINE_HOME}/.artisan/files
 cp -R /keys ${PIPELINE_HOME}/.artisan
 cp -R /files ${PIPELINE_HOME}/.artisan
 
-# if a package name has been provided
-if [[ -n "${OXART_PACKAGE_NAME+x}" ]]; then
+# if a package name has been provided 
+if [ -n "${OXART_PACKAGE_NAME+x}" ]; then
   # if a user name is defined
-  if [[ -n "${OXART_REG_USER+x}" ]]; then
+  if [ -n "${OXART_REG_USER+x}" ]; then
     # then requires a corresponding password
-    if [[ -z "${OXART_REG_PWD+x}" ]]; then
+    if [ -z "${OXART_REG_PWD+x}" ]; then
       echo "The password for the Artisan Registry user is required: OXART_REG_PWD must be provided"
       exit 1
     fi
   fi
   # if a function has been defined executes the package with the function
-  if [[ -n "${OXART_FX_NAME+x}" ]]; then
+  if [ -n "${OXART_FX_NAME+x}" ]; then
     # if a package source has been provided
-    if [[ -n "${OXART_PACKAGE_SOURCE+x}" ]]; then
+    if [ -n "${OXART_PACKAGE_SOURCE+x}" ]; then
        case "$OXART_PACKAGE_SOURCE" in
           "create" | "CREATE")
               # remove any existing files in the source folder
@@ -58,7 +58,7 @@ if [[ -n "${OXART_PACKAGE_NAME+x}" ]]; then
     fi
   else
     # if a package source has been provided
-    if [[ -n "${OXART_PACKAGE_SOURCE+x}" ]]; then
+    if [ -n "${OXART_PACKAGE_SOURCE+x}" ]; then
       case "$OXART_PACKAGE_SOURCE" in
         "merge" | "MERGE")
             # open package in the source folder and leave files there
@@ -74,7 +74,7 @@ if [[ -n "${OXART_PACKAGE_NAME+x}" ]]; then
     fi
   fi
   # else if only a function has been defined
-elif [[ -n "${OXART_FX_NAME+x}" ]]; then
+elif [ -n "${OXART_FX_NAME+x}" ]; then
   # run the function from the build.yaml in the mounted source
   art run ${OXART_FX_NAME} /workspace/source/
 else
