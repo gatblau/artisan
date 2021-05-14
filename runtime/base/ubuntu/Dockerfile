@@ -18,8 +18,7 @@ ARG UNAME=runtime
 ENV UID=100000000
 ENV GID=100000000
 
-RUN apt update && apt upgrade -y && \
-    apt clean all && rm -rf /var/cache/apt && \
+RUN apt clean all && rm -rf /var/cache/apt && \
     groupadd -g $GID -o $UNAME && \
     useradd -M -u $UID -g $GID $UNAME && \
     usermod --home / -u $UID $UNAME && \
