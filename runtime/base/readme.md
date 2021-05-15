@@ -3,9 +3,9 @@
 In order to facilitate the process of creating your own runtime, these base images should be used to ensure
 the created runtime is compatible with Artisan.
 
-Artisan runtimes are built on either a [Red Hat Universal Base Image](https://developers.redhat.com/articles/ubi-faq#) or on official Docker [Ubuntu Image](https://hub.docker.com/_/ubuntu)
+Artisan runtimes are built on either a [Red Hat Universal Base Image](https://developers.redhat.com/articles/ubi-faq#) or on an official Docker [Ubuntu Image](https://hub.docker.com/_/ubuntu)
 
-*To ensure containers you build using Red Hat UBI's can be redistributed, the base images disable non-UBI yum repositories.*
+*To ensure containers you build using Red Hat UBI's can be redistributed, the UBI base images disable non-UBI yum repositories.*
 
 To create a runtime:
 
