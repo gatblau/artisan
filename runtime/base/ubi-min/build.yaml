@@ -3,7 +3,6 @@ env:
   REPO_NAME: quay.io/artisan
   IMG_NAME: ubi-min
   ART_PACKAGE: artisan
-  LIFECYCLE_STAGE: alpha
 
 functions:
   - name: build-image
@@ -13,13 +12,13 @@ functions:
       # copy the bootstrap script into the build context
       - cp ../../boot.sh .
       # build the image with the artisan reference
-      - docker build -t=${REPO_NAME}/${IMG_NAME}:${ARTISAN_REF}-${LIFECYCLE_STAGE} .
+      - docker build -t=${REPO_NAME}/${IMG_NAME}:${ARTISAN_REF} .
       # tag the image as latest
-      - docker tag ${REPO_NAME}/${IMG_NAME}:${ARTISAN_REF}-${LIFECYCLE_STAGE} ${REPO_NAME}/${IMG_NAME}:latest
+      - docker tag ${REPO_NAME}/${IMG_NAME}:${ARTISAN_REF} ${REPO_NAME}/${IMG_NAME}:latest
       # delete the art cli
       - rm ./art
       - rm ./boot.sh
       # push the image and the latest tag
-      - docker push ${REPO_NAME}/${IMG_NAME}:${ARTISAN_REF}-${LIFECYCLE_STAGE}
+      - docker push ${REPO_NAME}/${IMG_NAME}:${ARTISAN_REF}
       - docker push ${REPO_NAME}/${IMG_NAME}:latest
 ...

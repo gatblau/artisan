@@ -6,9 +6,6 @@
 #  Contributors to this project, hereby assign copyright in this code to the project,
 #  to be licensed under the same terms as the rest of the code.
 #
-
-# UNTESTED - WORK IN PROGRESS
-
 FROM ubuntu:focal
 
 LABEL maintainer="steve@devcloud.guru"
