@@ -17,11 +17,7 @@ ENV GID=100000000
 
 RUN apt clean all && rm -rf /var/cache/apt && \
     groupadd -g $GID -o $UNAME && \
-    useradd -M -u $UID -g $GID $UNAME && \
-    usermod --home / -u $UID $UNAME && \
-    # artisan local registry folder
-    mkdir -p /.artisan/keys && mkdir -p /.artisan/tmp && mkdir -p /.artisan/build && \
-    chown -R $UNAME /.artisan/ && chmod -R a+wr /.artisan/ && \
+    useradd -u $UID -g $GID $UNAME && \
     # app folder
     mkdir -p /app/ && chown $UNAME /app/ && chmod a+rwx /app/ && \
     # keys volume mount
