@@ -19,11 +19,8 @@ RUN microdnf update --disablerepo=* --enablerepo=ubi-8-appstream --enablerepo=ub
     microdnf install shadow-utils.x86_64 -y && \
     microdnf clean all && rm -rf /var/cache/yum && \
     groupadd -g $GID -o $UNAME && \
-    useradd -M -u $UID -g $GID $UNAME && \
-    usermod --home / -u $UID $UNAME && \
-    # artisan local registry folder
-    mkdir -p /.artisan/keys && mkdir -p /.artisan/tmp && mkdir -p /.artisan/build && \
-    chown -R $UNAME /.artisan/ && chmod -R a+wr /.artisan/ && \
+    # user home under /home/runtime
+    useradd -u $UID -g $GID $UNAME && \
     # app folder
     mkdir -p /app/ && chown $UNAME /app/ && chmod a+rwx /app/ && \
     # keys volume mount

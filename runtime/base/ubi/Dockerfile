@@ -18,14 +18,10 @@ ENV GID=100000000
 # disable any repository that is not
 RUN dnf update --disablerepo=* --enablerepo=ubi-8-appstream --enablerepo=ubi-8-baseos --disableplugin=subscription-manager -y && \
     groupadd -g $GID -o $UNAME && \
-    useradd -M -u $UID -g $GID $UNAME && \
-    usermod --home / -u $UID $UNAME && \
-    # artisan local registry folder
-    mkdir -p /.artisan/keys && mkdir -p /.artisan/tmp && mkdir -p /.artisan/build && \
-    chown -R $UNAME /.artisan/ && chmod -R a+wr /.artisan/ && \
+    useradd -u $UID -g $GID $UNAME && \
     # app folder
     mkdir -p /app/ && chown $UNAME /app/ && chmod a+rwx /app/ && \
-    # keys volume mount
+    # keys volume mounts
     mkdir -p /keys/ && \
     # files volume mount
     mkdir -p /files/ && chown $UNAME /files/ && chmod a+r /files/
