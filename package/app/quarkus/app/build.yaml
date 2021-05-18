@@ -27,11 +27,6 @@ input:
       type: string
       description: the application name to create openshift tekton pipeline resources eg. EventListner & PipelineResources
 
-    - name: BUILDER_IMAGE
-      required: true
-      type: string
-      description: the image builder name (buildah image) to build application image (eg quay.io/artisan/buildah)
-
     - name: PUSH_IMAGE_REGISTRY
       required: true
       type: string
@@ -74,13 +69,6 @@ input:
         the name:tag for the quarkus recepie package to download (e.g. registry-host/app-group/package-name)
         it contains setup & pipeline flow alongwith build.yaml file
         this package should be already available in the artefact registry like nexus
-
-    - name: FX_NAME
-      required: true
-      type: string
-      description: |-
-        the function name to build image (eg. build-image)
-        this is the function name executed by the image builder. it contains commands to build, sign & push application img
 
     - name: CRYPTO_KEY_EMAIL
       required: true
@@ -184,14 +172,12 @@ functions:
     input:
       var:
         - APPLICATION_NAME
-        - BUILDER_IMAGE
         - PUSH_IMAGE_REGISTRY
         - PUSH_IMAGE_REPO
         - PUSH_IMAGE_NAME
         - PUSH_IMAGE_VERSION
         - PULL_IMAGE_REGISTRY
         - PACKAGE_NAME
-        - FX_NAME
         - CRYPTO_KEY_EMAIL
         - APP_PACKAGE_NAME
       secret:

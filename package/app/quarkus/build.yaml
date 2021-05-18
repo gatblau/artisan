@@ -65,11 +65,6 @@ input:
       type: string
       description: the application name to create openshift tekton pipeline resources eg. EventListner & PipelineResources
 
-    - name: BUILDER_IMAGE
-      required: true
-      type: string
-      description: the image builder name (buildah image) to build application image (eg quay.io/artisan/buildah)
-
     - name: PUSH_IMAGE_REGISTRY
       required: true
       type: string
@@ -105,13 +100,6 @@ input:
         application runtime image registry name (eg. registry.gitlab.com)
         this is the name of the image registry where base docker image is stored. it can be redhat, gitlab or quay registry
 
-    - name: FX_NAME
-      required: true
-      type: string
-      description: |-
-        the function name to build image (eg. build-image)
-        this is the function name executed by the image builder. it contains commands to build, sign & push application img
-
     - name: CRYPTO_KEY_EMAIL
       required: true
       type: string
@@ -125,12 +113,6 @@ input:
       description: |-
         git user email id to push the quarkus scaffold code
         email id is used to get authenticate with the code repo
-
-    - name: GIT_REPO_HOST
-      required: true
-      type: string
-      description: |-
-        git host to push the quarkus scaffold code (eg. gitlab.com)
 
     - name: PACKAGE_NAME
       required: true
@@ -241,11 +223,10 @@ functions:
     runtime: java
     export: true
     run:
-      - sh setup/setup-git.sh ${GIT_REPO_HOST} ${GIT_REPO_UNAME} ${GIT_REPO_PWD}
+      - sh setup/setup-git.sh ${GIT_REPO_UNAME} ${GIT_REPO_PWD}
     input:
       var:
         - GIT_URI
-        - GIT_REPO_HOST
         - GIT_REPO_EMAIL
       secret:
         - GIT_REPO_UNAME
@@ -287,14 +268,12 @@ functions:
         - SONAR_BINARIES
         - APP_PACKAGE_NAME
         - APPLICATION_NAME
-        - BUILDER_IMAGE
         - PUSH_IMAGE_REGISTRY
         - PUSH_IMAGE_REPO
         - PUSH_IMAGE_NAME
         - PUSH_IMAGE_VERSION
         - PULL_IMAGE_REGISTRY
         - PACKAGE_NAME
-        - FX_NAME
         - CRYPTO_KEY_EMAIL
         - OPENSHIFT_NAMESPACE
         - ART_RUNNER_URI
@@ -345,9 +324,7 @@ functions:
       var:
         - APP_PACKAGE_NAME
         - APPLICATION_NAME
-        - BUILDER_IMAGE
         - CRYPTO_KEY_EMAIL
-        - FX_NAME
         - PACKAGE_NAME
         - PULL_IMAGE_REGISTRY
         - PUSH_IMAGE_NAME
@@ -355,7 +332,6 @@ functions:
         - PUSH_IMAGE_REPO
         - PUSH_IMAGE_VERSION
         - GIT_REPO_EMAIL
-        - GIT_REPO_HOST
         - GIT_URI
         - PROJECT_ARTIFACT_ID
         - PROJECT_ARTIFACT_VERSION
