@@ -5,7 +5,7 @@
 URI=${GIT_URI:8}
 
 # call url encoder to handle password special chars
-source url_encoder.sh ${GIT_REPO_PWD}
+source setup/url_encoder.sh ${GIT_REPO_PWD}
 
 # initialize the git repo & push into the git
 cd app
