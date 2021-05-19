@@ -4,6 +4,9 @@
 # because in "git remote add origin" command it's already available
 URI=${GIT_URI:8}
 
+# call url encoder to handle password special chars
+source setup/url_encoder.sh ${GIT_REPO_PWD}
+
 # initialize the git repo & push into the git
 cd app
 git init

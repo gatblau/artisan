@@ -93,7 +93,7 @@ oc adm policy add-scc-to-user scc-nexus -z <nexus-service-account>
 
 Now we have to change the ServiceAccount as by default application gets installed inside the Default SA. 
 
-Click on Nexus repo app -> Click on Pods -> Switch to yaml section & add below code under spec
+Click on Nexus repo app -> Click on Actions -> Select Edit Deployment -> Switch to yaml section & add below code under template -> spec
 
 ```bash
 spec:
