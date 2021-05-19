@@ -1,0 +1,127 @@
+apiVersion: template.openshift.io/v1
+kind: Template
+labels:
+  template: sonar-qube
+  xpaas: 1.0.0
+message: Sonar Qube based application has been created in your project.
+metadata:
+  annotations:
+    description: Sonar Qube - Implemented in golang.
+    openshift.io/display-name: Sonar Qube
+    openshift.io/provider-display-name: Sonar Qube
+    tags: sonar, sonar scanner, sonar qube
+    template.openshift.io/documentation-url: https://github.com/gatblau/onix/tree/develop/artie
+    template.openshift.io/long-description: Sonar Qube
+    template.openshift.io/support-url: https://access.redhat.com
+    version: 1.0.0
+  labels:
+  name: sonarqube-template
+  selfLink: /apis/template.openshift.io/v1/namespaces/openshift/templates/sonarqube-template
+objects:
+- apiVersion: v1
+  kind: "ImageStream"
+  metadata:
+    labels:
+      application: ${APPLICATION_NAME}
+    name: ${APPLICATION_NAME}
+  spec:
+    lookupPolicy:
+      local: false
+    tags:
+    - annotations: null
+      from:
+        kind: DockerImage
+        name: ${SONARQUBE_IMAGE}
+      generation: 1
+      importPolicy: 
+        scheduled: true
+      name: latest
+      referencePolicy:
+        type: Source
+- apiVersion: v1
+  kind: DeploymentConfig
+  metadata:
+    labels:
+      application: ${APPLICATION_NAME}
+      app.openshift.io/runtime: go-gopher
+      app.kubernetes.io/name: openshift-sonarqube
+      app.kubernetes.io/instance: openshift-sonarqube
+      app.kubernetes.io/component: integration
+    name: ${APPLICATION_NAME}
+  spec:
+    replicas: 1
+    selector:
+      deploymentConfig: ${APPLICATION_NAME}
+    strategy:
+      type: Recreate
+    template:
+      metadata:
+        labels:
+          application: ${APPLICATION_NAME}
+          deploymentConfig: ${APPLICATION_NAME}
+        name: ${APPLICATION_NAME}
+      spec:
+        containers:
+        - image: ${APPLICATION_NAME}
+          imagePullPolicy: Always
+          name: ${APPLICATION_NAME}
+          ports:
+          - containerPort: 8080
+            name: http
+            protocol: TCP
+          resources: {}
+        terminationGracePeriodSeconds: 30
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+    triggers:
+    - imageChangeParams:
+        automatic: true
+        containerNames:
+        - ${APPLICATION_NAME}
+        from:
+          kind: ImageStreamTag
+          name: ${APPLICATION_NAME}:latest
+      type: ImageChange
+    - type: ConfigChange
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      description: The web server's http port.
+    labels:
+      application: ${APPLICATION_NAME}
+    name: ${APPLICATION_NAME}
+  spec:
+    ports:
+    - port: 8080
+      targetPort: 8080
+    selector:
+      deploymentConfig: ${APPLICATION_NAME}
+- apiVersion: v1
+  id: ${APPLICATION_NAME}-https
+  kind: Route
+  metadata:
+    annotations:
+      description: Route for application's https service.
+    labels:
+      application: ${APPLICATION_NAME}
+    name: ${APPLICATION_NAME}
+  spec:
+    port:
+      targetPort: "8080"
+    tls:
+      insecureEdgeTerminationPolicy: Redirect
+      termination: edge
+    to:
+      name: ${APPLICATION_NAME}
+parameters:
+- description: The name for the application
+  displayName: Application Name
+  name: APPLICATION_NAME
+  required: true
+  value: sonarqube
+- description: Repo URL for Sonar Qube Image
+  displayName: Sonar Qube Image URL
+  name: SONARQUBE_IMAGE
+  value: docker.io/library/sonarqube
+  required: true
