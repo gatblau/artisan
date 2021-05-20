@@ -1,0 +1,72 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: artisan-runner
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: artisan-runner
+  template:
+    metadata:
+      labels:
+        app: artisan-runner
+    spec:
+      serviceAccountName: artisan-runner
+      serviceAccount: artisan-runner
+      containers:
+      - name: artisan-runner
+        image: quay.io/gatblau/artisan-runner
+        ports:
+        - containerPort: 8080
+        env:
+          - name: OX_HTTP_UNAME
+            valueFrom:
+              secretKeyRef:
+                key: uname
+                name: artisan-runner-creds
+          - name: OX_HTTP_PWD
+            valueFrom:
+              secretKeyRef:
+                key: pwd
+                name: artisan-runner-creds
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: artisan-runner-creds
+type: Opaque
+stringData:
+  uname: "${ARTISAN_RUNNER_UNAME}"
+  pwd: "${ARTISAN_RUNNER_PWD}"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: artisan-runner
+spec:
+  type: ClusterIP
+  ports:
+  - port: 8080
+  selector:
+    app: artisan-runner
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: artisan-runner
+  annotations:
+    kubernetes.io/ingress.class: addon-http-application-routing
+spec:
+  rules:
+  - host: artisan-runner.${HTTPApplicationRoutingZoneName}
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: artisan-runner
+            port:
+              number: 8080
+---
