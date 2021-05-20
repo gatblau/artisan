@@ -1,17 +1,21 @@
 #/bin/bash
 
+# login to push image registry
 buildah login -u ${PUSH_IMAGE_REGISTRY_UNAME} -p ${PUSH_IMAGE_REGISTRY_PWD} ${PUSH_IMAGE_REGISTRY}
 
-# check if img is available in the registry
+# check if application img is already available in the registry
 skopeo inspect docker://${PUSH_IMAGE_REGISTRY}/${PUSH_IMAGE_REPO}/${PUSH_IMAGE_NAME}:${PUSH_IMAGE_VERSION} > inspect.log 2>&1
 error_count=$(grep -E "error|Error" -c inspect.log)
 if [ $error_count -gt 0 ]; then
    touch app-deploy-flag.txt
 fi
 
+# login to pull image registry
 buildah login -u ${PULL_IMAGE_REGISTRY_UNAME} -p ${PULL_IMAGE_REGISTRY_PWD} ${PULL_IMAGE_REGISTRY}
+
 #build image
 buildah bud --format=docker --isolation=chroot -t ${PUSH_IMAGE_REGISTRY}/${PUSH_IMAGE_REPO}/${PUSH_IMAGE_NAME}:${PUSH_IMAGE_VERSION} .
+
 # import gpg key to sign & push image
 gpg --import ${PIPELINE_HOME}/.artisan/keys/root_rsa_key.pgp
 
@@ -25,8 +29,8 @@ fi
 
 # deploy the app if flag file is present else skip app deployment
 if [ -e app-deploy-flag.txt ]; then
-   oc new-app --template=quarkus-app
+   oc new-app --template=${APPLICATION_NAME}
 fi
 
-# delete flag file
+# delete files
 rm -f app-deploy-flag.txt inspect.log
