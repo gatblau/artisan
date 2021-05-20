@@ -1,8 +1,11 @@
 #/bin/bash
 
+buildah login -u ${PUSH_IMAGE_REGISTRY_UNAME} -p ${PUSH_IMAGE_REGISTRY_PWD} ${PUSH_IMAGE_REGISTRY}
+
 # check if img is available in the registry
-skopeo inspect docker://${PUSH_IMAGE_REGISTRY}/${PUSH_IMAGE_REPO}/${PUSH_IMAGE_NAME}:${PUSH_IMAGE_VERSION} > .log 2>&1
-if [ $? -ne 0 ]; then
+skopeo inspect docker://${PUSH_IMAGE_REGISTRY}/${PUSH_IMAGE_REPO}/${PUSH_IMAGE_NAME}:${PUSH_IMAGE_VERSION} > inspect.log 2>&1
+error_count=$(grep -E "error|Error" -c inspect.log)
+if [ $error_count -gt 0 ]; then
    touch app-deploy-flag.txt
 fi
 
@@ -26,4 +29,4 @@ if [ -e app-deploy-flag.txt ]; then
 fi
 
 # delete flag file
-rm -f app-deploy-flag.txt
+rm -f app-deploy-flag.txt inspect.log
