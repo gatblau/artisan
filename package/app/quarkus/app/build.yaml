@@ -162,11 +162,6 @@ functions:
       - rm -rf .dockerignore
       # download application package from the artefact repository
       - art open -u=${REGISTRY_USER}:${REGISTRY_PWD} ${APP_PACKAGE_NAME} /workspace/source
-      - buildah login -u ${PULL_IMAGE_REGISTRY_UNAME} -p ${PULL_IMAGE_REGISTRY_PWD} ${PULL_IMAGE_REGISTRY}
-      # build image
-      - buildah bud --format=docker --isolation=chroot -t ${PUSH_IMAGE_REGISTRY}/${PUSH_IMAGE_REPO}/${PUSH_IMAGE_NAME}:${PUSH_IMAGE_VERSION} .
-      # import gpg key to sign & push image
-      - gpg --import ${PIPELINE_HOME}/.artisan/keys/root_rsa_key.pgp
       # use skopeo to sign the application image & push into the image registry
       - sh sign-image.sh
     input:
