@@ -37,8 +37,13 @@ objects:
   metadata:
     labels:
       application: ${APPLICATION_NAME}
+      app.kubernetes.io/part-of: ${APPLICATION_NAME}
       app.openshift.io/runtime: quarkus
-      app.kubernetes.io/name: ${APPLICATION_NAME}
+      app.kubernetes.io/name: openshift-${APPLICATION_NAME}
+      app.kubernetes.io/instance: openshift-${APPLICATION_NAME}
+      app.kubernetes.io/component: integration
+    annotations:
+      app.openshift.io/connects-to: ${APPLICATION_NAME}
     name: ${APPLICATION_NAME}
   spec:
     replicas: 1
@@ -116,3 +121,9 @@ objects:
       termination: edge
     to:
       name: ${APPLICATION_NAME}
+parameters:
+- description: The name for the application
+  displayName: Application Name
+  name: APPLICATION_NAME
+  required: true
+  value: ${APPLICATION_NAME}
