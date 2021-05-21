@@ -36,7 +36,6 @@ rm -f /lib/systemd/system/anaconda.target.wants/*;
 # install pre-requisites
 RUN dnf makecache --timer \
  && dnf -y install initscripts \
- && dnf -y update \
  && dnf -y install sudo which hostname python3 openssh-clients \
  && dnf clean all \
  && mkdir -p /.ssh/ && chown $UNAME /.ssh/ && chmod a+rwx /.ssh/
