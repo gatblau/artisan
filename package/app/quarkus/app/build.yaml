@@ -125,10 +125,9 @@ profiles:
     run:
       # copy the docker file to build the jvm version to the artefact(target) package folder
       - cp Dockerfile target/target/Dockerfile
-      # copy the below 3 files to build the jvm version to the artefact(target) package folder
+      # copy the below files to build the jvm version to the artefact(target) package folder
       # these files are required to build images & deploy the app
       - cp build-image.sh target/target/build-image.sh
-      - cp deploy-app.sh target/target/deploy-app.sh
       - cp deploy.yaml.tem target/target/deploy.yaml.tem 
     target: target/target
 
