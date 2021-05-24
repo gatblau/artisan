@@ -125,8 +125,9 @@ profiles:
     run:
       # copy the docker file to build the jvm version to the artefact(target) package folder
       - cp Dockerfile target/target/Dockerfile
-      # copy the sign-image.sh file to build the jvm version to the artefact(target) package folder
-      - cp sign-image.sh target/target/sign-image.sh
+      # copy the below 3 files to build the jvm version to the artefact(target) package folder
+      # these files are required to build images & deploy the app
+      - cp build-image.sh target/target/build-image.sh
       - cp deploy-app.sh target/target/deploy-app.sh
       - cp deploy.yaml.tem target/target/deploy.yaml.tem 
     target: target/target
@@ -169,8 +170,8 @@ functions:
       - rm -rf .dockerignore
       # download application package from the artefact repository
       - art open -u=${REGISTRY_USER}:${REGISTRY_PWD} ${APP_PACKAGE_NAME} /workspace/source
-      # use skopeo to sign the application image & push into the image registry
-      - sh sign-image.sh
+      # build & sign the docker image & push into the img registry. also deploy the app 
+      - sh build-image.sh
     input:
       var:
         - APPLICATION_NAME
