@@ -77,6 +77,11 @@ input:
         the email id which is used to generate crypto signature keys by using art cli
         this email id is used by img builder to sign the application image
 
+    - name: HOST_NAME
+      required: true
+      type: string
+      description: openshift or kubernetes cluster hostname required to deploy app & create an ingress
+
   secret:
     - name: ART_REG_USER
       description: the artisan registry user name which is deployed into the openshift
@@ -122,6 +127,8 @@ profiles:
       - cp Dockerfile target/target/Dockerfile
       # copy the sign-image.sh file to build the jvm version to the artefact(target) package folder
       - cp sign-image.sh target/target/sign-image.sh
+      - cp deploy-app.sh target/target/deploy-app.sh
+      - cp deploy.yaml.tem target/target/deploy.yaml.tem 
     target: target/target
 
 functions:
@@ -175,6 +182,7 @@ functions:
         - PACKAGE_NAME
         - CRYPTO_KEY_EMAIL
         - APP_PACKAGE_NAME
+        - HOST_NAME
       secret:
         - PULL_IMAGE_REGISTRY_UNAME
         - PULL_IMAGE_REGISTRY_PWD

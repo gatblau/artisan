@@ -29,7 +29,7 @@ fi
 
 # deploy the app if flag file is present else skip app deployment
 if [ -e app-deploy-flag.txt ]; then
-   oc new-app --template=${APPLICATION_NAME}
+   sh deploy-app.sh
 fi
 
 # delete files
