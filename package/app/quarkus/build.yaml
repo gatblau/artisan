@@ -137,6 +137,11 @@ input:
       type: string
       description: the name of the openshift/kubernetes namespace where the app pipeline should be created
 
+    - name: HOST_NAME
+      required: true
+      type: string
+      description: openshift or kubernetes cluster hostname required to deploy app & create an ingress
+
   secret:
     - name: SONAR_TOKEN
       description: |-
@@ -282,22 +287,7 @@ functions:
         - CRYPTO_KEY_EMAIL
         - ART_RUNNER_URI
         - CI_NAMESPACE
-
-  - name: deploy-app
-    description: deploys the Quarkus application to OpenShift
-    runtime: k8s
-    export: true
-    run:
-      # deploy OpenShift template
-      - sh setup/deploy-template.sh
-    input:
-      var:
-        - APPLICATION_NAME
-        - PUSH_IMAGE_REGISTRY
-        - PUSH_IMAGE_REPO
-        - PUSH_IMAGE_NAME
-        - PUSH_IMAGE_VERSION
-        - PROJECT_ARTIFACT_VERSION
+        - HOST_NAME
 
   # used this function on VM/local m/c to create the java-quarkus setup tekton pipeline into openshift
   - name: setup
