@@ -29,7 +29,15 @@ fi
 
 # deploy the app if flag file is present else skip app deployment
 if [ -e app-deploy-flag.txt ]; then
-   sh deploy-app.sh
+   # merges application template
+   art merge deploy.yaml.tem
+
+   # create application
+   kubectl apply -f deploy.yaml
+   if [ $? -ne 0 ]; then
+      echo "Failed to deploy the app"
+      exit 1
+   fi
 fi
 
 # delete files
