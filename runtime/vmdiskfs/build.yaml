@@ -1,7 +1,7 @@
 ---
 env:
-  REPO_NAME: quay.io/artisanrepo
-  IMG_NAME: iconverter
+  REPO_NAME: quay.io/artisan
+  IMG_NAME: vmdiskfs
 
 functions:
   - name: build-image
@@ -14,7 +14,7 @@ functions:
 
   - name: version
     description: prints the versions for the tools in this runtime
-    runtime: quay.io/egevorkyan/iconverter
+    runtime: vmdiskfs
     run:
       - qemu-img --version
       - virt-customize --version
