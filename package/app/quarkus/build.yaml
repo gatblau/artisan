@@ -122,15 +122,25 @@ input:
         it contains setup & pipeline flow alongwith build.yaml file
         this package should be already available in the artefact registry like nexus
 
-    - name: OPENSHIFT_NAMESPACE
+    - name: SETUP_NAMESPACE
       required: true
       type: string
-      description: the name of the OpenShift namespace where the pipelines should be created
+      description: the name of the openshift/kubernetes namespace where the setup pipeline should be created
 
     - name: ART_RUNNER_URI
       required: true
       type: string
       description: the URI of the Artisan runner to use
+
+    - name: CI_NAMESPACE
+      required: true
+      type: string
+      description: the name of the openshift/kubernetes namespace where the app pipeline should be created
+
+    - name: HOST_NAME
+      required: true
+      type: string
+      description: openshift or kubernetes cluster hostname required to deploy app & create an ingress
 
   secret:
     - name: SONAR_TOKEN
@@ -241,7 +251,7 @@ functions:
       # merge flow name into template
       - art merge setup/ci_flow_bare.yaml.tem
       # create a tekton pipeline resources file
-      - art flow run -l namespace=${OPENSHIFT_NAMESPACE} -u=${ART_RUNNER_UNAME}:${ART_RUNNER_PWD} setup/ci_flow_bare.yaml -b app ${ART_RUNNER_URI}
+      - art flow run -l namespace=${CI_NAMESPACE} -u=${ART_RUNNER_UNAME}:${ART_RUNNER_PWD} setup/ci_flow_bare.yaml -b app ${ART_RUNNER_URI}
     input:
       key:
         - SIGNING_KEY
@@ -275,24 +285,9 @@ functions:
         - PULL_IMAGE_REGISTRY
         - PACKAGE_NAME
         - CRYPTO_KEY_EMAIL
-        - OPENSHIFT_NAMESPACE
         - ART_RUNNER_URI
-
-  - name: deploy-app
-    description: deploys the Quarkus application to OpenShift
-    runtime: k8s
-    export: true
-    run:
-      # deploy OpenShift template
-      - sh setup/deploy-template.sh
-    input:
-      var:
-        - APPLICATION_NAME
-        - PUSH_IMAGE_REGISTRY
-        - PUSH_IMAGE_REPO
-        - PUSH_IMAGE_NAME
-        - PUSH_IMAGE_VERSION
-        - PROJECT_ARTIFACT_VERSION
+        - CI_NAMESPACE
+        - HOST_NAME
 
   # used this function on VM/local m/c to create the java-quarkus setup tekton pipeline into openshift
   - name: setup
@@ -301,7 +296,7 @@ functions:
     export: true
     run:
       - art merge setup/setup_flow_bare.yaml.tem
-      - art flow run -l namespace=${OPENSHIFT_NAMESPACE} -u=${ART_RUNNER_UNAME}:${ART_RUNNER_PWD} setup/setup_flow_bare.yaml -b . ${ART_RUNNER_URI}
+      - art flow run -l namespace=${SETUP_NAMESPACE} -u=${ART_RUNNER_UNAME}:${ART_RUNNER_PWD} setup/setup_flow_bare.yaml -b . ${ART_RUNNER_URI}
     input:
       key:
         - QUARKUS_SETUP_CREATE_PROJECT_OXART_VERIFICATION_KEY
@@ -340,7 +335,7 @@ functions:
         - SONAR_PROJECT_KEY
         - SONAR_SOURCES
         - SONAR_URI
-        - OPENSHIFT_NAMESPACE
+        - SETUP_NAMESPACE
         - ART_RUNNER_URI
 
   - name: cleanup

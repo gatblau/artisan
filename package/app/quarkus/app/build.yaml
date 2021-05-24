@@ -77,6 +77,11 @@ input:
         the email id which is used to generate crypto signature keys by using art cli
         this email id is used by img builder to sign the application image
 
+    - name: HOST_NAME
+      required: true
+      type: string
+      description: openshift or kubernetes cluster hostname required to deploy app & create an ingress
+
   secret:
     - name: ART_REG_USER
       description: the artisan registry user name which is deployed into the openshift
@@ -120,8 +125,10 @@ profiles:
     run:
       # copy the docker file to build the jvm version to the artefact(target) package folder
       - cp Dockerfile target/target/Dockerfile
-      # copy the sign-image.sh file to build the jvm version to the artefact(target) package folder
-      - cp sign-image.sh target/target/sign-image.sh
+      # copy the below files to build the jvm version to the artefact(target) package folder
+      # these files are required to build images & deploy the app
+      - cp build-image.sh target/target/build-image.sh
+      - cp deploy.yaml.tem target/target/deploy.yaml.tem 
     target: target/target
 
 functions:
@@ -162,13 +169,8 @@ functions:
       - rm -rf .dockerignore
       # download application package from the artefact repository
       - art open -u=${REGISTRY_USER}:${REGISTRY_PWD} ${APP_PACKAGE_NAME} /workspace/source
-      - buildah login -u ${PULL_IMAGE_REGISTRY_UNAME} -p ${PULL_IMAGE_REGISTRY_PWD} ${PULL_IMAGE_REGISTRY}
-      # build image
-      - buildah bud --format=docker --isolation=chroot -t ${PUSH_IMAGE_REGISTRY}/${PUSH_IMAGE_REPO}/${PUSH_IMAGE_NAME}:${PUSH_IMAGE_VERSION} .
-      # import gpg key to sign & push image
-      - gpg --import ${PIPELINE_HOME}/.artisan/keys/root_rsa_key.pgp
-      # use skopeo to sign the application image & push into the image registry
-      - sh sign-image.sh
+      # build & sign the docker image & push into the img registry. also deploy the app 
+      - sh build-image.sh
     input:
       var:
         - APPLICATION_NAME
@@ -180,6 +182,7 @@ functions:
         - PACKAGE_NAME
         - CRYPTO_KEY_EMAIL
         - APP_PACKAGE_NAME
+        - HOST_NAME
       secret:
         - PULL_IMAGE_REGISTRY_UNAME
         - PULL_IMAGE_REGISTRY_PWD
