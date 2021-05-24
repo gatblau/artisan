@@ -1,0 +1,43 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: manage-app-deployment
+  namespace: default
+rules:
+  - apiGroups: ["*"]
+    resources: [
+        deployments,
+        services,
+        ingresses
+      ]
+    verbs: [ "get", "list", "create", "update", "delete", "patch", "watch" ]
+
+  - apiGroups: ["*"] # all api groups
+    resources: [
+        "secrets",
+        "routes",
+        "pods"
+    ]
+    verbs: [ "get", "list", "create", "update", "delete", "patch", "watch" ]
+    
+  - apiGroups: ["*"] # all api groups
+    resources: [
+        "pods/log"
+    ]
+    verbs: [ "get", "list", "watch" ]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: manage-app-deployment-rule
+  namespace: default
+subjects:
+  - kind: ServiceAccount
+    name: pipeline
+    namespace: default
+    apiGroup: ""
+roleRef:
+  kind: Role
+  name: manage-app-deployment
+  apiGroup: rbac.authorization.k8s.io
+...

@@ -63,12 +63,12 @@ kubectl secrets link default <secret_name2> --for=pull
 Before deploying artisan runner app, we need to enable AKS cluster routing so that application is accessible using url instead of public ip
 
 ```bash
-az aks enable-addons --resource-group RGForSAP --name KubeCluster --addons http_application_routing
+az aks enable-addons --resource-group <RESOURCE_GROUP_NAME> --name <KUBE_CLUSTER_NAME> --addons http_application_routing
 ```
 
 Now get AKS cluster app routing zone name
 ```bash
-az aks show --resource-group RGForSAP --name KubeCluster --query addonProfiles.httpApplicationRouting.config.HTTPApplicationRoutingZoneName -o table
+az aks show --resource-group <RESOURCE_GROUP_NAME> --name <KUBE_CLUSTER_NAME> --query addonProfiles.httpApplicationRouting.config.HTTPApplicationRoutingZoneName -o table
 ```
 
 Output Format: 70e74a97963e4f81a821.eastus.aksapp.io
@@ -85,7 +85,15 @@ Create Artisan Runner app
 kubectl apply -f artisan-runner.yaml
 ```
 
-# Run ci pipeline in different namespace
+# Attach rbac policy to the pipeline service account
+
+In kubernetes, pipeline SA is not able to create deployment, ingress & service resources in the default SA. to create these resources we need to attach the rbac-app-deployment.yaml rbac to pipeline SA
+
+```bash
+oc apply -f rbac-app-deployment.yaml
+```
+
+# Run ci pipeline in different namespace (optional)
 
 1) Create ci-namespace
 
@@ -93,7 +101,7 @@ kubectl apply -f artisan-runner.yaml
 kubectl create ns ci-namespace
 ```
 
-2) Add policy 
+2) Add rbac policy 
 
 ```bash
 kubectl apply -f ci-rbac-runner.yaml
