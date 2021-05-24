@@ -6,11 +6,25 @@
 #  Contributors to this project, hereby assign copyright in this code to the project,
 #  to be licensed under the same terms as the rest of the code.
 #
+FROM alpine as builder
+
+ENV OKD_VERSION=4.7.0-0.okd-2021-04-24-103438
+
+WORKDIR /app/
+
+# downloads oc / kubectl clis
+RUN wget https://github.com/openshift/okd/releases/download/$OKD_VERSION/openshift-client-linux-$OKD_VERSION.tar.gz && \
+    tar -xf openshift-client-linux-$OKD_VERSION.tar.gz && \
+    rm openshift-client-linux-$OKD_VERSION.tar.gz
+
 FROM quay.io/artisan/ubi
 
 USER root
 
 ARG UNAME=runtime
+
+# deploy kubectl and oc commands
+COPY --from=builder /app/kubectl /app/oc /usr/bin/
 
 # install the kubic repository with latest buildah stable releases
 RUN dnf update --disablerepo=* --enablerepo=ubi-8-appstream --enablerepo=ubi-8-baseos -y && \

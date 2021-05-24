@@ -15,4 +15,5 @@ functions:
       - art run build-image go
       - art run build-image ansible
       - art run build-image terraform
+      - art run build-image vmdiskfs
 ...
