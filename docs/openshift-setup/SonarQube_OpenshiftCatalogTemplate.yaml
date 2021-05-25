@@ -66,7 +66,7 @@ objects:
           imagePullPolicy: Always
           name: ${APPLICATION_NAME}
           ports:
-          - containerPort: 8080
+          - containerPort: 9000
             name: http
             protocol: TCP
           resources: {}
@@ -93,8 +93,8 @@ objects:
     name: ${APPLICATION_NAME}
   spec:
     ports:
-    - port: 8080
-      targetPort: 8080
+    - port: 9000
+      targetPort: 9000
     selector:
       deploymentConfig: ${APPLICATION_NAME}
 - apiVersion: v1
@@ -108,7 +108,7 @@ objects:
     name: ${APPLICATION_NAME}
   spec:
     port:
-      targetPort: "8080"
+      targetPort: "9000"
     tls:
       insecureEdgeTerminationPolicy: Redirect
       termination: edge
