@@ -17,7 +17,7 @@ USER root
 COPY CentOS.repo /etc/yum.repos.d/CentOS.repo
 
 RUN dnf install -y http://mirror.centos.org/centos/8/BaseOS/x86_64/os/Packages/centos-gpg-keys-8-2.el8.noarch.rpm \
- && dnf install -y libguestfs-tools-c
+ && dnf install -y libguestfs-tools-c openssl
 
 # silence bogus subscription messages
 RUN echo "enabled=0" >> /etc/yum/pluginconf.d/subscription-manager.conf
