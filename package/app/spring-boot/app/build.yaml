@@ -1,0 +1,193 @@
+---
+app_icon: spring
+
+input:
+  var:
+    - name: APP_PACKAGE_NAME
+      required: true
+      type: name
+      description: |-
+        the name:tag for the application package to be published (e.g. registry-host/app-group/app-name)
+        this package contains application artfacts, dockerfile & build.yaml file. it's used by image builder to build the application img
+
+    - name: PROJECT_ARTIFACT_ID
+      required: true
+      type: string
+      description: the maven artifact id for the application
+
+    - name: PROJECT_ARTIFACT_VERSION
+      required: true
+      type: string
+      default: 0.0.1
+      description: the version of the application artifact
+
+    # env variables required by build-image function
+    - name: APPLICATION_NAME
+      required: true
+      type: string
+      description: the application name to create openshift tekton pipeline resources eg. EventListner & PipelineResources
+
+    - name: PUSH_IMAGE_REGISTRY
+      required: true
+      type: string
+      description: |-
+        the image registry name (eg. quay.io)
+        it's use to push application image into the image registry
+
+    - name: PUSH_IMAGE_REPO
+      required: true
+      type: string
+      description: |-
+        the image repo name
+        repo name of the image registry where image to be pushed. if repo is created under user then it will be username
+        if it's created inside the specific group then it would be a group name
+
+    - name: PUSH_IMAGE_NAME
+      required: true
+      type: string
+      description: |-
+        the application image name. it's a final image name that will be pushed into the img registry
+        we can pass any name (eg. java-app)
+
+    - name: PUSH_IMAGE_VERSION
+      required: true
+      type: string
+      description: |-
+        the application image version/tag. it's a docker image tag used to identify the img uniquely
+
+    - name: PULL_IMAGE_REGISTRY
+      required: true
+      type: string
+      description: |-
+        application runtime image registry name (eg. quay.io)
+        this is the name of the image registry where base docker image is stored. it can be redhat, gitlab or quay registry
+
+    - name: PACKAGE_NAME
+      required: true
+      type: string
+      description: |-
+        the name:tag for the spring recepie package to download (e.g. registry-host/app-group/package-name)
+        it contains setup & pipeline flow alongwith build.yaml file
+        this package should be already available in the artefact registry like nexus
+
+    - name: CRYPTO_KEY_EMAIL
+      required: true
+      type: string
+      description: |-
+        the email id which is used to generate crypto signature keys by using art cli
+        this email id is used by img builder to sign the application image
+
+    - name: HOST_NAME
+      required: true
+      type: string
+      description: openshift or kubernetes cluster hostname required to deploy app & create an ingress
+
+  secret:
+    - name: ART_REG_USER
+      description: the artisan registry user name which is deployed into the openshift
+
+    - name: ART_REG_PWD
+      description: the artisan registry password which is deployed into the openshift
+
+    - name: PULL_IMAGE_REGISTRY_UNAME
+      description: user name for the container registry where the base image is located
+
+    - name: PULL_IMAGE_REGISTRY_PWD
+      description: password for the container registry where the base image is located
+
+    - name: PUSH_IMAGE_REGISTRY_UNAME
+      description: user name for the container registry where the application image will be pushed
+
+    - name: PUSH_IMAGE_REGISTRY_PWD
+      description: password for the container registry where the application image will be pushed
+
+    - name: REGISTRY_USER
+      description: artefact registry user name where artefact will be pushed
+
+    - name: REGISTRY_PWD
+      description: artefact registry password where artefact will be pushed
+
+  key:
+    - name: SIGNING_KEY
+      description: the private PGP key required to digitally sign the application package
+      private: true
+      path: /
+
+    - name: VERIFICATION_KEY
+      description: the public PGP key required to open the application package
+      path: /
+
+profiles:
+  - name: app
+    description: packages the java application uber jar file
+    default: true
+    type: content/java
+    run:
+      # copy the docker file to build the jvm version to the artefact(target) package folder
+      - cp Dockerfile build/build/Dockerfile
+      # copy the below files to build the jvm version to the artefact(target) package folder
+      # these files are required to build images & deploy the app
+      - cp build-image.sh build/build/build-image.sh
+      - cp deploy.yaml.tem build/build/deploy.yaml.tem 
+    target: build/build
+
+functions:
+  # this function is used by CI pipeline
+  - name: build-app
+    description: compiles and tests the application
+    run:
+      - gradle build
+      - mkdir build/build
+      - cp build/libs/${PROJECT_ARTIFACT_ID}-${PROJECT_ARTIFACT_VERSION}-SNAPSHOT.jar build/build
+    input:
+      var:
+        - PROJECT_ARTIFACT_ID
+        - PROJECT_ARTIFACT_VERSION
+
+  # this function is used by CI pipeline
+  - name: publish-app
+    description: packages and publishes the application
+    run:
+      - art build -t=${APP_PACKAGE_NAME} -p app
+      - art push ${APP_PACKAGE_NAME} -u=${ART_REG_USER}:${ART_REG_PWD}
+    input:
+      var:
+        - APP_PACKAGE_NAME
+      secret:
+        - ART_REG_USER
+        - ART_REG_PWD
+      key:
+        # needs this binding to mount the key in the container
+        - SIGNING_KEY
+
+  # this function is used by CI pipeline
+  - name: build-image
+    run:
+      # scaffolding is adding artefacts/targets in .dockerignore file. deleteing it to copy files into the docker images
+      - rm -rf .dockerignore
+      # download application package from the artefact repository
+      - art open -u=${REGISTRY_USER}:${REGISTRY_PWD} ${APP_PACKAGE_NAME} /workspace/source
+      # build & sign the docker image & push into the img registry. also deploy the app 
+      - sh build-image.sh
+    input:
+      var:
+        - APPLICATION_NAME
+        - PUSH_IMAGE_REGISTRY
+        - PUSH_IMAGE_REPO
+        - PUSH_IMAGE_NAME
+        - PUSH_IMAGE_VERSION
+        - PULL_IMAGE_REGISTRY
+        - PACKAGE_NAME
+        - CRYPTO_KEY_EMAIL
+        - APP_PACKAGE_NAME
+        - HOST_NAME
+      secret:
+        - PULL_IMAGE_REGISTRY_UNAME
+        - PULL_IMAGE_REGISTRY_PWD
+        - PUSH_IMAGE_REGISTRY_UNAME
+        - PUSH_IMAGE_REGISTRY_PWD
+        - REGISTRY_USER
+        - REGISTRY_PWD
+      key:
+        - VERIFICATION_KEY
+...
