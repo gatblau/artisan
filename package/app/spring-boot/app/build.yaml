@@ -8,7 +8,7 @@ input:
       type: name
       description: |-
         the name:tag for the application package to be published (e.g. registry-host/app-group/app-name)
-        it contains artefacts built by the pipeline
+        this package contains application artfacts, dockerfile & build.yaml file. it's used by image builder to build the application img
 
     - name: PROJECT_ARTIFACT_ID
       required: true
@@ -22,24 +22,19 @@ input:
       description: the version of the application artifact
 
     # env variables required by build-image function
-    - name: BC_APPLICATION_NAME
+    - name: APPLICATION_NAME
       required: true
       type: string
       description: the application name to create openshift tekton pipeline resources eg. EventListner & PipelineResources
 
-    - name: BC_BUILDER_IMAGE
-      required: true
-      type: string
-      description: the image builder name (buildah image) to build application image (eg quay.io/artisan/buildah)
-
-    - name: BC_PUSH_IMAGE_REGISTRY
+    - name: PUSH_IMAGE_REGISTRY
       required: true
       type: string
       description: |-
         the image registry name (eg. quay.io)
         it's use to push application image into the image registry
 
-    - name: BC_PUSH_IMAGE_REPO
+    - name: PUSH_IMAGE_REPO
       required: true
       type: string
       description: |-
@@ -47,54 +42,45 @@ input:
         repo name of the image registry where image to be pushed. if repo is created under user then it will be username
         if it's created inside the specific group then it would be a group name
 
-    - name: BC_PUSH_IMAGE_NAME
+    - name: PUSH_IMAGE_NAME
       required: true
       type: string
       description: |-
         the application image name. it's a final image name that will be pushed into the img registry
         we can pass any name (eg. java-app)
 
-    - name: BC_PUSH_IMAGE_VERSION
+    - name: PUSH_IMAGE_VERSION
       required: true
       type: string
       description: |-
         the application image version/tag. it's a docker image tag used to identify the img uniquely
 
-    - name: BC_PULL_IMAGE_REGISTRY
+    - name: PULL_IMAGE_REGISTRY
       required: true
       type: string
       description: |-
         application runtime image registry name (eg. quay.io)
         this is the name of the image registry where base docker image is stored. it can be redhat, gitlab or quay registry
 
-    - name: BC_PACKAGE_NAME
+    - name: PACKAGE_NAME
       required: true
       type: string
       description: |-
-        the name for the application package that will be downloaded (e.g. registry-host/app-group/app-name)
-        this package contains application artfacts, dockerfile & build.yaml file. it's used by image builder to build the application img
+        the name:tag for the spring recepie package to download (e.g. registry-host/app-group/package-name)
+        it contains setup & pipeline flow alongwith build.yaml file
+        this package should be already available in the artefact registry like nexus
 
-    - name: BC_FX_NAME
-      required: true
-      type: string
-      description: |-
-        the function name to build image (eg. build-image)
-        this is the function name executed by the image builder. it contains commands to build, sign & push application img
-
-    - name: BC_CRYPTO_KEY_EMAIL
+    - name: CRYPTO_KEY_EMAIL
       required: true
       type: string
       description: |-
         the email id which is used to generate crypto signature keys by using art cli
         this email id is used by img builder to sign the application image
 
-    - name: PACKAGE_NAME
+    - name: HOST_NAME
       required: true
       type: string
-      description: |-
-        the name:tag for the spring-boot recepie package to download (e.g. registry-host/app-group/package-name)
-        it contains setup & pipeline flow alongwith build.yaml file
-        this package should be already available in the artefact registry like nexus
+      description: openshift or kubernetes cluster hostname required to deploy app & create an ingress
 
   secret:
     - name: ART_REG_USER
@@ -103,22 +89,22 @@ input:
     - name: ART_REG_PWD
       description: the artisan registry password which is deployed into the openshift
 
-    - name: BC_PULL_IMAGE_REGISTRY_UNAME
+    - name: PULL_IMAGE_REGISTRY_UNAME
       description: user name for the container registry where the base image is located
 
-    - name: BC_PULL_IMAGE_REGISTRY_PWD
+    - name: PULL_IMAGE_REGISTRY_PWD
       description: password for the container registry where the base image is located
 
-    - name: BC_PUSH_IMAGE_REGISTRY_UNAME
+    - name: PUSH_IMAGE_REGISTRY_UNAME
       description: user name for the container registry where the application image will be pushed
 
-    - name: BC_PUSH_IMAGE_REGISTRY_PWD
+    - name: PUSH_IMAGE_REGISTRY_PWD
       description: password for the container registry where the application image will be pushed
 
-    - name: BC_REGISTRY_USER
+    - name: REGISTRY_USER
       description: artefact registry user name where artefact will be pushed
 
-    - name: BC_REGISTRY_PWD
+    - name: REGISTRY_PWD
       description: artefact registry password where artefact will be pushed
 
   key:
@@ -138,11 +124,11 @@ profiles:
     type: content/java
     run:
       # copy the docker file to build the jvm version to the artefact(target) package folder
-      - cp img/Dockerfile build/build/Dockerfile
-      # copy the build.yaml file to build the jvm version to the artefact(target) package folder
-      - cp img/build.yaml build/build
-      # copy the sign-image.sh file to build the jvm version to the artefact(target) package folder
-      - cp img/sign-image.sh build/build/sign-image.sh
+      - cp Dockerfile build/build/Dockerfile
+      # copy the below files to build the jvm version to the artefact(target) package folder
+      # these files are required to build images & deploy the app
+      - cp build-image.sh build/build/build-image.sh
+      - cp deploy.yaml.tem build/build/deploy.yaml.tem 
     target: build/build
 
 functions:
@@ -177,27 +163,31 @@ functions:
   # this function is used by CI pipeline
   - name: build-image
     run:
-      # call shell script which contains commands to create buildconfig to build application image
-      - sh start-build.sh ${BC_APPLICATION_NAME}
+      # scaffolding is adding artefacts/targets in .dockerignore file. deleteing it to copy files into the docker images
+      - rm -rf .dockerignore
+      # download application package from the artefact repository
+      - art open -u=${REGISTRY_USER}:${REGISTRY_PWD} ${APP_PACKAGE_NAME} /workspace/source
+      # build & sign the docker image & push into the img registry. also deploy the app 
+      - sh build-image.sh
     input:
       var:
-        - BC_APPLICATION_NAME
-        - BC_BUILDER_IMAGE
-        - BC_PUSH_IMAGE_REGISTRY
-        - BC_PUSH_IMAGE_REPO
-        - BC_PUSH_IMAGE_NAME
-        - BC_PUSH_IMAGE_VERSION
-        - BC_PULL_IMAGE_REGISTRY
-        - BC_PACKAGE_NAME
-        - BC_FX_NAME
-        - BC_CRYPTO_KEY_EMAIL
+        - APPLICATION_NAME
+        - PUSH_IMAGE_REGISTRY
+        - PUSH_IMAGE_REPO
+        - PUSH_IMAGE_NAME
+        - PUSH_IMAGE_VERSION
+        - PULL_IMAGE_REGISTRY
+        - PACKAGE_NAME
+        - CRYPTO_KEY_EMAIL
+        - APP_PACKAGE_NAME
+        - HOST_NAME
       secret:
-        - BC_PULL_IMAGE_REGISTRY_UNAME
-        - BC_PULL_IMAGE_REGISTRY_PWD
-        - BC_PUSH_IMAGE_REGISTRY_UNAME
-        - BC_PUSH_IMAGE_REGISTRY_PWD
-        - BC_REGISTRY_USER
-        - BC_REGISTRY_PWD
+        - PULL_IMAGE_REGISTRY_UNAME
+        - PULL_IMAGE_REGISTRY_PWD
+        - PUSH_IMAGE_REGISTRY_UNAME
+        - PUSH_IMAGE_REGISTRY_PWD
+        - REGISTRY_USER
+        - REGISTRY_PWD
       key:
         - VERIFICATION_KEY
 ...
