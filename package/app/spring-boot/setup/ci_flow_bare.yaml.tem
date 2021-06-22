@@ -1,5 +1,5 @@
 ---
-name: ${BC_APPLICATION_NAME}
+name: ${APPLICATION_NAME}
 description: build, package, sign and publish a Spring-Boot Application
 
 steps:
@@ -24,6 +24,7 @@ steps:
 
   - name: build-image
     description: build and publish container image
-    runtime: k8s
+    runtime: buildah
     function: build-image
+    privileged: true
 ...
