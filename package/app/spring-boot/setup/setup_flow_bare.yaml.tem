@@ -23,11 +23,4 @@ steps:
     package: ${PACKAGE_NAME}
     source: read
     function: init-tkn
-
-  - name: create-app-deployment
-    description: create application deployment in OpenShift
-    runtime: k8s
-    package: ${PACKAGE_NAME}
-    source: read
-    function: deploy-app
 ...
