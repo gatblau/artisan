@@ -13,13 +13,6 @@ export PIPELINE_HOME=$(awk -F":" '{print $6}' /etc/passwd | grep -m1 `whoami`)
 
 printf "pipeline home is '%s'\n", "$PIPELINE_HOME"
 
-if [ -z "$(ls -A /keys)" ]; then
-  printf "no keys found under /keys volume, the folder content is:\n"
-  ls -la /keys
-  printf "cannot continue\n"
-  exit 1
-fi
-
 # copy any mounted keys to the artisan registry in the user home
 # folder required for tekton
 mkdir -p ${PIPELINE_HOME}/.artisan/keys
@@ -28,6 +21,13 @@ mkdir -p ${PIPELINE_HOME}/.artisan/files
 #echo copying keys from /keys mount to ${HOME}/.artisan artisan registry
 cp -R /keys ${PIPELINE_HOME}/.artisan
 cp -R /files ${PIPELINE_HOME}/.artisan
+
+if [ -z "$(ls -A ${PIPELINE_HOME}/.artisan/keys)" ]; then
+  printf "INFO: no PGP keys found in the runtime registry, the folder content is:\n"
+  ls -la ${PIPELINE_HOME}/.artisan/keys
+  printf "cannot continue\n"
+  exit 1
+fi
 
 # if a package name has been provided 
 if [ -n "${OXART_PACKAGE_NAME+x}" ]; then
