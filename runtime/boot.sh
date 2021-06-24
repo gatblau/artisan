@@ -22,13 +22,6 @@ mkdir -p ${PIPELINE_HOME}/.artisan/files
 cp -R /keys ${PIPELINE_HOME}/.artisan
 cp -R /files ${PIPELINE_HOME}/.artisan
 
-if [ -z "$(ls -A ${PIPELINE_HOME}/.artisan/keys)" ]; then
-  printf "INFO: no PGP keys found in the runtime registry, the folder content is:\n"
-  ls -la ${PIPELINE_HOME}/.artisan/keys
-  printf "cannot continue\n"
-  exit 1
-fi
-
 # if a package name has been provided 
 if [ -n "${OXART_PACKAGE_NAME+x}" ]; then
   # if a user name is defined
