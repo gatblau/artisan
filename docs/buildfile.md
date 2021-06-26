@@ -169,8 +169,8 @@ input:
 :checkered_flag: **try it!**
 
 ```bash
-# run the function say-hello in the build file located at exercise/10 folder
-$  art run say-hello exercise/10
+# run the function say-hello in the build file located at examples/10 folder
+$  art run say-hello examples/10
 # you should see
 Hello World
 ```
@@ -215,8 +215,8 @@ functions:
 # the following example assumes Linux/OSX operating system:
 
 # tell Artisan to run the "greet-user" function from the 
-# build file located at the "exercise/20" sub-folder
-$  art run greet-user exercise/20 
+# build file located at the "examples/20" sub-folder
+$  art run greet-user examples/20 
 
 # you should see an error message as the variable 
 # USER_TO_GREET is not defined
@@ -226,7 +226,7 @@ error!
 # now try interactive mode, so the command line interface 
 # will ask you to enter the missing variables
 # note the -i flag to tell Artisan to run in interactive mode
-$  art run -i greet-user exercise/20
+$  art run -i greet-user examples/20
 
 # you should be able to see the following prompt
 # note the default value in brackets
@@ -238,7 +238,7 @@ Hello Gatblau!
 
 # now export an environment variable 
 $ export USER_TO_GREET="Mickey Mouse"
-$ art run greet-user exercises/20
+$ art run greet-user exampless/20
   
 # you should now see the message below
 Hello Mickey Mouse!
@@ -249,12 +249,12 @@ $ unset USER_TO_GREET
 # Artisan can also load variables from a file
 # the file can contain one or more environment variables
 # to test it, create an environment file as follows
-$ echo USER_TO_GREET="Black Pete" >> exercise/20/.env
+$ echo USER_TO_GREET="Black Pete" >> examples/20/.env
 
 # now try and run the command below
 # note the -e flag to tell Artisan to load the 
 # new environment file
-$ art run -e exercise/20/.env greet-user exercise/20
+$ art run -e examples/20/.env greet-user examples/20
 
 # you should see the following message
 Hello Black Pete!
@@ -280,7 +280,7 @@ functions:
 :checkered_flag: **try it!**
 
 ```bash
-$ art run greet-user exercise/30
+$ art run greet-user examples/30
 
 # you should see the following message
 error!
@@ -303,7 +303,7 @@ In its simplest way, a build profile requires a target folder where the files th
 
 :checkered_flag: **try it!**
 
-You want to package arbitrary files located in the source folder [here](exercise/40/source).
+You want to package arbitrary files located in the source folder [here](examples/40/source).
 
 Define a profile in the build file as follows:
 
@@ -317,7 +317,7 @@ profiles:
 ...
 ```
 
-Then navigate to the folder [here](exercise/40) and run the following command:
+Then navigate to the folder [here](examples/40) and run the following command:
 
 ```bash
 # simplest command to build a package

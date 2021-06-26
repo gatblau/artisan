@@ -1,0 +1,19 @@
+---
+input:
+  var:
+    - name: HELLO_WORD
+      description: "the hello word in the language of choice"
+      required: true
+functions:
+  - name: say-hello
+    description: "prints a hello greeting to the standard output in a specific language"
+    export: true
+    runtime: quay.io/artisan/ubi-min
+    env:
+      NAME_TO_GREET: Gatblau
+    input:
+      var:
+        - HELLO_WORD
+    run:
+      - echo ${HELLO_WORD} ${NAME_TO_GREET}
+...

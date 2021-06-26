@@ -52,7 +52,7 @@ functions:
 
 :checkered_flag: **try it!**
 
-In the command line navigate to [this folder](exercise/50) and execute the following command:
+In the command line navigate to [this folder](examples/50) and execute the following command:
 
 ```bash
 # tell artisan to call the "say-hello" function
