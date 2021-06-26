@@ -1,0 +1,16 @@
+---
+env:
+  DERIVED_VARIABLE: aaa/$((echo ${INPUT_VARIABLE}))/ccc
+
+input:
+  var:
+    - name: INPUT_VARIABLE
+
+functions:
+  - name: derive
+    run:
+      - echo ${DERIVED_VARIABLE}
+    input:
+      var:
+        - INPUT_VARIABLE
+...
