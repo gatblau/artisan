@@ -1,4 +1,5 @@
-#  Onix Config Manager - iConverter Artisan Package Runtime Image
+#
+#  Onix Config Manager - Virtual Machine Disk File System Artisan Runtime Image
 #  Copyright (c) 2018-2021 by www.gatblau.org
 #  Licensed under the Apache License, Version 2.0 at http://www.apache.org/licenses/LICENSE-2.0
 #
@@ -6,7 +7,6 @@
 #  to be licensed under the same terms as the rest of the code.
 #
 FROM quay.io/artisan/fedora-min
-
 
 LABEL maintainer="egevorkyan@outlook.com"
 
