@@ -2,7 +2,6 @@ package object_storage
 
 import (
 	"context"
-	"github.com/minio/minio-go"
 	"github.com/minio/minio-go/v7"
 	"go/types"
 	"log"

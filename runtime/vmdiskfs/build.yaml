@@ -8,7 +8,7 @@ functions:
   - name: build-image
     description: builds and push docker image
     run:
-      - art open ${VMDISKFS_PACKAGE} . -s
+      - art run build-linux tool
       - docker build --squash -t=${REPO_NAME}/${IMG_NAME}:${ARTISAN_REF} .
       - docker tag ${REPO_NAME}/${IMG_NAME}:${ARTISAN_REF} ${REPO_NAME}/${IMG_NAME}:latest
       - docker push ${REPO_NAME}/${IMG_NAME}:${ARTISAN_REF}
