@@ -16,22 +16,22 @@ functions:
     env:
       GOOS: darwin
     run:
-      - go build -o bin/darwin/vmdiskfs
+      - go build -o ../vmdiskfs
 
   - name: build-linux
     description: builds tool for Linux
     env:
       GOOS: linux
     run:
-      - go build -o bin/linux/vmdiskfs
+      - go build -o ../vmdiskfs
 
   - name: zip
     description: archiving with zip tool
     run:
-      - zip vmdiskfs.zip bin/darwin/vmdiskfs bin/linux/vmdiskfs
+      - zip vmdiskfs.zip ../vmdiskfs ../vmdiskfs
 
   - name: tar
     description: archiving using tar utility, useful for Linux
     run:
-      - tar czvf vmdiskfs.tar.gz bin/darwin/vmdiskfs bin/linux/vmdiskfs
+      - tar czvf vmdiskfs.tar.gz ../vmdiskfs ../vmdiskfs
 ...
