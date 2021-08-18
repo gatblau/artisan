@@ -8,8 +8,8 @@
 #
 FROM alpine as builder
 
-ENV SONAR_ZIP_FILE=sonar-scanner-cli-3.3.0.1492-linux.zip
-ENV SONAR_FOLDER=sonar-scanner-3.3.0.1492-linux
+ENV SONAR_ZIP_FILE=sonar-scanner-cli-4.6.2.2472-linux.zip
+ENV SONAR_FOLDER=sonar-scanner-4.6.2.2472-linux
 
 WORKDIR /app/
 
