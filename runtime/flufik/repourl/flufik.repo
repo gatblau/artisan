@@ -1,0 +1,6 @@
+[Flufik]
+name=Flufik
+baseurl=https://repositoryeg.jfrog.io/artifactory/flufik-rpm
+gpgkey=https://repositoryeg.jfrog.io/artifactory/flufik-rpm/repodata/repomd.xml.key
+enabled=1
+gpgcheck=1
