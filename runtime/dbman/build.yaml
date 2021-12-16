@@ -1,0 +1,21 @@
+---
+env:
+  REPO_NAME: quay.io/artisan
+  IMG_NAME: dbman
+  ART_PACKAGE: dbman
+
+functions:
+  - name: build-image
+    run:
+      # fetches artisan CLI
+      - art open ${ART_PACKAGE} . -s
+        # build the image with the artisan reference
+      - docker build -t=${REPO_NAME}/${IMG_NAME}:${ARTISAN_REF} .
+      # tag the image as latest
+      - docker tag ${REPO_NAME}/${IMG_NAME}:${ARTISAN_REF} ${REPO_NAME}/${IMG_NAME}:latest
+      # delete the dbman cli
+      - rm ./dbman
+      # push the image and the latest tag
+      - docker push ${REPO_NAME}/${IMG_NAME}:${ARTISAN_REF}
+      - docker push ${REPO_NAME}/${IMG_NAME}:latest
+...
