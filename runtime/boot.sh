@@ -9,18 +9,31 @@
 #
 
 # fetch user home directory from /etc/passwd file
-export PIPELINE_HOME=$(awk -F":" '{print $6}' /etc/passwd | grep -m1 `whoami`)
+export PIPELINE_HOME=$(awk -F":" '{print $6}' /etc/passwd | grep -m1 $(whoami))
 
-printf "pipeline home is '%s'\n", "$PIPELINE_HOME"
+# if in debug mode
+if [ -n "${ARTISAN_DEBUG+x}" ]; then
+  printf "RUNTIME DEBUG INFO:"
+  printf "===========================================================================\n"
+  printf "* home => '%s'\n" "$PIPELINE_HOME"
+  printf "* user => '%s'\n\n" $(whoami)
+  printf "* current directory =>\n"
+  ls -la
+  printf "\n"
+  printf "* root directory =>\n"
+  ls -la /
+  printf "===========================================================================\n"
+fi
 
 # copy any mounted keys to the artisan registry in the user home
 # folder required for tekton
 mkdir -p ${PIPELINE_HOME}/.artisan/keys
 mkdir -p ${PIPELINE_HOME}/.artisan/files
 
-#echo copying keys from /keys mount to ${HOME}/.artisan artisan registry
-cp -R /keys ${PIPELINE_HOME}/.artisan
-cp -R /files ${PIPELINE_HOME}/.artisan
+# copy keys from /keys mount to ${HOME}/.artisan artisan registry
+# make it silently so it does not error on runc scenarios
+cp -R /keys ${PIPELINE_HOME}/.artisan 2>/dev/null
+cp -R /files ${PIPELINE_HOME}/.artisan 2>/dev/null
 
 # if a package name has been provided 
 if [ -n "${OXART_PACKAGE_NAME+x}" ]; then
