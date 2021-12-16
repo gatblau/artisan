@@ -1,4 +1,4 @@
-<img src="https://github.com/gatblau/artisan/raw/master/artisan.png" width="150" align="right"/>
+<img src="https://github.com/gatblau/artisan/raw/main/artisan.png" width="150" align="right"/>
 
 # The build file
 
