@@ -12,7 +12,7 @@ ARG UNAME=runtime
 
 ENV PATH="/root/.local/bin":$PATH
 ENV container=docker
-ENV ANSIBLE_VERSION=2.10.5
+ENV ANSIBLE_VERSION=4.10.0
 
 USER root
 
