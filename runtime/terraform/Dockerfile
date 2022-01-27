@@ -7,7 +7,7 @@
 #  to be licensed under the same terms as the rest of the code.
 #
 FROM alpine as builder
-ENV TERRAFORM_VERSION=0.14.7
+ENV TERRAFORM_VERSION=1.1.4
 WORKDIR /app/
 RUN wget https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip
 RUN unzip terraform_${TERRAFORM_VERSION}_linux_amd64.zip
