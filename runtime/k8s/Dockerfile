@@ -8,7 +8,7 @@
 #
 FROM alpine as builder
 
-ENV OKD_VERSION=4.7.0-0.okd-2021-04-24-103438
+ENV OKD_VERSION=4.9.0-0.okd-2022-01-14-230113
 
 WORKDIR /app/
 
