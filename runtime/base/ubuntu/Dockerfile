@@ -12,8 +12,8 @@ LABEL maintainer="steve@devcloud.guru"
 
 ARG UNAME=runtime
 
-ENV UID=100000000
-ENV GID=100000000
+ENV UID=1000
+ENV GID=1000
 
 RUN apt clean all && rm -rf /var/cache/apt && \
     groupadd -g $GID -o $UNAME && \
