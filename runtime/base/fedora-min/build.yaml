@@ -8,7 +8,7 @@ functions:
   - name: build-image
     run:
       # fetches artisan CLI
-      - art open ${ART_PACKAGE} . -s
+      - art open ${ART_PACKAGE} .
       # copy the bootstrap script into the build context
       - cp ../../boot.sh .
       # build the image with the artisan reference

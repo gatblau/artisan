@@ -1,6 +1,6 @@
 #
 #  Onix Config Manager - Base Artisan Runtime Image - Java + Maven + Gradle
-#  Copyright (c) 2018-2021 by www.gatblau.org
+#  Copyright (c) 2018-Present by www.gatblau.org
 #  Licensed under the Apache License, Version 2.0 at http://www.apache.org/licenses/LICENSE-2.0
 #
 #  Contributors to this project, hereby assign copyright in this code to the project,
@@ -8,12 +8,12 @@
 #
 FROM alpine as builder
 
-ENV MAVEN_VERSION 3.6.3
+ENV MAVEN_VERSION 3.8.6
 #ENV GRADLE_VERSION 6.8
 
 WORKDIR /app/
 
-# downloads maven and gradel
+# downloads maven
 RUN wget http://archive.apache.org/dist/maven/maven-3/$MAVEN_VERSION/binaries/apache-maven-$MAVEN_VERSION-bin.tar.gz && \
     tar -zxvf apache-maven-$MAVEN_VERSION-bin.tar.gz && \
     rm apache-maven-$MAVEN_VERSION-bin.tar.gz
@@ -28,7 +28,7 @@ USER root
 
 ARG UNAME=runtime
 
-ENV MAVEN_VERSION 3.6.3
+ENV MAVEN_VERSION 3.8.6
 #ENV GRADLE_VERSION 6.8
 ENV JAVA_HOME /usr/lib/jvm/jre-openjdk
 
@@ -37,7 +37,7 @@ ENV MAVEN_HOME /usr/lib/mvn
 ENV PATH $MAVEN_HOME/bin:$GRADLE_HOME/bin:$PATH
 
 # installs JDK 11
-RUN microdnf install -y java-11-openjdk-devel git && \
+RUN microdnf install -y java-17-openjdk-devel git && \
     microdnf clean all && rm -rf /var/cache /var/log/dnf* /var/log/yum.* && \
     mkdir -p /.m2/repository/ && chown -R $UNAME /.m2/ && chmod -R a+wr /.m2/
 

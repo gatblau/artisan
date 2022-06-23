@@ -1,6 +1,6 @@
 #
 #  Onix Config Manager - Base Artisan Runtime Image - ubi8
-#  Copyright (c) 2018-2021 by www.gatblau.org
+#  Copyright (c) 2018-Present by www.gatblau.org
 #  Licensed under the Apache License, Version 2.0 at http://www.apache.org/licenses/LICENSE-2.0
 #
 #  Contributors to this project, hereby assign copyright in this code to the project,
@@ -21,8 +21,6 @@ RUN dnf update --disablerepo=* --enablerepo=ubi-8-appstream --enablerepo=ubi-8-b
     useradd -u $UID -g $GID $UNAME && \
     # app folder
     mkdir -p /app/ && chown $UNAME /app/ && chmod a+rwx /app/ && \
-    # keys volume mounts
-    mkdir -p /keys/ && \
     # files volume mount
     mkdir -p /files/ && chown $UNAME /files/ && chmod a+r /files/
 

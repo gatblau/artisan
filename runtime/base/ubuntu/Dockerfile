@@ -1,6 +1,6 @@
 #
 #  Onix Config Manager - Base Artisan Runtime Image - Ubuntu 20.04
-#  Copyright (c) 2018-2021 by www.gatblau.org
+#  Copyright (c) 2018-Present by www.gatblau.org
 #  Licensed under the Apache License, Version 2.0 at http://www.apache.org/licenses/LICENSE-2.0
 #
 #  Contributors to this project, hereby assign copyright in this code to the project,
@@ -20,8 +20,6 @@ RUN apt clean all && rm -rf /var/cache/apt && \
     useradd -u $UID -g $GID $UNAME && \
     # app folder
     mkdir -p /app/ && chown $UNAME /app/ && chmod a+rwx /app/ && \
-    # keys volume mount
-    mkdir -p /keys/ && \
     # files volume mount
     mkdir -p /files/ && chown $UNAME /files/ && chmod a+r /files/
 

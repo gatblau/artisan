@@ -8,7 +8,7 @@ functions:
   - name: build-image
     run:
       # fetches artisan CLI
-      - art open ${ART_PACKAGE} . -s
+      - art open ${ART_PACKAGE} .
         # build the image with the artisan reference
       - docker build -t=${REPO_NAME}/${IMG_NAME}:${ARTISAN_REF} .
       # tag the image as latest

@@ -23,8 +23,6 @@ RUN microdnf update --disablerepo=* --enablerepo=ubi-8-appstream --enablerepo=ub
     useradd -u $UID -g $GID $UNAME && \
     # app folder
     mkdir -p /app/ && chown $UNAME /app/ && chmod a+rwx /app/ && \
-    # keys volume mount
-    mkdir -p /keys/ && \
     # files volume mount
     mkdir -p /files/ && chown $UNAME /files/ && chmod a+r /files/
 

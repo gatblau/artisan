@@ -8,8 +8,8 @@
 #
 FROM alpine as builder
 
-ENV GRADLE_VERSION 6.8
-ENV SPRING_VERSION 2.4.5
+ENV GRADLE_VERSION 7.4.2
+ENV SPRING_VERSION 2.7.0
 
 WORKDIR /app/
 
@@ -29,8 +29,8 @@ USER root
 
 ARG UNAME=runtime
 
-ENV GRADLE_VERSION 6.8
-ENV SPRING_VERSION 2.4.5
+ENV GRADLE_VERSION 7.4.2
+ENV SPRING_VERSION 2.7.0
 ENV JAVA_HOME /usr/lib/jvm/jre-openjdk
 
 ENV GRADLE_HOME /usr/lib/gradle
@@ -39,8 +39,8 @@ ENV PATH $GRADLE_HOME/bin:$PATH
 ENV SPRING_HOME /usr/lib/spring
 ENV PATH $SPRING_HOME/bin:$PATH
 
-# installs JDK 11
-RUN microdnf install -y java-11-openjdk-devel git && \
+# installs JDK 17
+RUN microdnf install -y java-17-openjdk-devel git && \
     microdnf clean all && rm -rf /var/cache /var/log/dnf* /var/log/yum.* && \
     mkdir -p /.m2/repository/ && chown -R $UNAME /.m2/ && chmod -R a+wr /.m2/
 

@@ -25,14 +25,12 @@ if [ -n "${ARTISAN_DEBUG+x}" ]; then
   printf "===========================================================================\n"
 fi
 
-# copy any mounted keys to the artisan registry in the user home
+# copy any mounted files to the artisan registry in the user home
 # folder required for tekton
-mkdir -p ${PIPELINE_HOME}/.artisan/keys
 mkdir -p ${PIPELINE_HOME}/.artisan/files
 
-# copy keys from /keys mount to ${HOME}/.artisan artisan registry
+# copy files from /files mount to ${HOME}/.artisan artisan registry
 # make it silently so it does not error on runc scenarios
-cp -R /keys ${PIPELINE_HOME}/.artisan 2>/dev/null
 cp -R /files ${PIPELINE_HOME}/.artisan 2>/dev/null
 
 # if a package name has been provided 
